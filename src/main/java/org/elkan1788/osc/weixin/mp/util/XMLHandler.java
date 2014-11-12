@@ -50,6 +50,10 @@ public class XMLHandler extends DefaultHandler2 {
                            String localName,
                            String qName) throws SAXException {
 
+        if (log.isDebugEnabled()) {
+            log.debug("当前节点值[{}]: {}", qName, arrtVal);
+        }
+
         // 本想用反射实现,但耗时长,所以还是手动编码吧,累
         if ("MsgId".equals(qName)) {
             msg.setMsgId(Long.valueOf(arrtVal));

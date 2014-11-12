@@ -174,7 +174,7 @@ public class XmlMsgBuilder {
      * @param timeStamp     时间戳
      * @param nonce         随机字符
      */
-    public XmlMsgBuilder encrypt(String xml, String msgSignature,
+    public String encrypt(String xml, String msgSignature,
                                  String timeStamp, String nonce) {
 
         msgBuf.setLength(0);
@@ -192,7 +192,7 @@ public class XmlMsgBuilder {
                 .append(nonce)
                 .append("]]></Nonce>\n");
         msgBuf.append("</xml>");
-        return  this;
+        return  msgBuf.toString();
     }
 
     /**

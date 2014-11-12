@@ -4,8 +4,8 @@ package org.elkan1788.osc.weixin.mp.commons;
  * 微信所有的API地址
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
- * @since 2014/11/6
- * @version 1.0
+ * @since 2014/11/12
+ * @version 1.0.2
  */
 public interface WxApiUrl {
 
@@ -20,7 +20,7 @@ public interface WxApiUrl {
     /**
      * 微信多媒体文件API入口
      */
-    public static final String MEDIA_API = "http://file.api.weixin.qq.com/media";
+    public static final String MEDIA_API = "http://file.api.weixin.qq.com/cgi-bin/media";
     /**
      * 令牌API入口
      */

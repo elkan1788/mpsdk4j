@@ -12,9 +12,12 @@ import org.elkan1788.osc.weixin.mp.vo.OutPutMsg;
 import org.elkan1788.osc.weixin.mp.vo.ReceiveMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -86,6 +89,7 @@ public class WxMsgParser {
             } catch (AesException e) {
                 log.error("创建AES加密失败!!!");
                 log.error(e.toString());
+                wxcrp = null;
             }
         }
     }
@@ -103,7 +107,11 @@ public class WxMsgParser {
 	public static ReceiveMsg convert2VO(InputStream msg,
                                         String msgSignature,
                                         String timeStamp,
-                                        String nonce) throws Exception {
+                                        String nonce)
+            throws ParserConfigurationException,
+                                        SAXException,
+                                        IOException,
+                                        AesException {
 
         ReceiveMsg rm = null;
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -169,9 +177,6 @@ public class WxMsgParser {
 
         if (AES_ENCRYPT) {// 加密
            reply_msg = wxcrp.encryptMsg(reply_msg, timeStamp, nonce);
-           reply_msg = XmlMsgBuilder.create()
-                   .encrypt(reply_msg, msgSignature, timeStamp, nonce)
-                   .build();
         }
 
         // 调试信息

@@ -23,8 +23,8 @@ import java.util.Map;
  * 微信API接口实现
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
- * @since 2014/11/10
- * @version 1.0.0
+ * @since 2014/11/12
+ * @version 1.1.0
  */
 public class WxApiImpl implements WxApi {
 
@@ -61,7 +61,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("errcode") > 0) {
+                || result.contains("errcode")) {
            throw new WxRespException(result);
         }
 
@@ -80,7 +80,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("errcode") > 0) {
+                || result.contains("errcode")) {
             throw new WxRespException(result);
         }
         JSONObject tmp = JSON.parseObject(result).getJSONObject("menu");
@@ -118,7 +118,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("ok") < 0) {
+                || !result.contains("ok")) {
             throw new WxRespException(result);
         }
 
@@ -137,7 +137,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("ok") < 0) {
+                || result.contains("errcode")) {
             throw new WxRespException(result);
         }
 
@@ -157,7 +157,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("group") < 0) {
+                || !result.contains("group")) {
             throw new WxRespException(result);
         }
 
@@ -202,7 +202,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("ok") < 0) {
+                || result.contains("errcode")) {
             throw new WxRespException(result);
         }
 
@@ -244,7 +244,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.indexOf("ok") < 0) {
+                || result.contains("errcode")) {
             throw new WxRespException(result);
         }
 
@@ -330,8 +330,8 @@ public class WxApiImpl implements WxApi {
             log.error(e.toString());
         }
 
-        if (result.isEmpty() ||
-                result.indexOf("ok") < 0) {
+        if (result.isEmpty() 
+                || !result.contains("ok")) {
             throw new WxRespException(result);
         }
 
@@ -354,7 +354,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty() ||
-                result.indexOf("ok") < 0) {
+                result.contains("errcode")) {
             throw new WxRespException(result);
         }
 
@@ -372,8 +372,8 @@ public class WxApiImpl implements WxApi {
             log.error(e.toString());
         }
 
-        if (result.isEmpty() ||
-                result.indexOf("errcode") > -1) {
+        if (result.isEmpty()
+                ||result.contains("errcode")) {
             throw new WxRespException(result);
         }
 
@@ -384,10 +384,14 @@ public class WxApiImpl implements WxApi {
 
     @Override
     public void dlMedia(String mediaId, File file) throws WxRespException {
+
         String url = String.format(WxApiUrl.MEDIA_DL_API, getAccessToken(), mediaId);
-        boolean is_file = file.isFile();
-        if (!is_file){
-            file = new File(file.getAbsolutePath()+"/"+mediaId);
+        // 检查文件夹是否存在
+        if(!file.exists()) {
+            String path = file.getAbsolutePath();
+            String separ = System.getProperties().getProperty("file.separator");
+            File dir = new File(path.substring(0, path.lastIndexOf(separ)));
+            dir.mkdirs();
         }
 
         try {

@@ -18,17 +18,17 @@ import java.io.IOException;
  */
 public class SimpleHttpReq {
 
-    public static String TEXT_PLAIN = "text/plain";
+    public static final String TEXT_PLAIN = "text/plain";
 
-    public static String TEXT_HTML = "text/html";
+    public static final String TEXT_HTML = "text/html";
 
-    public static String TEXT_XML = "text/xml";
+    public static final String TEXT_XML = "text/xml";
 
-    public static String APPLICATION_XML = "application/xml";
+    public static final String APPLICATION_XML = "application/xml";
 
-    public static String APPLICATION_JSON = "application/json";
+    public static final String APPLICATION_JSON = "application/json";
 
-    private static StrResponseHandler respHandler = new StrResponseHandler();
+    private static final StrResponseHandler respHandler = new StrResponseHandler();
 
     /**
      * GET请求

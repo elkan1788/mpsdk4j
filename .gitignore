@@ -1,4 +1,4 @@
-src/test/
 target/
 *.iml
 *.class
+*.jar

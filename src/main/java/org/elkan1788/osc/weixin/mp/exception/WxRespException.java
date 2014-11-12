@@ -16,11 +16,11 @@ public class WxRespException extends Exception {
     /**
      * 错误代码
      */
-    private int errCode;
+    private final int errCode;
     /**
      * 错误中文描述
      */
-    private String errMesg;
+    private final String errMesg;
     // 临时JSON对象
     protected static JSONObject error;
 

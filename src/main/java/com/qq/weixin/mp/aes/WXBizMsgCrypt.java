@@ -1,6 +1,7 @@
 package com.qq.weixin.mp.aes;
 
 import org.apache.commons.codec.binary.Base64;
+import org.elkan1788.osc.weixin.mp.util.XmlMsgBuilder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -73,14 +74,18 @@ public class WXBizMsgCrypt {
 
 	// 随机生成16位字符串
 	private String getRandomStr() {
-		String base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		Random random = new Random();
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < 16; i++) {
-			int number = random.nextInt(base.length());
-			sb.append(base.charAt(number));
-		}
-		return sb.toString();
+        StringBuffer sb = new StringBuffer();
+        Random ran = new Random();
+        for(int i=0; i<16; i++) {
+            boolean flag = ran.nextInt(2) % 2 == 0;
+            if(flag) {
+                char c = (char) (int) (Math.random() * 26 + 97);
+                sb.append(c);
+            } else {
+                sb.append(ran.nextInt(10));
+            }
+        }
+        return sb.toString();
 	}
 
 	/**
@@ -125,7 +130,6 @@ public class WXBizMsgCrypt {
 
 			return base64Encrypted;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new AesException(AesException.EncryptAESError);
 		}
 	}
@@ -152,7 +156,6 @@ public class WXBizMsgCrypt {
 			// 解密
 			original = cipher.doFinal(encrypted);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new AesException(AesException.DecryptAESError);
 		}
 
@@ -170,7 +173,6 @@ public class WXBizMsgCrypt {
             fromAppId = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
 					CHARSET);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new AesException(AesException.IllegalBuffer);
 		}
 
@@ -202,15 +204,14 @@ public class WXBizMsgCrypt {
 		String encrypt = encrypt(getRandomStr(), replyMsg);
 
 		// 生成安全签名
-		if (timeStamp == "") {
+		if ("".equals(timeStamp)) {
 			timeStamp = Long.toString(System.currentTimeMillis());
 		}
 
 		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt);
 
-		// System.out.println("发送给平台的签名是: " + signature[1].toString());
 		// 生成发送的xml
-		String result = XMLParse.generate(encrypt, signature, timeStamp, nonce);
+        String result = XmlMsgBuilder.create().encrypt(encrypt, signature, timeStamp, nonce);
 		return result;
 	}
 
@@ -241,8 +242,6 @@ public class WXBizMsgCrypt {
 		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt[1].toString());
 
 		// 和URL中的签名比较是否相等
-		// System.out.println("第三方收到URL中的签名：" + msg_sign);
-		// System.out.println("第三方校验签名：" + signature);
 		if (!signature.equals(msgSignature)) {
 			throw new AesException(AesException.ValidateSignatureError);
 		}
