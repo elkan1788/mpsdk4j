@@ -176,7 +176,7 @@ public class WxMsgParser {
         }
 
         if (AES_ENCRYPT) {// 加密
-           reply_msg = wxcrp.encryptMsg(reply_msg, timeStamp, nonce);
+           reply_msg = wxcrp.encryptMsg(reply_msg, msgSignature, timeStamp, nonce);
         }
 
         // 调试信息

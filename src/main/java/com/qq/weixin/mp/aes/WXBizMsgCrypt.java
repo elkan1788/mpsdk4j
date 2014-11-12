@@ -193,13 +193,14 @@ public class WXBizMsgCrypt {
 	 * </ol>
 	 *
 	 * @param replyMsg 公众平台待回复用户的消息，xml格式的字符串
+	 * @param msgSignature 消息安全签名
 	 * @param timeStamp 时间戳，可以自己生成，也可以用URL参数的timestamp
 	 * @param nonce 随机串，可以自己生成，也可以用URL参数的nonce
 	 *
 	 * @return 加密后的可以直接回复用户的密文，包括msg_signature, timestamp, nonce, encrypt的xml格式的字符串
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
-	public String encryptMsg(String replyMsg, String timeStamp, String nonce) throws AesException {
+	public String encryptMsg(String replyMsg, String msgSignature, String timeStamp, String nonce) throws AesException {
 		// 加密
 		String encrypt = encrypt(getRandomStr(), replyMsg);
 
@@ -208,10 +209,10 @@ public class WXBizMsgCrypt {
 			timeStamp = Long.toString(System.currentTimeMillis());
 		}
 
-		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt);
+//		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt);
 
 		// 生成发送的xml
-        String result = XmlMsgBuilder.create().encrypt(encrypt, signature, timeStamp, nonce);
+        String result = XmlMsgBuilder.create().encrypt(encrypt, msgSignature, timeStamp, nonce);
 		return result;
 	}
 

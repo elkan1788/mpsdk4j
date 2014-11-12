@@ -93,4 +93,17 @@ public class Articles2 {
     public void setShowCover(int showCover) {
         this.showCover = showCover;
     }
+
+    @Override
+    public String toString() {
+        return "Articles2{" +
+                "mediaId='" + mediaId + '\'' +
+                ", author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", sourceUrl='" + sourceUrl + '\'' +
+                ", content='" + content + '\'' +
+                ", digest='" + digest + '\'' +
+                ", showCover=" + showCover +
+                '}';
+    }
 }
