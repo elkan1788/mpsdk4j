@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONObject;
  *
  * @author 凡梦星尘(senhuili@mdc.cn)
  * @since 2014/11/8
- * @version 1.0.0
+ * @version 1.0.2
  */
 public class MPAct {
 
@@ -32,6 +32,9 @@ public class MPAct {
 	 */
 	private String appSecert;
 
+    /**
+     * 令牌
+     */
     private String token;
 
 	/**
@@ -50,7 +53,6 @@ public class MPAct {
 
 	/**
 	 * 是否认证
-	 * 
 	 */
 	private boolean pass;
 

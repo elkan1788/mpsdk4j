@@ -9,8 +9,19 @@ package org.elkan1788.osc.weixin.mp.vo;
  */
 public class Group {
 
+    /**
+     * 分组唯一ID
+     */
     private int id;
+
+    /**
+     * 分组名称
+     */
     private String name;
+
+    /**
+     * 用户统计
+     */
     private int count;
 
     public int getId() {
