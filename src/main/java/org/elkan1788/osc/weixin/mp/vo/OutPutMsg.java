@@ -28,6 +28,16 @@ public class OutPutMsg extends BaseMsg {
 	private List<Article> articles = new ArrayList<>();
 
     /**
+     * 用于群发消息中的分组ID
+     */
+    private String groupId;
+
+    /**
+     * 用于群发消息中的用户ID,最多支持1000个
+     */
+    private List<String> toUsers = new ArrayList<>();
+
+    /**
      * 带基础参数的构造函数
      * @param fromUserName 微信用户openId
      * @param toUserName   微信公众号原始ID
@@ -73,6 +83,22 @@ public class OutPutMsg extends BaseMsg {
         }
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public List<String> getToUsers() {
+        return toUsers;
+    }
+
+    public void setToUsers(List<String> toUsers) {
+        this.toUsers = toUsers;
+    }
+
     @Override
     public String toString() {
         return "OutPutMsg{" +
@@ -89,7 +115,9 @@ public class OutPutMsg extends BaseMsg {
                 ", description='" + description + '\'' +
                 ", musicUrl='" + musicUrl + '\'' +
                 ", hQMusicUrl='" + hQMusicUrl + '\'' +
+                ", groupId='" + groupId + '\'' +
                 ", articles=" + ((null==articles) ? 0 : articles.size()) +
+                ", toUsers=" + ((null==toUsers) ? 0 : toUsers.size()) +
                 "} " + super.toString();
     }
 }

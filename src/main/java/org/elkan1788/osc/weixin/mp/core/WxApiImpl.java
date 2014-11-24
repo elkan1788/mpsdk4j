@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2014/11/12
- * @version 1.1.0
+ * @version 1.2.0
  */
 public class WxApiImpl implements WxApi {
 
@@ -40,6 +40,7 @@ public class WxApiImpl implements WxApi {
     public String getAccessToken() throws WxRespException {
         String token = mpAct.getAccessToken();
         if (null == token
+                || token.isEmpty()
                 || mpAct.getExpiresIn() < System.currentTimeMillis()) {
             refreshAccessToken();
             token = mpAct.getAccessToken();
@@ -66,6 +67,28 @@ public class WxApiImpl implements WxApi {
         }
 
         mpAct.accessToken(result);
+    }
+
+    @Override
+    public List<String> getServerIp() throws WxRespException {
+        String url = String.format(WxApiUrl.IP_LIST_API, getAccessToken());
+        String result = "";
+        try {
+            result = SimpleHttpReq.get(url);
+        } catch (IOException e) {
+            log.error("获取微信服务器IP时出现异常!!!");
+            log.error(e.toString());
+        }
+
+        if (result.isEmpty()
+                || result.contains("errcode")) {
+            throw new WxRespException(result);
+        }
+
+        JSONObject tmp = JSON.parseObject(result);
+        List<String> ips = JSONObject.parseArray(tmp.getString("ip_list"), String.class);
+
+        return ips;
     }
 
     @Override
@@ -244,7 +267,7 @@ public class WxApiImpl implements WxApi {
         }
 
         if (result.isEmpty()
-                || result.contains("errcode")) {
+                || !result.contains("ok")) {
             throw new WxRespException(result);
         }
 
@@ -400,5 +423,112 @@ public class WxApiImpl implements WxApi {
             log.error("下载多媒体文件时出现异常!!!");
             log.error(e.toString());
         }
+    }
+
+    @Override
+    public String[] upNews(Articles2... articles2s) throws WxRespException {
+        String url = String.format(WxApiUrl.NEWS_UPLOAD_API, getAccessToken());
+        String upnews_msg = JsonMsgBuilder.create().uploadNews(articles2s).build();
+        String result = "";
+        try {
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, upnews_msg);
+        } catch (IOException e) {
+            log.error("上传群发图文消息时出现异常!!!");
+            log.error(e.toString());
+        }
+
+        if (result.isEmpty()
+                ||result.contains("errcode")) {
+            throw new WxRespException(result);
+        }
+        JSONObject tmp = JSON.parseObject(result);
+        String[] results = {
+                tmp.getString("type"),
+                tmp.getString("media_id"),
+                tmp.getString("created_at")
+        };
+        return results;
+    }
+
+    @Override
+    public String[] upVideo(String mediaId,
+                                String title, String description) throws WxRespException {
+        String url = String.format(WxApiUrl.MEDIA_UPVIDEO_API, getAccessToken());
+        String result = "";
+        String upvideo_msg = JsonMsgBuilder.create().uploadVideo(mediaId,title,description).build();
+        try {
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, upvideo_msg);
+        } catch (IOException e) {
+            log.error("上传群发消息中的视频时出现异常!!!");
+            log.error(e.toString());
+        }
+
+        if (result.isEmpty()
+                ||result.contains("errcode")) {
+            throw new WxRespException(result);
+        }
+        JSONObject tmp = JSON.parseObject(result);
+        String[] results = {
+                tmp.getString("type"),
+                tmp.getString("media_id"),
+                tmp.getString("created_at")
+        };
+        return results;
+    }
+
+    @Override
+    public String sendAll(OutPutMsg msg) throws WxRespException {
+        String group_id = msg.getGroupId();
+        List<String> to_users = msg.getToUsers();
+        if (null != group_id
+                && !group_id.isEmpty()
+                && !to_users.isEmpty()) {
+            throw new RuntimeException("群发消息只能选择一种模式");
+        }
+
+        String url = "";
+        if (to_users.isEmpty()) {
+           url =  String.format(WxApiUrl.GROUP_NEWS_MESSAGE_API, "sendall", getAccessToken());
+        } else {
+            url = String.format(WxApiUrl.GROUP_NEWS_MESSAGE_API, "send", getAccessToken());
+        }
+
+        String result = "";
+        String send_msg = JsonMsgBuilder.create().sendAll(msg).build();
+        try {
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, send_msg);
+        } catch (IOException e) {
+            log.error("发送群消息时出现异常!!!");
+            log.error(e.toString());
+        }
+
+        if (result.isEmpty()
+                ||!result.contains("msg_id")) {
+            throw new WxRespException(result);
+        }
+
+        JSONObject tmp = JSON.parseObject(result);
+
+        return tmp.getString("msg_id");
+    }
+
+    @Override
+    public boolean delSendAll(String msgId) throws WxRespException {
+        String url = String.format(WxApiUrl.GROUP_NEWS_MESSAGE_API, "delete", getAccessToken());
+        String result = "";
+        String del_msg = "{\"msg_id\":"+ msgId +"}";
+        try {
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, del_msg);
+        } catch (IOException e) {
+            log.error("删除群发消息时出现异常!!!");
+            log.error(e.toString());
+        }
+
+        if (result.isEmpty()
+                ||!result.contains("ok")) {
+            throw new WxRespException(result);
+        }
+
+        return true;
     }
 }

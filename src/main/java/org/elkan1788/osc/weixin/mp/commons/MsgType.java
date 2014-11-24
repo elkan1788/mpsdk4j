@@ -94,7 +94,15 @@ public enum MsgType {
     /**
      * 弹出地理位置选择器
      */
-    e_location_select;
+    e_location_select,
+    /**
+     * 群发消息中的图文消息
+     */
+    mpnews,
+    /**
+     * 群发消息中的视频消息
+     */
+    mpvideo;
 
     /**
      * 事件类型标识

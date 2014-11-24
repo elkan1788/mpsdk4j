@@ -26,6 +26,10 @@ public interface WxApiUrl {
      */
     public static final String ACCESS_TOKEN_API = WX_API + "/token?grant_type=client_credential&appid=%1$s&secret=%2$s";
     /**
+     * 获取微信服务器IP
+     */
+    public static final String IP_LIST_API = WX_API + "/getcallbackip?access_token=%1$s";
+    /**
      * 自定义菜单API入口[create, get, delete]
      */
     public static final String CUSTOM_MENU_API = WX_API + "/menu/%1$s?access_token=%2$s";
@@ -82,4 +86,8 @@ public interface WxApiUrl {
      */
     public static final String GROUP_NEWS_MESSAGE_API = WX_API + "/message/mass/%1$s?access_token=%2$s";
 
+    /**
+     * 群发消息上传视频
+     */
+    public static final String MEDIA_UPVIDEO_API = MEDIA_API +  "/uploadvideo?access_token=%1$s";
 }

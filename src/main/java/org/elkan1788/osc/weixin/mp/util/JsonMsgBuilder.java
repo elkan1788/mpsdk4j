@@ -1,6 +1,8 @@
 package org.elkan1788.osc.weixin.mp.util;
 
+import org.elkan1788.osc.weixin.mp.commons.MsgType;
 import org.elkan1788.osc.weixin.mp.vo.Article;
+import org.elkan1788.osc.weixin.mp.vo.Articles2;
 import org.elkan1788.osc.weixin.mp.vo.OutPutMsg;
 import org.elkan1788.osc.weixin.mp.vo.Template;
 
@@ -13,7 +15,7 @@ import org.elkan1788.osc.weixin.mp.vo.Template;
  */
 public class JsonMsgBuilder {
 
-    private final StringBuffer msgBuf = new StringBuffer("{");;
+    private final StringBuffer msgBuf = new StringBuffer("{");
 
     /**
      * 创建
@@ -34,6 +36,10 @@ public class JsonMsgBuilder {
         msgBuf.append("\"msgtype\":\"")
                 .append(msg.getMsgType())
                 .append("\",");
+    }
+
+    void msgSuffix(OutPutMsg msg) {
+        msgBuf.append("\"msgtype\":\"").append(msg.getMsgType()).append("\"");
     }
 
     /**
@@ -188,6 +194,99 @@ public class JsonMsgBuilder {
         }
         msgBuf.append(data.substring(0, data.lastIndexOf(",")));
         msgBuf.append("}");
+        return this;
+    }
+
+    /**
+     * 上传多图文消息
+     *
+     * @param articles2s    图文消息
+     */
+    public JsonMsgBuilder uploadNews(Articles2... articles2s) {
+        msgBuf.append("\"articles\":[");
+        StringBuffer art2_buf = new StringBuffer();
+        for (Articles2 art2 : articles2s) {
+            art2_buf.append("{");
+            art2_buf.append("\"thumb_media_id\":\"").append(art2.getMediaId()).append("\",");
+            art2_buf.append("\"author\":\"").append(art2.getAuthor()).append("\",");
+            art2_buf.append("\"title\":\"").append(art2.getTitle()).append("\",");
+            art2_buf.append("\"content_source_url\":\"").append(art2.getSourceUrl()).append("\",");
+            art2_buf.append("\"content\":\"").append(art2.getContent()).append("\",");
+            art2_buf.append("\"digest\":\"").append(art2.getDigest()).append("\",");
+            art2_buf.append("\"show_cover_pic\":\"").append(art2.getShowCover()).append("\"");
+            art2_buf.append("},");
+        }
+        msgBuf.append(art2_buf.substring(0, art2_buf.lastIndexOf(",")));
+        msgBuf.append("]");
+        return this;
+    }
+
+    /**
+     * 上传视频
+     *
+     * @param mediaId   多媒体ID
+     * @param title 视频标题
+     * @param description   视频描述
+     */
+    public JsonMsgBuilder uploadVideo(String mediaId, String title, String description) {
+        msgBuf.append("\"media_id\":\"").append(mediaId).append("\",");
+        msgBuf.append("\"title\":\"").append(title).append("\",");
+        msgBuf.append("\"description\":\"").append(description).append("\"");
+        return this;
+    }
+
+    /**
+     * 群发消息
+     *
+     * @param msg 输出消息实体
+     */
+    public JsonMsgBuilder sendAll(OutPutMsg msg) {
+        if (msg.getToUsers().isEmpty()) {
+          msgBuf.append("\"filter\":{")
+                  .append("\"group_id\":\"")
+                  .append(msg.getGroupId())
+                  .append("\"},");
+        } else {
+            msgBuf.append("\"touser\":[");
+            StringBuffer users_buf = new StringBuffer();
+            for (String touser : msg.getToUsers()) {
+                users_buf.append("\"").append(touser).append("\",");
+            }
+            msgBuf.append(users_buf.substring(0, users_buf.lastIndexOf(",")));
+            msgBuf.append("],");
+        }
+
+        MsgType type = MsgType.valueOf(msg.getMsgType());
+        switch (type) {
+            case text:
+                msgBuf.append("\"text\":{\"content\":\"").append(msg.getContent()).append("\"}");
+                break;
+            case image:
+                msgBuf.append("\"image\":{\"media_id\":\"").append(msg.getMediaId()).append("\"}");
+                break;
+            case voice:
+                msgBuf.append("\"voice\":{\"media_id\":\"").append(msg.getMediaId()).append("\"}");
+                break;
+            case mpvideo:
+                msgBuf.append("\"mpvideo\":{\"media_id\":\"").append(msg.getMediaId()).append("\"}");
+                break;
+            case video:
+                msgBuf.append("\"video\":{\"media_id\":\"")
+                        .append(msg.getMediaId())
+                        .append("\",\"title\":\"")
+                        .append(msg.getTitle())
+                        .append("\",\"description\":\"")
+                        .append(msg.getDescription()).append("\"}");
+                break;
+            case mpnews:
+                msgBuf.append("\"mpnews\":{\"media_id\":\"").append(msg.getMediaId()).append("\"}");
+                break;
+            default:
+                break;
+        }
+
+        msgBuf.append(",\"msgtype\":\"").append(msg.getMsgType()).append("\"");
+
         return this;
     }
 

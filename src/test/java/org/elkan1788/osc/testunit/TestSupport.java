@@ -49,7 +49,7 @@ public class TestSupport {
         mpAct.setAppSecert(appSecret);
         mpAct.setToken(token);
         mpAct.setAESKey(aesKey);
-        if (!accessToken.equals("NOT")) {
+        if (!accessToken.equals("NOT")||!accessToken.isEmpty()) {
             mpAct.setAccessToken(accessToken);
             mpAct.setExpiresIn(7000 * 1000 + System.currentTimeMillis());
         }

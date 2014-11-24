@@ -21,6 +21,8 @@ public interface WxApi {
     public static final String VIDEO = "video";
     public static final String MUSIC = "music";
     public static final String NEWS = "news";
+    public static final String MPNEWS = "mpnews";
+    public static final String MPVIDEO = "mpvideo";
 
 	/**
 	 * 创建ACCESS_TOKEN
@@ -32,6 +34,12 @@ public interface WxApi {
      */
 	public void refreshAccessToken() throws WxRespException;
 
+	/**
+	 * 获取微信服务器IP列表
+	 * @return IP地址集合
+	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+	 */
+	public List<String> getServerIp() throws WxRespException;
 
     /**
      * 上传多媒体文件，微信服务器只保存3天
@@ -122,10 +130,48 @@ public interface WxApi {
      * @param topColor      顶部颜色
      * @param url           跳转地址
      * @param templates     模样数据
-     * @return
+     * @return false或true
      * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
      */
 	public boolean sendTemplateMsg(String openId, String templateId, String topColor, String url, Template... templates) throws WxRespException;
 
+	/**
+	 * 上传图文消息素材
+	 *
+	 * @param articles2s 图文消息实体数组
+	 * @return [0 消息类型, 1 多媒体ID, 2 创建时间]
+	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+	 */
+	public String[] upNews(Articles2... articles2s) throws WxRespException;
 
+	/**
+	 * 上传群发消息中的视频文件
+	 *
+	 * @param mediaId	多媒体ID[需通过基础支持中的上传下载多媒体文件来得到]
+	 * @param title		标题
+	 * @param description	描述
+	 * @return [0 消息类型, 1 多媒体ID, 2 创建时间]
+	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+	 */
+	public String[] upVideo(String mediaId, String title, String description) throws WxRespException;
+
+	/**
+	 * 群发消息[分组或指定用户]
+	 * @param msg	消息输出实体[groupId或toUsers, content, msgType, mediaId]
+	 * @return	消息ID
+	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+	 */
+	public String sendAll(OutPutMsg msg) throws WxRespException;
+
+	/**
+	 * 删除群发消息<pre/>
+	 *
+	 * 只有已经发送成功的消息才能删除删除消息只是将消息的图文详情页失效，<pre/>
+	 * 已经收到的用户，还是能在其本地看到消息卡片。 另外，删除群发消息只能<pre/>
+	 * 删除图文消息和视频消息，其他类型的消息一经发送，无法删除。
+	 * @param msgId	发送消息的ID
+	 * @return	false或true
+	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+	 */
+	public boolean delSendAll(String msgId) throws WxRespException;
 }

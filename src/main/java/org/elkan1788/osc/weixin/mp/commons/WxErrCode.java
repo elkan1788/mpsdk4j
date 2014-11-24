@@ -49,6 +49,7 @@ public class WxErrCode {
     public static final int INVALID_URLLENGTH = 40039;
     public static final int INVALID_GROUPID = 40050;
     public static final int INVALID_GROUPNAME = 40051;
+    public static final int INVALID_MSGID = 40059;
     public static final int LOST_AESSTOKEN = 41001;
     public static final int LOST_APPID = 41002;
     public static final int LOST_REFRESHTOKEN = 41003;
@@ -179,6 +180,8 @@ public class WxErrCode {
                 return "不合法的分组id";
             case INVALID_GROUPNAME:
                 return "分组名字不合法";
+            case INVALID_MSGID:
+                return "不合法的消息ID";
             case LOST_AESSTOKEN:
                 return "缺少access_token参数";
             case LOST_APPID:
