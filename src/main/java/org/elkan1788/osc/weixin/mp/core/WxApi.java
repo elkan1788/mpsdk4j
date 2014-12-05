@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2014/11/10
- * @version 1.0.0
+ * @version 1.2.2
  */
 public interface WxApi {
 
@@ -62,7 +62,7 @@ public interface WxApi {
 
     /**
      * 获取微信菜单
-     * @return  微信菜单
+     * @return  微信菜单集合
      */
 	public List<Menu> getMenu() throws WxRespException;
 
@@ -75,41 +75,58 @@ public interface WxApi {
 
 	/**
 	 * 删除自定义菜单
+	 * @return true或false
 	 */
 	public boolean deleteMenu() throws WxRespException;
 
 	/**
 	 * 创建分组，成功返回分组ID，否则抛出异常
+	 * @param name 分组名称
+	 * @return 分组ID
 	 */
 	public int creatGroup(String name) throws WxRespException;
 
 	/**
 	 * 获取所有分组
+	 * @return  Groups集合
 	 */
 	public List<Group> getGroups() throws WxRespException;
 
 	/**
 	 * 重命名分组
+	 * @param id	分组ID
+	 * @param name	新的分组名称
+	 * @return true或false
 	 */
 	public boolean renGroup(int id, String name) throws WxRespException;
 
 	/**
 	 * 获取用户分组ID
+	 * @param openId 	用户ID
+	 * @return 分组ID
 	 */
 	public int getGroupId(String openId) throws WxRespException;
 
 	/**
 	 * 移动用户分组
+	 * @param openId	用户ID
+	 * @param groupId	新分组ID
+	 * @return true或false
 	 */
 	public boolean move2Group(String openId, int groupId) throws WxRespException;
 
 	/**
 	 * 获取关注用户列表
+	 * @param	nextOpenId	 	拉取列表的后一个用户的OPENID
+	 * @return 关注用户ID列表
 	 */
 	public FollowList getFollowerList(String nextOpenId) throws WxRespException;
 
 	/**
 	 * 获取关注者的信息
+	 * @param	openId	用户ID
+	 * @param 	lang	使用语言
+	 * @return 关注者的基本信息
 	 */
 	public Follower getFollower(String openId, String lang) throws WxRespException;
 

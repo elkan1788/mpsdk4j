@@ -4,30 +4,30 @@ package org.elkan1788.osc.weixin.mp.vo;
  * 微信模板消息
  *
  * @author 凡梦星尘(senhuili@mdc.cn)
- * @since 2014/11/7
  * @version 1.0.0
+ * @since 2014/11/7
  */
 public class Template {
 
-	/**
-	 * 默认颜色(蓝色)
-	 */
-	private String DEFAULT_COLOR = "#119EF3";
+    /**
+     * 默认颜色(蓝色)
+     */
+    private String DEFAULT_COLOR = "#119EF3";
 
-	/**
-	 * 模板字段名称
-	 */
-	private String name;
+    /**
+     * 模板字段名称
+     */
+    private String name;
 
-	/**
-	 * 显示颜色
-	 */
-	private String color;
+    /**
+     * 显示颜色
+     */
+    private String color;
 
-	/**
-	 * 显示数据
-	 */
-	private String value;
+    /**
+     * 显示数据
+     */
+    private String value;
 
     public Template() {
     }
@@ -66,7 +66,7 @@ public class Template {
      * 组装模板数据
      */
     public String templateData() {
-        StringBuffer data =  new StringBuffer("\""+name+"\":{");
+        StringBuffer data = new StringBuffer("\"" + name + "\":{");
         data.append("\"value\":\"").append(value).append("\",");
         data.append("\"color\":").append(color).append("\"}");
         return data.toString();

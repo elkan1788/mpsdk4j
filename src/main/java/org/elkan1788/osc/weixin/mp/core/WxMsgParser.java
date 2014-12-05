@@ -98,9 +98,9 @@ public class WxMsgParser {
      * 将微信消息转换成VO对象
      *
      * @param msg       消息输入流
+     * @param msgSignature  消息签名
      * @param timeStamp 时间戳
      * @param nonce     随机字符
-     * @param msgSignature  消息签名
      * @return  消息VO对象
      * @throws java.lang.Exception
      */
@@ -143,11 +143,15 @@ public class WxMsgParser {
 	 * 回复消息
      *
      * @param msg 消息VO对象
+     * @param msgSignature 消息签名
+     * @param timeStamp 消息时间戳
+     * @param nonce 随机字符
      * @return 回复内容
 	 */
 	public static String reply(OutPutMsg msg,
                                String msgSignature,
-                               String timeStamp, String nonce) throws AesException {
+                               String timeStamp,
+                               String nonce) throws AesException {
 
         String reply_msg = "";
         // 获取消息类型
