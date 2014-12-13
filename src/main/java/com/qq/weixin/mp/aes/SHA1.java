@@ -17,13 +17,14 @@ public class SHA1 {
      * @return 安全签名
      * @throws com.qq.weixin.mp.aes.AesException
      */
-        public static String getSHA1(String... params) throws AesException {
+        public static String calculate(String... params) throws AesException {
 		try {
             String[] array = params;
 			StringBuffer sb = new StringBuffer();
 			// 字符串排序
 			Arrays.sort(array);
-			for (int i = 0; i < 4; i++) {
+			int len = params.length;
+			for (int i = 0; i < len; i++) {
 				sb.append(array[i]);
 			}
 			String str = sb.toString();
