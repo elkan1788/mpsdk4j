@@ -7,7 +7,7 @@ package org.elkan1788.osc.weixin.mp.commons;
  * @version 1.0
  * @since 2014/11/6
  */
-public enum MsgType {
+public enum WxMsgType {
 
     /**
      * 文本消息
@@ -58,6 +58,10 @@ public enum MsgType {
      */
     e_SCAN,
     /**
+     * 自动上传位置
+     */
+    e_LOCATION,
+    /**
      * 点击事件
      */
     e_CLICK,
@@ -69,6 +73,10 @@ public enum MsgType {
      * 模板消息推送事件
      */
     e_TEMPLATESENDJOBFINISH,
+    /**
+     * 群发消息推送事件
+     */
+    e_MASSSENDJOBFINISH,
 
     // 以下事件微信iPhone5.4.1+, Android5.4+仅支持
     /**

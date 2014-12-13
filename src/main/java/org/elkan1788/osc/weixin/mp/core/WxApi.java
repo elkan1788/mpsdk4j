@@ -27,19 +27,19 @@ public interface WxApi {
 	/**
 	 * 创建ACCESS_TOKEN
 	 */
-	public String getAccessToken() throws WxRespException;
+	String getAccessToken() throws WxRespException;
 
     /**
      * 刷新ACCESS_TOKE
      */
-	public void refreshAccessToken() throws WxRespException;
+	void refreshAccessToken() throws WxRespException;
 
 	/**
 	 * 获取微信服务器IP列表
 	 * @return IP地址集合
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
-	public List<String> getServerIp() throws WxRespException;
+	List<String> getServerIp() throws WxRespException;
 
     /**
      * 上传多媒体文件，微信服务器只保存3天
@@ -49,7 +49,7 @@ public interface WxApi {
      * @return  储存媒体ID
      * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
      */
-    public String upMedia(String mediaType, File file) throws WxRespException;
+    String upMedia(String mediaType, File file) throws WxRespException;
 
     /**
      * 下载多媒体文件
@@ -58,39 +58,39 @@ public interface WxApi {
      * @param file      本地存储位置[默认使用媒体ID作文件名]
      * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
      */
-    public void dlMedia(String mediaId, File file) throws WxRespException;
+    void dlMedia(String mediaId, File file) throws WxRespException;
 
     /**
      * 获取微信菜单
      * @return  微信菜单集合
      */
-	public List<Menu> getMenu() throws WxRespException;
+	List<Menu> getMenu() throws WxRespException;
 
     /**
      * 创建微信菜单
      * @param menus 微信菜单
      * @return  true或false
      */
-	public boolean createMenu(Menu... menus) throws WxRespException;
+	boolean createMenu(Menu... menus) throws WxRespException;
 
 	/**
 	 * 删除自定义菜单
 	 * @return true或false
 	 */
-	public boolean deleteMenu() throws WxRespException;
+	boolean deleteMenu() throws WxRespException;
 
 	/**
 	 * 创建分组，成功返回分组ID，否则抛出异常
 	 * @param name 分组名称
 	 * @return 分组ID
 	 */
-	public int creatGroup(String name) throws WxRespException;
+	int creatGroup(String name) throws WxRespException;
 
 	/**
 	 * 获取所有分组
 	 * @return  Groups集合
 	 */
-	public List<Group> getGroups() throws WxRespException;
+	List<Group> getGroups() throws WxRespException;
 
 	/**
 	 * 重命名分组
@@ -98,14 +98,14 @@ public interface WxApi {
 	 * @param name	新的分组名称
 	 * @return true或false
 	 */
-	public boolean renGroup(int id, String name) throws WxRespException;
+	boolean renGroup(int id, String name) throws WxRespException;
 
 	/**
 	 * 获取用户分组ID
 	 * @param openId 	用户ID
 	 * @return 分组ID
 	 */
-	public int getGroupId(String openId) throws WxRespException;
+	int getGroupId(String openId) throws WxRespException;
 
 	/**
 	 * 移动用户分组
@@ -113,14 +113,14 @@ public interface WxApi {
 	 * @param groupId	新分组ID
 	 * @return true或false
 	 */
-	public boolean move2Group(String openId, int groupId) throws WxRespException;
+	boolean move2Group(String openId, int groupId) throws WxRespException;
 
 	/**
 	 * 获取关注用户列表
 	 * @param	nextOpenId	 	拉取列表的后一个用户的OPENID
 	 * @return 关注用户ID列表
 	 */
-	public FollowList getFollowerList(String nextOpenId) throws WxRespException;
+	FollowList getFollowerList(String nextOpenId) throws WxRespException;
 
 	/**
 	 * 获取关注者的信息
@@ -128,7 +128,7 @@ public interface WxApi {
 	 * @param 	lang	使用语言
 	 * @return 关注者的基本信息
 	 */
-	public Follower getFollower(String openId, String lang) throws WxRespException;
+	Follower getFollower(String openId, String lang) throws WxRespException;
 
     /**
      * 发送客服消息
@@ -137,7 +137,7 @@ public interface WxApi {
      * @return  false或true
      * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
      */
-	public boolean sendCustomerMsg(OutPutMsg msg) throws WxRespException;
+	boolean sendCustomerMsg(OutPutMsg msg) throws WxRespException;
 
     /**
      * 发送模板消息
@@ -150,7 +150,7 @@ public interface WxApi {
      * @return false或true
      * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
      */
-	public boolean sendTemplateMsg(String openId, String templateId, String topColor, String url, Template... templates) throws WxRespException;
+	boolean sendTemplateMsg(String openId, String templateId, String topColor, String url, Template... templates) throws WxRespException;
 
 	/**
 	 * 上传图文消息素材
@@ -159,7 +159,7 @@ public interface WxApi {
 	 * @return [0 消息类型, 1 多媒体ID, 2 创建时间]
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
-	public String[] upNews(Articles2... articles2s) throws WxRespException;
+	String[] upNews(Articles2... articles2s) throws WxRespException;
 
 	/**
 	 * 上传群发消息中的视频文件
@@ -170,7 +170,7 @@ public interface WxApi {
 	 * @return [0 消息类型, 1 多媒体ID, 2 创建时间]
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
-	public String[] upVideo(String mediaId, String title, String description) throws WxRespException;
+	String[] upVideo(String mediaId, String title, String description) throws WxRespException;
 
 	/**
 	 * 群发消息[分组或指定用户]
@@ -178,7 +178,7 @@ public interface WxApi {
 	 * @return	消息ID
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
-	public String sendAll(OutPutMsg msg) throws WxRespException;
+	String sendAll(OutPutMsg msg) throws WxRespException;
 
 	/**
 	 * 删除群发消息<pre/>
@@ -190,5 +190,5 @@ public interface WxApi {
 	 * @return	false或true
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
-	public boolean delSendAll(String msgId) throws WxRespException;
+	boolean delSendAll(String msgId) throws WxRespException;
 }

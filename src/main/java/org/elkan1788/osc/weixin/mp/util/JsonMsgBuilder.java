@@ -1,6 +1,6 @@
 package org.elkan1788.osc.weixin.mp.util;
 
-import org.elkan1788.osc.weixin.mp.commons.MsgType;
+import org.elkan1788.osc.weixin.mp.commons.WxMsgType;
 import org.elkan1788.osc.weixin.mp.vo.Article;
 import org.elkan1788.osc.weixin.mp.vo.Articles2;
 import org.elkan1788.osc.weixin.mp.vo.OutPutMsg;
@@ -256,7 +256,7 @@ public class JsonMsgBuilder {
             msgBuf.append("],");
         }
 
-        MsgType type = MsgType.valueOf(msg.getMsgType());
+        WxMsgType type = WxMsgType.valueOf(msg.getMsgType());
         switch (type) {
             case text:
                 msgBuf.append("\"text\":{\"content\":\"").append(msg.getContent()).append("\"}");

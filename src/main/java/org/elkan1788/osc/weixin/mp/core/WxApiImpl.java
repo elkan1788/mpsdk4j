@@ -3,7 +3,7 @@ package org.elkan1788.osc.weixin.mp.core;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.PropertyFilter;
-import org.elkan1788.osc.weixin.mp.commons.MsgType;
+import org.elkan1788.osc.weixin.mp.commons.WxMsgType;
 import org.elkan1788.osc.weixin.mp.commons.WxApiUrl;
 import org.elkan1788.osc.weixin.mp.exception.WxRespException;
 import org.elkan1788.osc.weixin.mp.util.JsonMsgBuilder;
@@ -322,7 +322,7 @@ public class WxApiImpl implements WxApi {
     public boolean sendCustomerMsg(OutPutMsg msg) throws WxRespException {
         String url = String.format(WxApiUrl.CUSTOM_MESSAGE_API, getAccessToken());
         String custom_msg = "";
-        MsgType type = MsgType.valueOf(msg.getMsgType());
+        WxMsgType type = WxMsgType.valueOf(msg.getMsgType());
         switch (type) {
             case text:
                 custom_msg = JsonMsgBuilder.create().text(msg).build();
