@@ -65,9 +65,43 @@ public class ReceiveMsg extends BaseMsg {
 	private double precision;
 
 	/**
-	 * 微信发送消息状态（模板消息）
+	 * 微信发送消息状态（模板消息,群发消息）<pre/>
+     * 群发的结构，为“send success”或“send fail”或“err(num)”。但send success时，<pre/>
+     * 也有可能因用户拒收公众号的消息、系统错误等原因造成少量用户接收失败。err(num)是审核失败的具体原因，<pre/>
+     * 可能的情况如下：<pre/>
+     * err(10001), //涉嫌广告 <pre/>
+     * err(20001), //涉嫌政治 <pre/>
+     * err(20004), //涉嫌社会 <pre/>
+     * err(20002), //涉嫌色情 <pre/>
+     * err(20006), //涉嫌违法犯罪 <pre/>
+     * err(20008), //涉嫌欺诈 <pre/>
+     * err(20013), //涉嫌版权 <pre/>
+     * err(22000), //涉嫌互推(互相宣传) <pre/>
+     * err(21000), //涉嫌其他
 	 */
 	private String status;
+
+    /**
+     * group_id下粉丝数；或者openid_list中的粉丝数
+     */
+    private Integer totalCnt;
+
+    /**
+     * 过滤（过滤是指特定地区、性别的过滤、用户设置拒收的过滤，
+     * 用户接收已超4条的过滤）后，准备发送的粉丝数，原则上，
+     * FilterCount = SentCount + ErrorCount
+     */
+    private Integer filterCnt;
+
+    /**
+     * 发送成功的粉丝数
+     */
+    private Integer sentCnt;
+
+    /**
+     * 发送失败的粉丝数
+     */
+    private Integer errorCnt;
 
     public String getPicUrl() {
         return picUrl;
@@ -165,6 +199,38 @@ public class ReceiveMsg extends BaseMsg {
         this.status = status;
     }
 
+    public Integer getTotalCnt() {
+        return totalCnt;
+    }
+
+    public void setTotalCnt(Integer totalCnt) {
+        this.totalCnt = totalCnt;
+    }
+
+    public Integer getFilterCnt() {
+        return filterCnt;
+    }
+
+    public void setFilterCnt(Integer filterCnt) {
+        this.filterCnt = filterCnt;
+    }
+
+    public Integer getSentCnt() {
+        return sentCnt;
+    }
+
+    public void setSentCnt(Integer sentCnt) {
+        this.sentCnt = sentCnt;
+    }
+
+    public Integer getErrorCnt() {
+        return errorCnt;
+    }
+
+    public void setErrorCnt(Integer errorCnt) {
+        this.errorCnt = errorCnt;
+    }
+
     @Override
     public String toString() {
         return "ReceiveMsg{" +
@@ -191,6 +257,10 @@ public class ReceiveMsg extends BaseMsg {
                 ", longitude=" + longitude +
                 ", precision=" + precision +
                 ", status='" + status + '\'' +
+                ", totalCnt='" + totalCnt + '\'' +
+                ", filterCnt='" + filterCnt + '\'' +
+                ", sentCnt='" + sentCnt + '\'' +
+                ", errorCnt='" + errorCnt + '\'' +
                 "} ";
     }
 }

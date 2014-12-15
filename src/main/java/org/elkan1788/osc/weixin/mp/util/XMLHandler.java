@@ -6,13 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * 微信消息内容处理器
  *
  * @author 凡梦星尘(senhuili@mdc.cn)
  * @since 2014/11/7
- * @version 1.0.0
+ * @version 1.0.3
  */
 public class XMLHandler extends DefaultHandler2 {
 
@@ -50,12 +51,14 @@ public class XMLHandler extends DefaultHandler2 {
                            String localName,
                            String qName) throws SAXException {
 
-        if (log.isDebugEnabled()) {
-            log.debug("当前节点值[{}]: {}", qName, arrtVal);
+        if (log.isInfoEnabled()) {
+            if (!"xml".equals(qName)) {
+                log.info("当前节点值[{}]: {}", qName, arrtVal);
+            }
         }
 
         // 本想用反射实现,但耗时长,所以还是手动编码吧,累
-        if ("MsgId".equals(qName)) {
+        if ("MsgId".equals(qName) || "MsgID".equals(qName)) {
             msg.setMsgId(Long.valueOf(arrtVal));
             return ;
         }
@@ -150,12 +153,17 @@ public class XMLHandler extends DefaultHandler2 {
             return ;
         }
 
+        if ("Event".equals(qName)) {
+            msg.setEvent(arrtVal);
+            return ;
+        }
+
         if ("EventKey".equals(qName)) {
             msg.setEventKey(arrtVal);
             return ;
         }
 
-        if ("Ticket(".equals(qName)) {
+        if ("Ticket".equals(qName)) {
             msg.setTicket(arrtVal);
             return ;
         }
@@ -179,6 +187,26 @@ public class XMLHandler extends DefaultHandler2 {
             msg.setStatus(arrtVal);
             return ;
         }
+
+        if ("TotalCount".equals(qName)) {
+            msg.setTotalCnt(Integer.parseInt(arrtVal));
+            return ;
+        }
+
+        if ("FilterCount".equals(qName)) {
+            msg.setFilterCnt(Integer.parseInt(arrtVal));
+            return ;
+        }
+
+        if ("SentCount".equals(qName)) {
+            msg.setSentCnt(Integer.parseInt(arrtVal));
+            return ;
+        }
+
+        if ("ErrorCount".equals(qName)) {
+            msg.setErrorCnt(Integer.parseInt(arrtVal));
+            return ;
+        }
     }
 
     @Override
@@ -186,4 +214,11 @@ public class XMLHandler extends DefaultHandler2 {
         this.arrtVal = new String(ch, start, length);
     }
 
+    /**
+     * 清除当前VO对象缓存数据
+     */
+    public void clear() {
+        this.msg = null;
+        this.msg = new ReceiveMsg();
+    }
 }
