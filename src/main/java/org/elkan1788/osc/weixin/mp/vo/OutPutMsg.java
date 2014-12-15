@@ -47,6 +47,13 @@ public class OutPutMsg extends BaseMsg {
         this.fromUserName = toUserName;
         this.toUserName = fromUserName;
         this.msgType =  msgType;
+        this.createTime = System.currentTimeMillis() / 1000;
+    }
+
+    public OutPutMsg(ReceiveMsg rm) {
+        this.fromUserName = rm.getToUserName();
+        this.toUserName = rm.getFromUserName();
+        this.createTime = System.currentTimeMillis() / 1000;
     }
 
     public OutPutMsg() {
