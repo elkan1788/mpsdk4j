@@ -66,6 +66,16 @@ public class MPAct {
 	 */
 	private long expiresIn;
 
+    /**
+     * 预授权码
+     */
+    private String preAuthCode;
+
+    /**
+     * 预授权码有效时间
+     */
+    private long preAuthExpiresIn;
+
     public String getMpId() {
         return mpId;
     }
@@ -146,10 +156,37 @@ public class MPAct {
         this.expiresIn = expiresIn;
     }
 
-    public void accessToken(String msg) {
-        JSONObject tmp = JSON.parseObject(msg);
-        setAccessToken(tmp.getString("access_token"));
+    public void createAccessToken(String result) {
+
+        JSONObject tmp = JSON.parseObject(result);
+        if (result.contains("accessToken")) {
+            setAccessToken(tmp.getString("access_token"));
+        } else {
+            setAccessToken(tmp.getString("component_access_token"));
+        }
         setExpiresIn((tmp.getLong("expires_in") - 60)* 1000);
+    }
+
+    public String getPreAuthCode() {
+        return preAuthCode;
+    }
+
+    public void setPreAuthCode(String preAuthCode) {
+        this.preAuthCode = preAuthCode;
+    }
+
+    public long getPreAuthExpiresIn() {
+        return preAuthExpiresIn;
+    }
+
+    public void setPreAuthExpiresIn(long preAuthExpiresIn) {
+        this.preAuthExpiresIn = preAuthExpiresIn;
+    }
+
+    public void createPreAuthCode(String result) {
+        JSONObject tmp = JSONObject.parseObject(result);
+        setPreAuthCode(tmp.getString("pre_auth_code"));
+        setPreAuthExpiresIn((tmp.getLong("expires_in")-60) * 1000);
     }
 
     @Override
