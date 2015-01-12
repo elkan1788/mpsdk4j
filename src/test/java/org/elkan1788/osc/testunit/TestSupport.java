@@ -24,7 +24,12 @@ public class TestSupport {
     protected String templateId;
     protected String mediaId;
     protected String accessToken;
-    
+
+    protected String msgSing;
+    protected String timestamp;
+    protected String echostr;
+    protected String nonce;
+
     protected MPAct mpAct;
     
     @Before
@@ -42,6 +47,11 @@ public class TestSupport {
         templateId = p.getProperty("templateId");
         mediaId = p.getProperty("mediaId");
         accessToken = p.getProperty("accessToken", "NOT");
+
+        msgSing = p.getProperty("msgSing");
+        timestamp = p.getProperty("timestamp");
+        echostr = p.getProperty("echostr");
+        nonce = p.getProperty("nonce");
 
         mpAct = new MPAct();
         mpAct.setMpId(mpId);

@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * 微信API接口设计
+ * 微信公众平台开发者API接口设计
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2014/11/10
@@ -159,7 +159,7 @@ public interface WxApi {
 	 * @return [0 消息类型, 1 多媒体ID, 2 创建时间]
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
-	String[] upNews(Articles2... articles2s) throws WxRespException;
+	String[] upNews(Article2... articles2s) throws WxRespException;
 
 	/**
 	 * 上传群发消息中的视频文件

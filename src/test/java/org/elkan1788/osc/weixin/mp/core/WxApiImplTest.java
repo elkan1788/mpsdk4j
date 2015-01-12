@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ public class WxApiImplTest extends TestSupport {
     public void testGetAccessToken() throws Exception {
         String token = wxApi.getAccessToken();
         System.out.println("token:"+token);
+        System.out.println("create time:"+System.currentTimeMillis()+60*1000);
     }
 
     @Test
@@ -119,10 +121,10 @@ public class WxApiImplTest extends TestSupport {
         boolean flag = wxApi.sendCustomerMsg(msg);
         System.out.println("发送文本客服消息: " + flag);
         // 图像客服消息
-        msg.setMsgType(WxApi.IMAGE);
+        /*msg.setMsgType(WxApi.IMAGE);
         msg.setMediaId(mediaId);
         flag = wxApi.sendCustomerMsg(msg);
-        System.out.println("发送图像客服消息: " + flag);
+        System.out.println("发送图像客服消息: " + flag);*/
     }
 
     @Test
@@ -153,7 +155,7 @@ public class WxApiImplTest extends TestSupport {
         String mediaId1 = wxApi.upMedia(WxApi.IMAGE, image1);
         File image2 = new File("D:/art2.jpg");
         String mediaId2 = wxApi.upMedia(WxApi.IMAGE, image2);
-        Articles2 art1 = new Articles2();
+        Article2 art1 = new Article2();
         art1.setTitle("不差钱！玩酷4G上线送话费啦！");
         art1.setDigest("不差钱！玩酷4G上线送话费啦！!");
         art1.setAuthor("凡梦星尘");
@@ -162,7 +164,7 @@ public class WxApiImplTest extends TestSupport {
         art1.setShowCover(1);
         art1.setSourceUrl("http://mp.weixin.qq.com/s?__biz=MzA3MTUyMTMyNg==&mid=201733564&idx=1&sn=ad92ead6499c322b4273cfb39708d40a&key=475e040e205b91d666e07d715eedc09b47d3c4631448d3cf4c229fec511f83e55cebe78da209f0aa51fcd1d8a82302e2&ascene=1&uin=MTU1ODU2MzgwMg%3D%3D&devicetype=webwx&version=70000001&pass_ticket=JG3EHTQ5Idcfm%2Bqt%2BhbFaY8U%2BKx3wCm%2FS6JZomsTeS10EjFBAsYWqTWOctZiAl5C");
     
-        Articles2 art2 = new Articles2();
+        Article2 art2 = new Article2();
         art2.setTitle("【实用攻略】火车票预售期将延长至60天，买票攻略get！火速收藏~ ");
         art2.setDigest("【实用攻略】火车票预售期将延长至60天，买票攻略get！火速收藏~ ");
         art2.setAuthor("凡梦星尘");
@@ -192,17 +194,17 @@ public class WxApiImplTest extends TestSupport {
     @Test
     public void testSendAll() throws Exception {
         OutPutMsg outmsg = new OutPutMsg();
-        /*outmsg.setToUsers(Arrays.asList(openId));
+        outmsg.setToUsers(Arrays.asList(openId));
         outmsg.setMsgType(WxApi.MPNEWS);
-        outmsg.setMediaId("q2t8zU4BGSH58YsBkL_WCdjdvVDZG1oyxe3NRgioLQp0gGjolztVjP6B4mugLfhE");
+        outmsg.setMediaId("-ClbTNHmkAYlBmuY0lK-_GMipA7rDQvlekihc8u6oCr3AcQkemGcI1Nxj8Xtma_9");
         String msgid = wxApi.sendAll(outmsg);
-        System.out.println("news msgid:"+msgid);//2348282442*/
+        System.out.println("news msgid:"+msgid);//2348282442
 
-        outmsg.setMediaId("-h6ETcIv_vOeS_X3Wjf2VlSuwWiPfZSJBelgKlNffqDB8pgg7QWWPG986vOCmG3G");
+      /*  outmsg.setMediaId("-h6ETcIv_vOeS_X3Wjf2VlSuwWiPfZSJBelgKlNffqDB8pgg7QWWPG986vOCmG3G");
         outmsg.setMsgType(WxApi.MPVIDEO);
         outmsg.setGroupId("104");
         String msgid = wxApi.sendAll(outmsg);
-        System.out.println("video msgid:"+msgid);//2348282861
+        System.out.println("video msgid:"+msgid);*///2348282861
     }
 
     @Test

@@ -2,7 +2,7 @@ package org.elkan1788.osc.weixin.mp.util;
 
 import org.elkan1788.osc.weixin.mp.commons.WxMsgType;
 import org.elkan1788.osc.weixin.mp.vo.Article;
-import org.elkan1788.osc.weixin.mp.vo.Articles2;
+import org.elkan1788.osc.weixin.mp.vo.Article2;
 import org.elkan1788.osc.weixin.mp.vo.OutPutMsg;
 import org.elkan1788.osc.weixin.mp.vo.Template;
 
@@ -202,10 +202,10 @@ public class JsonMsgBuilder {
      *
      * @param articles2s    图文消息
      */
-    public JsonMsgBuilder uploadNews(Articles2... articles2s) {
+    public JsonMsgBuilder uploadNews(Article2... articles2s) {
         msgBuf.append("\"articles\":[");
         StringBuffer art2_buf = new StringBuffer();
-        for (Articles2 art2 : articles2s) {
+        for (Article2 art2 : articles2s) {
             art2_buf.append("{");
             art2_buf.append("\"thumb_media_id\":\"").append(art2.getMediaId()).append("\",");
             art2_buf.append("\"author\":\"").append(art2.getAuthor()).append("\",");

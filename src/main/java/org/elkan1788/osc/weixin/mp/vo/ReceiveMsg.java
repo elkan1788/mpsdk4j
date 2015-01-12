@@ -1,5 +1,7 @@
 package org.elkan1788.osc.weixin.mp.vo;
 
+import java.util.List;
+
 /**
  * 接收消息实体
  *
@@ -45,7 +47,7 @@ public class ReceiveMsg extends BaseMsg {
 	private String eventKey;
 
 	/**
-	 * 二维码的ticket
+	 * 二维码的ticket或是开放平台中服务方的ComponentVerifyTicket
 	 */
 	private String ticket;
 
@@ -63,6 +65,31 @@ public class ReceiveMsg extends BaseMsg {
 	 * 地理位置精度
 	 */
 	private double precision;
+
+    /**
+     * 扫描类型,一般是qcode
+     */
+    private String scanType;
+
+    /**
+     * 扫描结果，即二维码对应的字符串信息
+     */
+    private String scanResult;
+
+    /**
+     * 发送的图片数量
+     */
+    private int count;
+
+    /**
+     * 发送的图片列表
+     */
+    private List<PicInfo> picList;
+
+    /**
+     * 朋友圈POI的名字，可能为空
+     */
+    private String poiName;
 
 	/**
 	 * 微信发送消息状态（模板消息,群发消息）<pre/>
@@ -84,24 +111,40 @@ public class ReceiveMsg extends BaseMsg {
     /**
      * group_id下粉丝数；或者openid_list中的粉丝数
      */
-    private Integer totalCnt;
+    private int totalCnt;
 
     /**
      * 过滤（过滤是指特定地区、性别的过滤、用户设置拒收的过滤，
      * 用户接收已超4条的过滤）后，准备发送的粉丝数，原则上，
      * FilterCount = SentCount + ErrorCount
      */
-    private Integer filterCnt;
+    private int filterCnt;
 
     /**
      * 发送成功的粉丝数
      */
-    private Integer sentCnt;
+    private int sentCnt;
 
     /**
      * 发送失败的粉丝数
      */
-    private Integer errorCnt;
+    private int errorCnt;
+
+    /**
+     * 服务appid
+     */
+    private String appId;
+
+    /**
+     * none,代表该消息推送给服务
+     * unauthorized,代表公众号取消授权
+     */
+    private String infoType;
+
+    /**
+     * 取消授权的公众号
+     */
+    private String unAuthAppid;
 
     public String getPicUrl() {
         return picUrl;
@@ -191,6 +234,46 @@ public class ReceiveMsg extends BaseMsg {
         this.precision = precision;
     }
 
+    public String getScanType() {
+        return scanType;
+    }
+
+    public void setScanType(String scanType) {
+        this.scanType = scanType;
+    }
+
+    public String getScanResult() {
+        return scanResult;
+    }
+
+    public void setScanResult(String scanResult) {
+        this.scanResult = scanResult;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public List<PicInfo> getPicList() {
+        return picList;
+    }
+
+    public void setPicList(List<PicInfo> picList) {
+        this.picList = picList;
+    }
+
+    public String getPoiName() {
+        return poiName;
+    }
+
+    public void setPoiName(String poiName) {
+        this.poiName = poiName;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -199,36 +282,60 @@ public class ReceiveMsg extends BaseMsg {
         this.status = status;
     }
 
-    public Integer getTotalCnt() {
+    public int getTotalCnt() {
         return totalCnt;
     }
 
-    public void setTotalCnt(Integer totalCnt) {
+    public void setTotalCnt(int totalCnt) {
         this.totalCnt = totalCnt;
     }
 
-    public Integer getFilterCnt() {
+    public int getFilterCnt() {
         return filterCnt;
     }
 
-    public void setFilterCnt(Integer filterCnt) {
+    public void setFilterCnt(int filterCnt) {
         this.filterCnt = filterCnt;
     }
 
-    public Integer getSentCnt() {
+    public int getSentCnt() {
         return sentCnt;
     }
 
-    public void setSentCnt(Integer sentCnt) {
+    public void setSentCnt(int sentCnt) {
         this.sentCnt = sentCnt;
     }
 
-    public Integer getErrorCnt() {
+    public int getErrorCnt() {
         return errorCnt;
     }
 
-    public void setErrorCnt(Integer errorCnt) {
+    public void setErrorCnt(int errorCnt) {
         this.errorCnt = errorCnt;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
+    }
+
+    public String getUnAuthAppid() {
+        return unAuthAppid;
+    }
+
+    public void setUnAuthAppid(String unAuthAppid) {
+        this.unAuthAppid = unAuthAppid;
     }
 
     @Override
@@ -261,6 +368,9 @@ public class ReceiveMsg extends BaseMsg {
                 ", filterCnt='" + filterCnt + '\'' +
                 ", sentCnt='" + sentCnt + '\'' +
                 ", errorCnt='" + errorCnt + '\'' +
+                ", appId='" + appId + '\'' +
+                ", infoType='" + infoType + '\'' +
+                ", unAuthAppid='" + unAuthAppid + '\'' +
                 "} ";
     }
 }

@@ -1,5 +1,6 @@
 package org.elkan1788.osc.weixin.mp.util;
 
+import org.elkan1788.osc.weixin.mp.vo.PicInfo;
 import org.elkan1788.osc.weixin.mp.vo.ReceiveMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,12 +9,15 @@ import org.xml.sax.SAXException;
 import org.xml.sax.ext.DefaultHandler2;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 微信消息内容处理器
+ * 微信消息内容处理器[更新JDK7特性]
  *
  * @author 凡梦星尘(senhuili@mdc.cn)
  * @since 2014/11/7
- * @version 1.0.3
+ * @version 1.0.4
  */
 public class XMLHandler extends DefaultHandler2 {
 
@@ -25,9 +29,16 @@ public class XMLHandler extends DefaultHandler2 {
 	private ReceiveMsg msg = new ReceiveMsg();
 
     /**
+     * 图片信息
+     */
+    private PicInfo picInfo;
+
+    private List<PicInfo> picList;
+
+    /**
      * 节点属性值
      */
-    private String arrtVal;
+    private String attrVal;
 
 	/**
 	 * 获取消息实体对象
@@ -43,7 +54,17 @@ public class XMLHandler extends DefaultHandler2 {
                              String localName,
                              String qName,
                              Attributes attributes) throws SAXException {
-        super.startElement(uri, localName, qName, attributes);
+
+        switch (qName) {
+            case "PicList":
+                this.picList = new ArrayList<>();
+                break;
+            case "item":
+                this.picInfo = new PicInfo();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -53,171 +74,142 @@ public class XMLHandler extends DefaultHandler2 {
 
         if (log.isInfoEnabled()) {
             if (!"xml".equals(qName)) {
-                log.info("当前节点值[{}]: {}", qName, arrtVal);
+                log.info("当前节点值[{}]: {}", qName, attrVal);
             }
         }
 
-        // 本想用反射实现,但耗时长,所以还是手动编码吧,累
-        if ("MsgId".equals(qName) || "MsgID".equals(qName)) {
-            msg.setMsgId(Long.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("CreateTime".equals(qName)) {
-            msg.setCreateTime(Long.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("MsgType".equals(qName)) {
-            msg.setMsgType(arrtVal);
-            return ;
-        }
-
-        if ("Event".equals(qName)) {
-            msg.setEvent(arrtVal);
-            return ;
-        }
-
-        if ("ToUserName".equals(qName)) {
-            msg.setToUserName(arrtVal);
-            return ;
-        }
-
-        if ("FromUserName".equals(qName)) {
-            msg.setFromUserName(arrtVal);
-            return ;
-        }
-
-        if ("Content".equals(qName)) {
-            msg.setContent(arrtVal);
-            return ;
-        }
-
-        if ("PicUrl".equals(qName)) {
-            msg.setPicUrl(arrtVal);
-            return ;
-        }
-
-        if ("MediaId".equals(qName)) {
-            msg.setMediaId(arrtVal);
-            return ;
-        }
-
-        if ("Format".equals(qName)) {
-            msg.setFormat(arrtVal);
-            return ;
-        }
-
-        if ("Recognition".equals(qName)) {
-            msg.setRecognition(arrtVal);
-            return ;
-        }
-
-        if ("ThumbMediaId".equals(qName)) {
-            msg.setThumbMediaId(arrtVal);
-            return ;
-        }
-
-        if ("Location_X".equals(qName)) {
-            msg.setLatitude(Double.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("Location_Y".equals(qName)) {
-            msg.setLongitude(Double.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("Scale".equals(qName)) {
-            msg.setScale(Integer.parseInt(arrtVal));
-            return ;
-        }
-
-        if ("Label".equals(qName)) {
-            msg.setLabel(arrtVal);
-            return ;
-        }
-
-        if ("Title".equals(qName)) {
-            msg.setTitle(arrtVal);
-            return ;
-        }
-
-        if ("Description".equals(qName)) {
-            msg.setDescription(arrtVal);
-            return ;
-        }
-
-        if ("Url".equals(qName)) {
-            msg.setUrl(arrtVal);
-            return ;
-        }
-
-        if ("Event".equals(qName)) {
-            msg.setEvent(arrtVal);
-            return ;
-        }
-
-        if ("EventKey".equals(qName)) {
-            msg.setEventKey(arrtVal);
-            return ;
-        }
-
-        if ("Ticket".equals(qName)) {
-            msg.setTicket(arrtVal);
-            return ;
-        }
-
-        if ("Latitude".equals(qName)) {
-            msg.setLatitude(Double.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("Longitude".equals(qName)) {
-            msg.setLongitude(Double.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("Precision".equals(qName)) {
-            msg.setPrecision(Double.valueOf(arrtVal));
-            return ;
-        }
-
-        if ("Status".equals(qName)) {
-            msg.setStatus(arrtVal);
-            return ;
-        }
-
-        if ("TotalCount".equals(qName)) {
-            msg.setTotalCnt(Integer.parseInt(arrtVal));
-            return ;
-        }
-
-        if ("FilterCount".equals(qName)) {
-            msg.setFilterCnt(Integer.parseInt(arrtVal));
-            return ;
-        }
-
-        if ("SentCount".equals(qName)) {
-            msg.setSentCnt(Integer.parseInt(arrtVal));
-            return ;
-        }
-
-        if ("ErrorCount".equals(qName)) {
-            msg.setErrorCnt(Integer.parseInt(arrtVal));
-            return ;
+        // 本想用反射实现,但耗时长,所以还是手动编码吧,累(更新JDK7特性)
+        switch (qName) {
+            case "MsgId":
+            case "MsgID":
+                msg.setMsgId(Long.valueOf(attrVal));
+                break;
+            case "CreateTime":
+                msg.setCreateTime(Long.valueOf(attrVal));
+                break;
+            case "MsgType":
+                msg.setMsgType(attrVal);
+                break;
+            case "Event":
+                msg.setEvent(attrVal);
+                break;
+            case "ToUserName":
+                msg.setToUserName(attrVal);
+                break;
+            case "FromUserName" :
+                msg.setFromUserName(attrVal);
+                break;
+            case "Content":
+                msg.setContent(attrVal);
+                break;
+            case "PicUrl":
+                msg.setPicUrl(attrVal);
+                break;
+            case "MediaId":
+                msg.setMediaId(attrVal);
+                break;
+            case "Format":
+                msg.setFormat(attrVal);
+                break;
+            case "Recognition":
+                msg.setRecognition(attrVal);
+                break;
+            case "ThumbMediaId":
+                msg.setThumbMediaId(attrVal);
+                break;
+            case "Location_X":
+            case "Latitude":
+                msg.setLatitude(Double.valueOf(attrVal));
+                break;
+            case "Location_Y":
+            case "Longitude":
+                msg.setLongitude(Double.valueOf(attrVal));
+                break;
+            case "Scale":
+                msg.setScale(Integer.parseInt(attrVal));
+                break;
+            case "Label":
+                msg.setLabel(attrVal);
+                break;
+            case "Title":
+                msg.setTitle(attrVal);
+                break;
+            case "Description":
+                msg.setDescription(attrVal);
+                break;
+            case "Url":
+                msg.setUrl(attrVal);
+                break;
+            case "EventKey":
+                msg.setEventKey(attrVal);
+                break;
+            case "Ticket":
+            case "ComponentVerifyTicket":
+                msg.setTicket(attrVal);
+                break;
+            case "Precision":
+                msg.setPrecision(Double.valueOf(attrVal));
+                break;
+            case "ScanType":
+                msg.setScanType(attrVal);
+                break;
+            case "ScanResult":
+                msg.setScanResult(attrVal);
+                break;
+            case "Count":
+                msg.setCount(Integer.parseInt(attrVal));
+                break;
+            case "PicMd5Sum":
+                picInfo.setPicMd5Sum(attrVal);
+                break;
+            case "item":
+                picList.add(picInfo);
+                break;
+            case "PicList":
+                msg.setPicList(picList);
+                break;
+            case "Poiname":
+                msg.setPoiName(attrVal);
+                break;
+            case "Status":
+                msg.setStatus(attrVal);
+                break;
+            case "TotalCount":
+                msg.setTotalCnt(Integer.parseInt(attrVal));
+                break;
+            case "FilterCount":
+                msg.setFilterCnt(Integer.parseInt(attrVal));
+                break;
+            case "SentCount":
+                msg.setSentCnt(Integer.parseInt(attrVal));
+                break;
+            case "ErrorCount":
+                msg.setErrorCnt(Integer.parseInt(attrVal));
+                break;
+            case "AppId":
+                msg.setAppId(attrVal);
+                break;
+            case "InfoType":
+                msg.setInfoType(attrVal);
+                break;
+            case "AuthorizerAppid":
+                msg.setUnAuthAppid(attrVal);
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        this.arrtVal = new String(ch, start, length);
+        this.attrVal = new String(ch, start, length);
     }
 
     /**
      * 清除当前VO对象缓存数据
      */
     public void clear() {
+        this.picInfo = null;
         this.msg = null;
         this.msg = new ReceiveMsg();
     }

@@ -4,8 +4,8 @@ package org.elkan1788.osc.weixin.mp.commons;
  * 微信所有的API地址
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
- * @since 2014/11/12
  * @version 1.0.2
+ * @since 2014/11/12
  */
 public interface WxApiUrl {
 
@@ -56,11 +56,11 @@ public interface WxApiUrl {
     /**
      * 上传多媒体文件API入口
      */
-    public static final String MEDIA_UP_API =  MEDIA_API + "/upload?type=%1$s&access_token=%2$s";
+    public static final String MEDIA_UP_API = MEDIA_API + "/upload?type=%1$s&access_token=%2$s";
     /**
      * 发送客服消息入口
      */
-    public static final String CUSTOM_MESSAGE_API =  WX_API + "/message/custom/send?access_token=%1$s";
+    public static final String CUSTOM_MESSAGE_API = WX_API + "/message/custom/send?access_token=%1$s";
     /**
      * 网页授权请求地址
      */
@@ -70,24 +70,31 @@ public interface WxApiUrl {
      */
     public static final String OAUTH_TOKEN = "/sns/oauth2/access_token?appid=%1$s&secret=%2$s&grant_type=authorization_code&code=%3$s";
     /**
-     * 网页授权取得用户信息
+     * 网页授权取得用户信息地址
      */
     public static final String OAUTH_USERINFO = "/sns/userinfo?access_token=%1$s&openid=%2$s&lang=%3$s";
     /**
-     * 发送模板消息
+     * 发送模板消息地址
      */
     public static final String TEMPLATE_MESSAGE_API = WX_API + "/message/template/send?access_token=%1$";
     /**
-     * 上传图文素材
+     * 上传图文素材地址
      */
     public static final String NEWS_UPLOAD_API = WX_API + "/media/uploadnews?access_token=%1$s";
     /**
-     * 分组群消息[sendall,send,delete]
+     * 分组群消息[sendall,send,delete]入口
      */
     public static final String GROUP_NEWS_MESSAGE_API = WX_API + "/message/mass/%1$s?access_token=%2$s";
-
     /**
-     * 群发消息上传视频
+     * 群发消息上传视频地址
      */
-    public static final String MEDIA_UPVIDEO_API = MEDIA_API +  "/uploadvideo?access_token=%1$s";
+    public static final String MEDIA_UPVIDEO_API = MEDIA_API + "/uploadvideo?access_token=%1$s";
+    /**
+     * 服务组件API入口
+     */
+    public static final String COMPONENT_API = WX_API + "/component/%1$s?component_access_token=%2$s";
+    /**
+     * 获取服务组件token地址
+     */
+    public static final String COMPONENT_TOKEN_API = WX_API + "/component/api_component_token";
 }

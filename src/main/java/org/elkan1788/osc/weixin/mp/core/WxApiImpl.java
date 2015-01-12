@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 微信API接口实现
+ * 微信公众平台开发者API接口实现
  *
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2014/11/12
@@ -32,6 +32,11 @@ public class WxApiImpl implements WxApi {
 
     private MPAct mpAct;
 
+    /**
+     * 微信公众平台接口构建
+     *
+     * @param mpAct 公众号信息
+     */
     public WxApiImpl(MPAct mpAct) {
         this.mpAct = mpAct;
     }
@@ -42,7 +47,9 @@ public class WxApiImpl implements WxApi {
         if (null == token
                 || token.isEmpty()
                 || mpAct.getExpiresIn() < System.currentTimeMillis()) {
-            refreshAccessToken();
+            synchronized (mpAct){
+                refreshAccessToken();
+            }
             token = mpAct.getAccessToken();
         }
         return token;
@@ -66,7 +73,7 @@ public class WxApiImpl implements WxApi {
            throw new WxRespException(result);
         }
 
-        mpAct.accessToken(result);
+        mpAct.createAccessToken(result);
     }
 
     @Override
@@ -170,10 +177,10 @@ public class WxApiImpl implements WxApi {
     @Override
     public int creatGroup(String name) throws WxRespException {
         String url = String.format(WxApiUrl.GROUPS_API, "create", getAccessToken());
-        String body = "{\"group\":{\"name\":\""+name+"\"}}";
+        String data = "{\"group\":{\"name\":\""+name+"\"}}";
         String result = "";
         try {
-            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, body);
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, data);
         } catch (IOException e) {
             log.error("创建微信分组时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
@@ -215,10 +222,10 @@ public class WxApiImpl implements WxApi {
     public boolean renGroup(int id, String name) throws WxRespException {
         String url = String.format(WxApiUrl.GROUPS_API, "update", getAccessToken());
         name = name.length() > 30 ? name.substring(0,30) : name;
-        String body = "{\"group\":{\"id\":"+id+",\"name\":\""+name+"\"}}";
+        String data = "{\"group\":{\"id\":"+id+",\"name\":\""+name+"\"}}";
         String result = "";
         try {
-            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, body);
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, data);
         } catch (IOException e) {
             log.error("修改分组名称时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
@@ -235,10 +242,10 @@ public class WxApiImpl implements WxApi {
     @Override
     public int getGroupId(String openId) throws WxRespException {
         String url = String.format(WxApiUrl.GROUPS_API, "getid", getAccessToken());
-        String body = "{\"openid\":\""+openId+"\"}";
+        String data = "{\"openid\":\""+openId+"\"}";
         String result = "";
         try {
-            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, body);
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, data);
         } catch (IOException e) {
             log.error("获取用户所在分组时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
@@ -257,10 +264,10 @@ public class WxApiImpl implements WxApi {
     @Override
     public boolean move2Group(String openId, int groupId) throws WxRespException {
         String url = String.format(WxApiUrl.GROUPS_USER_API, getAccessToken());
-        String body = "{\"openid\":\""+openId+"\",\"to_groupid\":"+groupId+"}";
+        String data = "{\"openid\":\""+openId+"\",\"to_groupid\":"+groupId+"}";
         String result = "";
         try {
-            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, body);
+            result = SimpleHttpReq.post(url, SimpleHttpReq.APPLICATION_JSON, data);
         } catch (IOException e) {
             log.error("移动用户分组时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
@@ -426,7 +433,7 @@ public class WxApiImpl implements WxApi {
     }
 
     @Override
-    public String[] upNews(Articles2... articles2s) throws WxRespException {
+    public String[] upNews(Article2... articles2s) throws WxRespException {
         String url = String.format(WxApiUrl.NEWS_UPLOAD_API, getAccessToken());
         String upnews_msg = JsonMsgBuilder.create().uploadNews(articles2s).build();
         String result = "";
