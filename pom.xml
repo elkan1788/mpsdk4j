@@ -6,7 +6,7 @@
 
     <groupId>org.elkan1788.osc</groupId>
     <artifactId>mpsdk4j</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.a.17</version>
     <packaging>jar</packaging>
     <name>微信公众平台JAVA开发SDK</name>
     <description>
@@ -111,6 +111,14 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.0</version>
+        </dependency>
+
+        <!-- ServletApi -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
