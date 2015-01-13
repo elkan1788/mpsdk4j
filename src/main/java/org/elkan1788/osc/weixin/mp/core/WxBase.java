@@ -21,37 +21,37 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 /**
  * 微信普通消息互动
  *
  * @author 凡梦星尘(senhuili@mdc.cn)
- * @since 2014/11/8
  * @version 1.2.0
+ * @since 2014/11/8
  */
 public class WxBase {
 
     private static final Logger log = LoggerFactory.getLogger(WxBase.class);
-
     // 消息模式(默认明文)
     private boolean aesEncrypt = false;
     // 定义公众号信息
     private MPAct mpAct;
     // 微信加密
-    private WXBizMsgCrypt wxMsgCrt;
-
+    private WXBizMsgCrypt wxInMsgCrt;
+    // XML解析准备
     private SAXParserFactory factory = SAXParserFactory.newInstance();
     private SAXParser xmlParser;
     private XMLHandler xmlHandler = new XMLHandler();
-
+    // 微信交互参数
     private String signature;
     private String msgSignature;
     private String timeStamp;
     private String nonce;
     private String echostr;
-
-    private InputStream wxMsg;
-
+    // 微信消息流
+    private InputStream wxInMsg;
+    // 解析/响应微信消息
     private ReceiveMsg rm;
     private OutPutMsg om;
 
@@ -67,43 +67,49 @@ public class WxBase {
         }
     }
 
-    public WxBase(boolean aesEncrypt) {
-        try {
-            xmlParser = factory.newSAXParser();
-        } catch (ParserConfigurationException e) {
-            log.error("SAX解析配置文件失败!!!");
-            log.error(e.getLocalizedMessage(), e);
-        } catch (SAXException e) {
-            log.error("SAX异常!!!");
-            log.error(e.getLocalizedMessage(), e);
-        }
-        this.aesEncrypt = aesEncrypt;
-    }
-
     /**
-     * 初始化
+     * 微信基础功能参数初始化
      *
-     * @param req   HTTP请求
-     * @param mpAct 公众号信息
-     * @throws IOException
+     * @param req 请求
      */
-    public void init(HttpServletRequest req, MPAct mpAct) throws IOException {
-        setMpAct(mpAct);
-        setSignature(req.getParameter("signature"));
-        setTimeStamp(req.getParameter("timestamp"));
-        setNonce(req.getParameter("nonce"));
-        setEchostr(req.getParameter("echostr"));
-        if (this.aesEncrypt) {
-            this.setMsgSignature(req.getParameter("msg_signature"));
+    public void init(HttpServletRequest req) {
+        // 请求编码设置
+        try {
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("设置微信服务器请求编辑时出现异常!!!");
+            log.error(e.getLocalizedMessage(), e);
         }
-        this.wxMsg = req.getInputStream();
+        String sign = req.getParameter("signature");
+        String time = req.getParameter("timestamp");
+        String nonce = req.getParameter("nonce");
+        String echo = req.getParameter("echostr");
+        String encrypt = req.getParameter("encrypt_type");
+        String msgSign = req.getParameter("msg_signature");
+        InputStream wxInMsg = null;
+        try {
+            wxInMsg = req.getInputStream();
+        } catch (IOException e) {
+            log.error("接收微信消息时出现异常!!!");
+            log.error(e.getLocalizedMessage(), e);
+        }
+
+        setSignature(sign);
+        setTimeStamp(time);
+        setNonce(nonce);
+        setEchostr(echo);
+        if ("aes".equals(encrypt)) {
+            setAesEncrypt(true);
+            setMsgSignature(msgSign);
+        }
+        this.wxInMsg = wxInMsg;
     }
 
     /**
      * 微信URL接入校验
      *
-     * @param handler   微信消息处理
-     * @return  随机字符
+     * @param handler 微信消息处理
+     * @return 随机字符
      * @throws AesException
      */
     public String check(WxHandler handler) throws AesException {
@@ -116,14 +122,14 @@ public class WxBase {
     /**
      * 微信消息处理
      *
-     * @param handler   消息处理器
-     * @return  回复消息
+     * @param handler 消息处理器
+     * @return 回复消息
      * @throws Exception
      */
     public String handler(WxHandler handler) throws Exception {
         clear();
-        String reply =  "";
-        this.rm = convert2VO(this.wxMsg);
+        String reply = "";
+        this.rm = convert2VO(this.wxInMsg);
         // 处理消息
         String msg_type = this.rm.getMsgType();
         if ("event".equals(msg_type)) {
@@ -141,19 +147,19 @@ public class WxBase {
     /**
      * 处理普通的消息
      *
-     * @param handler   消息处理器
-     * @return  回复消息实体
+     * @param handler 消息处理器
+     * @return 回复消息实体
      * @throws Exception
      */
     private OutPutMsg handlerMsg(WxHandler handler) throws Exception {
         if (log.isInfoEnabled()) {
-           log.info("[MPSDK4J-{}]处理普通消息...",MPSDK4J.version());
+            log.info("[MPSDK4J-{}]处理普通消息...", MPSDK4J.version());
         }
-        OutPutMsg om =  null;
+        OutPutMsg om = null;
         WxMsgType type = WxMsgType.valueOf(this.rm.getMsgType());
         switch (type) {
             case text:
-                om =  handler.text(this.rm);
+                om = handler.text(this.rm);
                 break;
             case image:
                 om = handler.image(this.rm);
@@ -180,15 +186,15 @@ public class WxBase {
     /**
      * 处理事件推送消息
      *
-     * @param handler   消息处理器
-     * @return  回复消息实体
+     * @param handler 消息处理器
+     * @return 回复消息实体
      * @throws Exception
      */
     private OutPutMsg handlerEvent(WxHandler handler) throws Exception {
         if (log.isInfoEnabled()) {
-            log.info("[MPSDK4J-{}]处理事件推送消息...",MPSDK4J.version());
+            log.info("[MPSDK4J-{}]处理事件推送消息...", MPSDK4J.version());
         }
-        OutPutMsg om =  null;
+        OutPutMsg om = null;
         WxEventType type = WxEventType.valueOf(this.rm.getEvent());
         switch (type) {
             case subscribe:
@@ -244,15 +250,15 @@ public class WxBase {
     /**
      * 处理微信开放平台的推送消息
      *
-     * @param handler   消息处理器
-     * @return  默认返回"success"
+     * @param handler 消息处理器
+     * @return 默认返回"success"
      * @throws Exception
      */
     public String handlerPush(WxHandler handler) throws Exception {
         if (log.isInfoEnabled()) {
-            log.info("[MPSDK4J-{}]处理开放平台推送消息...",MPSDK4J.version());
+            log.info("[MPSDK4J-{}]处理开放平台推送消息...", MPSDK4J.version());
         }
-        this.rm = convert2VO(this.wxMsg);
+        this.rm = convert2VO(this.wxInMsg);
         String info_type = this.rm.getInfoType();
         switch (info_type) {
             case "component_verify_ticket":
@@ -270,8 +276,8 @@ public class WxBase {
     /**
      * 将微信消息转换成接收消息VO对象
      *
-     * @param msg   微信消息输入流
-     * @return  接收消息VO对象
+     * @param msg 微信消息输入流
+     * @return 接收消息VO对象
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
@@ -286,10 +292,10 @@ public class WxBase {
         if (!this.aesEncrypt) { // 明文
             this.xmlParser.parse(msg, this.xmlHandler);
         } else {// 密文
-            String dcrp_msg = this.wxMsgCrt.decryptMsg(this.msgSignature,
+            String dcrp_msg = this.wxInMsgCrt.decryptMsg(this.msgSignature,
                     this.timeStamp, this.nonce, StreamTool.toString(msg));
-            this.wxMsg = StreamTool.toStream(dcrp_msg);
-            this.xmlParser.parse(this.wxMsg, this.xmlHandler);
+            this.wxInMsg = StreamTool.toStream(dcrp_msg);
+            this.xmlParser.parse(this.wxInMsg, this.xmlHandler);
         }
 
         ReceiveMsg rm = this.xmlHandler.getMsgVO();
@@ -308,8 +314,8 @@ public class WxBase {
     /**
      * 回复微信消息
      *
-     * @param msg   输出消息VO对象
-     * @return  微信消息
+     * @param msg 输出消息VO对象
+     * @return 微信消息
      * @throws AesException
      */
     private String reply(OutPutMsg msg) throws AesException {
@@ -349,7 +355,7 @@ public class WxBase {
         }
 
         if (this.aesEncrypt) {// 加密
-            reply_msg = this.wxMsgCrt.encryptMsg(reply_msg, this.timeStamp, this.nonce);
+            reply_msg = this.wxInMsgCrt.encryptMsg(reply_msg, this.timeStamp, this.nonce);
         }
 
         return reply_msg;
@@ -384,12 +390,12 @@ public class WxBase {
         }
         if (this.aesEncrypt) {
             try {
-                this.wxMsgCrt = new WXBizMsgCrypt(this.mpAct.getToken(),
+                this.wxInMsgCrt = new WXBizMsgCrypt(this.mpAct.getToken(),
                         this.mpAct.getAESKey(), this.mpAct.getAppId());
             } catch (AesException e) {
                 log.error("创建AES加密失败!!!");
                 log.error(e.getLocalizedMessage(), e);
-                this.wxMsgCrt = null;
+                this.wxInMsgCrt = null;
             }
         }
     }
@@ -438,8 +444,8 @@ public class WxBase {
         this.echostr = echostr;
     }
 
-    public void setWxMsg(InputStream wxMsg) {
-        this.wxMsg = wxMsg;
+    public void setWxInMsg(InputStream wxInMsg) {
+        this.wxInMsg = wxInMsg;
     }
 
     public ReceiveMsg getReceiveMsg() {
