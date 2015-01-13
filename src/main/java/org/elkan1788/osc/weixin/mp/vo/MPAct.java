@@ -159,7 +159,7 @@ public class MPAct {
     public void createAccessToken(String result) {
 
         JSONObject tmp = JSON.parseObject(result);
-        if (result.contains("accessToken")) {
+        if (result.contains("access_token")) {
             setAccessToken(tmp.getString("access_token"));
         } else {
             setAccessToken(tmp.getString("component_access_token"));
