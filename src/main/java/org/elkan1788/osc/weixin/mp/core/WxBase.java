@@ -33,8 +33,6 @@ public class WxBase {
 
     private static final Logger log = LoggerFactory.getLogger(WxBase.class);
 
-    // 开发模式(默认关闭)
-    private boolean devMode = false;
     // 消息模式(默认明文)
     private boolean aesEncrypt = false;
     // 定义公众号信息
@@ -69,7 +67,7 @@ public class WxBase {
         }
     }
 
-    public WxBase(boolean devMode, boolean aesEncrypt) {
+    public WxBase(boolean aesEncrypt) {
         try {
             xmlParser = factory.newSAXParser();
         } catch (ParserConfigurationException e) {
@@ -79,7 +77,6 @@ public class WxBase {
             log.error("SAX异常!!!");
             log.error(e.getLocalizedMessage(), e);
         }
-        this.devMode = devMode;
         this.aesEncrypt = aesEncrypt;
     }
 
@@ -298,7 +295,7 @@ public class WxBase {
         ReceiveMsg rm = this.xmlHandler.getMsgVO();
         this.xmlHandler.clear();
         // 调试信息
-        if (this.devMode) {
+        if (log.isInfoEnabled()) {
             log.info("[MPSDK4J-{}]接收到微信消息[{},{}]:...",
                     MPSDK4J.version(),
                     rm.getMsgId(), rm.getCreateTime());
@@ -344,7 +341,7 @@ public class WxBase {
         }
 
         // 调试信息
-        if (this.devMode) {
+        if (log.isInfoEnabled()) {
             log.info("[MPSDK4J-{}]微信回复消息[{},{}]...",
                     MPSDK4J.version(),
                     msg.getMsgId(), msg.getCreateTime());
@@ -367,14 +364,6 @@ public class WxBase {
         }
     }
 
-    public boolean isDevMode() {
-        return devMode;
-    }
-
-    public void setDevMode(boolean devMode) {
-        this.devMode = devMode;
-    }
-
     public boolean isAesEncrypt() {
         return aesEncrypt;
     }
@@ -389,7 +378,7 @@ public class WxBase {
 
     public void setMpAct(MPAct mpAct) {
         this.mpAct = mpAct;
-        if (this.devMode) {
+        if (log.isInfoEnabled()) {
             log.info("微信公众号信息...");
             log.info("{}", this.mpAct);
         }
