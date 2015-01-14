@@ -6,7 +6,7 @@
 
     <groupId>org.elkan1788.osc</groupId>
     <artifactId>mpsdk4j</artifactId>
-    <version>1.a.18</version>
+    <version>1.a.19</version>
     <packaging>jar</packaging>
     <name>微信公众平台JAVA开发SDK</name>
     <description>

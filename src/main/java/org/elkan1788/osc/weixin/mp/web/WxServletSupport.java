@@ -23,10 +23,6 @@ import java.io.PrintWriter;
 public abstract class WxServletSupport extends HttpServlet implements WxWebSupport {
 
     private static final Logger log = LoggerFactory.getLogger(WxServletSupport.class);
-    // 微信公众号信息
-    private MPAct mpAct;
-    // 微信消息处理器
-    private WxHandler wxHandler;
     // 微信基础功能
     private WxBase wxBase = new WxBase();
 
@@ -50,13 +46,12 @@ public abstract class WxServletSupport extends HttpServlet implements WxWebSuppo
     @Override
     protected void doGet(HttpServletRequest req,
                          HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
         // 响应设置
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html");
         this.wxBase.init(req);
         try {
-            String echo = this.wxBase.check(wxHandler);
+            String echo = this.wxBase.check();
             PrintWriter out = resp.getWriter();
             if (!echo.isEmpty()) {
                 out.print(echo);
@@ -83,11 +78,10 @@ public abstract class WxServletSupport extends HttpServlet implements WxWebSuppo
     @Override
     protected void doPost(HttpServletRequest req,
                           HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
         this.wxBase.init(req);
         String result = "error";
         try {
-            result = this.wxBase.handler(this.wxHandler);
+            result = this.wxBase.handler();
         } catch (Exception e) {
             log.error("解析微信消息时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
@@ -100,12 +94,12 @@ public abstract class WxServletSupport extends HttpServlet implements WxWebSuppo
 
     @Override
     public void setMpAct(MPAct mpAct) {
-        this.mpAct = mpAct;
+        this.wxBase.setMpAct(mpAct);
     }
 
     @Override
     public void setWxHandler(WxHandler wxHandler) {
-        this.wxHandler = wxHandler;
+        this.wxBase.setWxHandler(wxHandler);
     }
 
     @Override

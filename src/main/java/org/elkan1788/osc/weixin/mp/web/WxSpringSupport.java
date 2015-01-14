@@ -19,10 +19,6 @@ import java.io.IOException;
 public abstract class WxSpringSupport implements WxWebSupport {
 
     private static final Logger log = LoggerFactory.getLogger(WxSpringSupport.class);
-    // 微信公众号信息
-    private MPAct mpAct;
-    // 微信消息处理器
-    private WxHandler wxHandler;
     // 微信基础功能
     private WxBase wxBase = new WxBase();
 
@@ -51,7 +47,7 @@ public abstract class WxSpringSupport implements WxWebSupport {
         // 微信接入验证
         if ("GET".equals(method)) {
             try {
-                reply = this.wxBase.check(this.wxHandler);
+                reply = this.wxBase.check();
                 if (reply.isEmpty()) {
                     reply = "error";
                     log.error("微信接入验证URL时失败!!!");
@@ -67,7 +63,7 @@ public abstract class WxSpringSupport implements WxWebSupport {
 
         // 信息互动
         try {
-            reply = this.wxBase.handler(this.wxHandler);
+            reply = this.wxBase.handler();
         } catch (Exception e) {
             log.error("解析微信消息时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
@@ -78,12 +74,12 @@ public abstract class WxSpringSupport implements WxWebSupport {
 
     @Override
     public void setMpAct(MPAct mpAct) {
-        this.mpAct = mpAct;
+        this.wxBase.setMpAct(mpAct);
     }
 
     @Override
     public void setWxHandler(WxHandler wxHandler) {
-        this.wxHandler = wxHandler;
+        this.wxBase.setWxHandler(wxHandler);
     }
 
     @Override

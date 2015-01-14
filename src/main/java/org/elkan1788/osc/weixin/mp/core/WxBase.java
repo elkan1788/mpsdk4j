@@ -51,9 +51,11 @@ public class WxBase {
     private String echostr;
     // 微信消息流
     private InputStream wxInMsg;
+    // 微信消息处理器
+    private WxHandler wxHandler;
     // 解析/响应微信消息
     private ReceiveMsg rm;
-    private OutPutMsg om;
+    private OutPutMsg om;    
 
     public WxBase() {
         try {
@@ -108,13 +110,12 @@ public class WxBase {
     /**
      * 微信URL接入校验
      *
-     * @param handler 微信消息处理
      * @return 随机字符
      * @throws AesException
      */
-    public String check(WxHandler handler) throws AesException {
+    public String check() throws AesException {
 
-        boolean check = handler.check(this.mpAct.getToken(),
+        boolean check = wxHandler.check(this.mpAct.getToken(),
                 this.signature, this.timeStamp, this.nonce);
         return check ? echostr : "";
     }
@@ -122,20 +123,19 @@ public class WxBase {
     /**
      * 微信消息处理
      *
-     * @param handler 消息处理器
      * @return 回复消息
      * @throws Exception
      */
-    public String handler(WxHandler handler) throws Exception {
+    public String handler() throws Exception {
         clear();
         String reply = "";
         this.rm = convert2VO(this.wxInMsg);
         // 处理消息
         String msg_type = this.rm.getMsgType();
         if ("event".equals(msg_type)) {
-            this.om = handlerEvent(handler);
+            this.om = handlerEvent();
         } else {
-            this.om = handlerMsg(handler);
+            this.om = handlerMsg();
         }
         // 输出消息
         if (null != this.om) {
@@ -147,11 +147,10 @@ public class WxBase {
     /**
      * 处理普通的消息
      *
-     * @param handler 消息处理器
      * @return 回复消息实体
      * @throws Exception
      */
-    private OutPutMsg handlerMsg(WxHandler handler) throws Exception {
+    private OutPutMsg handlerMsg() throws Exception {
         if (log.isInfoEnabled()) {
             log.info("[MPSDK4J-{}]处理普通消息...", MPSDK4J.version());
         }
@@ -159,25 +158,25 @@ public class WxBase {
         WxMsgType type = WxMsgType.valueOf(this.rm.getMsgType());
         switch (type) {
             case text:
-                om = handler.text(this.rm);
+                om = wxHandler.text(this.rm);
                 break;
             case image:
-                om = handler.image(this.rm);
+                om = wxHandler.image(this.rm);
                 break;
             case voice:
-                om = handler.voice(this.rm);
+                om = wxHandler.voice(this.rm);
                 break;
             case video:
-                om = handler.video(this.rm);
+                om = wxHandler.video(this.rm);
                 break;
             case location:
-                om = handler.location(this.rm);
+                om = wxHandler.location(this.rm);
                 break;
             case link:
-                om = handler.link(this.rm);
+                om = wxHandler.link(this.rm);
                 break;
             default:
-                om = handler.def(this.rm);
+                om = wxHandler.def(this.rm);
                 break;
         }
         return om;
@@ -186,11 +185,10 @@ public class WxBase {
     /**
      * 处理事件推送消息
      *
-     * @param handler 消息处理器
      * @return 回复消息实体
      * @throws Exception
      */
-    private OutPutMsg handlerEvent(WxHandler handler) throws Exception {
+    private OutPutMsg handlerEvent() throws Exception {
         if (log.isInfoEnabled()) {
             log.info("[MPSDK4J-{}]处理事件推送消息...", MPSDK4J.version());
         }
@@ -198,49 +196,49 @@ public class WxBase {
         WxEventType type = WxEventType.valueOf(this.rm.getEvent());
         switch (type) {
             case subscribe:
-                om = handler.eSub(this.rm);
+                om = wxHandler.eSub(this.rm);
                 break;
             case unsubscribe:
-                handler.eUnSub(this.rm);
+                wxHandler.eUnSub(this.rm);
                 break;
             case SCAN:
-                handler.eScan(this.rm);
+                wxHandler.eScan(this.rm);
                 break;
             case CLICK:
-                om = handler.eClick(this.rm);
+                om = wxHandler.eClick(this.rm);
                 break;
             case VIEW:
-                handler.eView(this.rm);
+                wxHandler.eView(this.rm);
                 break;
             case scancodpush:
-                om = handler.eScanCodePush(this.rm);
+                om = wxHandler.eScanCodePush(this.rm);
                 break;
             case scancodwaitmsg:
-                om = handler.eScanCodeWait(this.rm);
+                om = wxHandler.eScanCodeWait(this.rm);
                 break;
             case pic_sysphoto:
-                om = handler.ePicSysPhoto(this.rm);
+                om = wxHandler.ePicSysPhoto(this.rm);
                 break;
             case pic_photo_or_album:
-                om = handler.ePicPhotoOrAlbum(this.rm);
+                om = wxHandler.ePicPhotoOrAlbum(this.rm);
                 break;
             case pic_weixin:
-                om = handler.ePicWeixin(this.rm);
+                om = wxHandler.ePicWeixin(this.rm);
                 break;
             case location_select:
-                om = handler.eLocationSelect(this.rm);
+                om = wxHandler.eLocationSelect(this.rm);
                 break;
             case LOCATION:
-                handler.eLocation(this.rm);
+                wxHandler.eLocation(this.rm);
                 break;
             case TEMPLATESENDJOBFINISH:
-                handler.eTemplateFinish(this.rm);
+                wxHandler.eTemplateFinish(this.rm);
                 break;
             case MASSSENDJOBFINISH:
-                handler.eSendJobFinish(this.rm);
+                wxHandler.eSendJobFinish(this.rm);
                 break;
             default:
-                om = handler.def(this.rm);
+                om = wxHandler.def(this.rm);
                 break;
         }
         return om;
@@ -250,11 +248,10 @@ public class WxBase {
     /**
      * 处理微信开放平台的推送消息
      *
-     * @param handler 消息处理器
      * @return 默认返回"success"
      * @throws Exception
      */
-    public String handlerPush(WxHandler handler) throws Exception {
+    public String handlerPush() throws Exception {
         if (log.isInfoEnabled()) {
             log.info("[MPSDK4J-{}]处理开放平台推送消息...", MPSDK4J.version());
         }
@@ -262,10 +259,10 @@ public class WxBase {
         String info_type = this.rm.getInfoType();
         switch (info_type) {
             case "component_verify_ticket":
-                handler.eComponentVerifyTicket(this.rm);
+                wxHandler.eComponentVerifyTicket(this.rm);
                 break;
             case "unauthorized":
-                handler.eUnAuthorizerMP(this.rm);
+                wxHandler.eUnAuthorizerMP(this.rm);
                 break;
             default:
                 break;
@@ -376,6 +373,16 @@ public class WxBase {
 
     public void setAesEncrypt(boolean aesEncrypt) {
         this.aesEncrypt = aesEncrypt;
+        if (aesEncrypt) {
+            try {
+                this.wxInMsgCrt = new WXBizMsgCrypt(this.mpAct.getToken(),
+                        this.mpAct.getAESKey(), this.mpAct.getAppId());
+            } catch (AesException e) {
+                log.error("创建AES加密失败!!!");
+                log.error(e.getLocalizedMessage(), e);
+                this.wxInMsgCrt = null;
+            }
+        }
     }
 
     public MPAct getMpAct() {
@@ -388,16 +395,6 @@ public class WxBase {
             log.info("微信公众号信息...");
             log.info("{}", this.mpAct);
         }
-        if (this.aesEncrypt) {
-            try {
-                this.wxInMsgCrt = new WXBizMsgCrypt(this.mpAct.getToken(),
-                        this.mpAct.getAESKey(), this.mpAct.getAppId());
-            } catch (AesException e) {
-                log.error("创建AES加密失败!!!");
-                log.error(e.getLocalizedMessage(), e);
-                this.wxInMsgCrt = null;
-            }
-        }
     }
 
     public XMLHandler getXmlHandler() {
@@ -406,6 +403,10 @@ public class WxBase {
 
     public String getSignature() {
         return signature;
+    }
+
+    public void setWxHandler(WxHandler wxHandler) {
+        this.wxHandler = wxHandler;
     }
 
     public void setSignature(String signature) {

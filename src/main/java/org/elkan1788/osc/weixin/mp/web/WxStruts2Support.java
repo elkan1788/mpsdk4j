@@ -25,10 +25,6 @@ import java.io.PrintWriter;
 public abstract class WxStruts2Support extends ActionSupport implements WxWebSupport, ServletRequestAware, ServletResponseAware {
 
     private static final Logger log = LoggerFactory.getLogger(WxStruts2Support.class);
-    // 微信公众号信息
-    private MPAct mpAct;
-    // 微信消息处理器
-    private WxHandler wxHandler;
     // 微信基础功能
     private WxBase wxBase = new WxBase();
     // Http请求
@@ -45,7 +41,7 @@ public abstract class WxStruts2Support extends ActionSupport implements WxWebSup
 
     /**
      * 与微信信息交互<pre/>
-     * 实现时只需写个SpringMVC入口调用此方法即可,入口用ResponseBody输出
+     * 实现时只需写个Struts2入口调用此方法即可
      *
      * @return  回复消息
      * @throws java.io.IOException
@@ -64,7 +60,7 @@ public abstract class WxStruts2Support extends ActionSupport implements WxWebSup
         // 微信接入验证
         if ("GET".equals(method)) {
             try {
-                reply = this.wxBase.check(this.wxHandler);
+                reply = this.wxBase.check();
                 if (reply.isEmpty()) {
                     reply = "error";
                     log.error("微信接入验证URL时失败!!!");
@@ -82,7 +78,7 @@ public abstract class WxStruts2Support extends ActionSupport implements WxWebSup
 
         // 信息互动
         try {
-            reply = this.wxBase.handler(this.wxHandler);
+            reply = this.wxBase.handler();
             out.print(reply);
         } catch (Exception e) {
             log.error("解析微信消息时出现异常!!!");
@@ -94,12 +90,12 @@ public abstract class WxStruts2Support extends ActionSupport implements WxWebSup
 
     @Override
     public void setMpAct(MPAct mpAct) {
-        this.mpAct = mpAct;
+        this.wxBase.setMpAct(mpAct);
     }
 
     @Override
     public void setWxHandler(WxHandler wxHandler) {
-        this.wxHandler = wxHandler;
+        this.wxBase.setWxHandler(wxHandler);
     }
 
     @Override

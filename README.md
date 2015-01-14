@@ -74,7 +74,7 @@
 <dependency>
   <groupId>org.elkan1788.osc</groupId>
   <artifactId>mpsdk4j</artifactId>
-  <version>1.a.18</version>
+  <version>1.a.19</version>
 </dependency>
 ```
 
@@ -99,20 +99,11 @@ public class WeiXinServlet extends WxServletSupport {
         // 修改为实际的公众号信息,可以在开发者栏目中查看
         mpAct.setAppId("wx****");
         mpAct.setAppSecert("***");
+        mpAct.setToken("***");
         mpAct.setAESKey("******");
         this.setMpAct(mpAct);
         // 可实现自己的WxHandler
         this.setWxHandler(new WxDefaultHandler());
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
     }
 }
 ```
@@ -130,6 +121,7 @@ public class WeiXinController extends WxSpringSupport {
         // 修改为实际的公众号信息,可以在开发者栏目中查看
         mpAct.setAppId("wx****");
         mpAct.setAppSecert("***");
+        mpAct.setToken("***");
         mpAct.setAESKey("******");
         this.setMpAct(mpAct);
         // 可实现自己的WxHandler
@@ -162,6 +154,7 @@ public class WeiXinAction extends WxStruts2Support {
         // 修改为实际的公众号信息,可以在开发者栏目中查看
         mpAct.setAppId("wx****");
         mpAct.setAppSecert("***");
+        mpAct.setToken("***");
         mpAct.setAESKey("******");
         this.setMpAct(mpAct);
         // 可实现自己的WxHandler
