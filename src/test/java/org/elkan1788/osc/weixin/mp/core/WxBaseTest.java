@@ -18,12 +18,14 @@ import static org.hamcrest.core.Is.is;
  */
 public class WxBaseTest extends TestSupport {
 
-    private WxBase wxBase = new WxBase(true, false);
+    private WxBase wxBase = new WxBase();
     private WxHandler handler = new WxDefaultHandler();
 
     @Override
     public void init() throws Exception {
         super.init();
+        this.wxBase.setMpAct(mpAct);
+        this.wxBase.setWxHandler(handler);
         this.wxBase.setMsgSignature(msgSing);
         this.wxBase.setTimeStamp(timestamp);
         this.wxBase.setNonce(nonce);
@@ -46,7 +48,7 @@ public class WxBaseTest extends TestSupport {
 
     private String pushXml = "<xml>\n" +
             "<AppId>" + this.mpId + "</AppId>\n" +
-            "<CreateTime>1413192605 </CreateTime>\n" +
+            "<CreateTime>1413192605</CreateTime>\n" +
             "<InfoType>component_verify_ticket</InfoType>\n" +
             "<ComponentVerifyTicket></ComponentVerifyTicket>\n" +
             "</xml>";
@@ -56,7 +58,7 @@ public class WxBaseTest extends TestSupport {
      */
     @Test
     public void testCheck() throws Exception {
-        String echostr = this.wxBase.check(handler);
+        String echostr = this.wxBase.check();
         assertThat(echostr, is(this.wxBase.getEchostr()));
     }
 
@@ -67,11 +69,11 @@ public class WxBaseTest extends TestSupport {
     public void testHandler() throws Exception {
         if (this.wxBase.isAesEncrypt()) {
             // 加密消息
-            this.wxBase.setWxMsg(StreamTool.toStream(this.enrcpXml));
+            this.wxBase.setWxInMsg(StreamTool.toStream(this.enrcpXml));
         } else {
-            this.wxBase.setWxMsg(StreamTool.toStream(this.textXml));
+            this.wxBase.setWxInMsg(StreamTool.toStream(this.textXml));
         }
-        String reply_msg = this.wxBase.handler(this.handler);
+        String reply_msg = this.wxBase.handler();
         String xml_msg = XmlMsgBuilder.create().
                 text(this.wxBase.getOutPutMsg()).build();
         assertThat(reply_msg, is(xml_msg));
@@ -82,8 +84,8 @@ public class WxBaseTest extends TestSupport {
      */
     @Test
     public void testHandlerPush() throws Exception {
-        this.wxBase.setWxMsg(StreamTool.toStream(this.pushXml));
-        String reply_msg = this.wxBase.handlerPush(this.handler);
+        this.wxBase.setWxInMsg(StreamTool.toStream(this.pushXml));
+        String reply_msg = this.wxBase.handlerPush();
         assertThat("success", is(reply_msg));
     }
 }

@@ -177,7 +177,7 @@ public class WxDefaultHandler implements WxHandler {
     public OutPutMsg eSub(ReceiveMsg rm) {
         OutPutMsg om = new OutPutMsg(rm);
         om.setMsgType(WxMsgType.text.name());
-        om.setContent("做人最重要的是要有自信，记得每天起床时，在镜子前对自己说，你很好，你可以的，关注号码百事通微信平台，你可以了解你想要的生活信息，可以参加有趣的小活动，可以掌握一手电影资料，可以······，树立生活自信，你可以的！");
+        om.setContent("做人最重要的是要有自信，记得每天起床时，在镜子前对自己说，你很好，你可以的，树立生活自信，你可以的！");
         if (log.isInfoEnabled()) {
             log.info("接收到订阅消息...");
             log.info("from={}, to={}, event={}",
