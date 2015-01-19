@@ -52,29 +52,38 @@
 ##### 3.2Maven库引用
 另外你也可以通过OSChina的Maven库获取依赖
 
-*  1.加入OSC仓库
+*  1.加入OSC仓库，也可参考官方说明[OSChina Maven Help](http://maven.oschina.net/help.html)
 ```xml
 <repositories>
-   <repository>
-       <id>nexus</id>
-       <name>local private nexus</name>
-       <url>http://maven.oschina.net/content/groups/public/</url>
-       <releases>
+    <repository>
+        <id>nexus</id>
+        <url>http://maven.oschina.net/content/groups/public/</url>
+        <releases>
           <enabled>true</enabled>
-       </releases>
-       <snapshots>
+        </releases>
+        <snapshots>
           <enabled>false</enabled>
-       </snapshots>
-     </repository>
-</repositories> 
+        </snapshots>
+    </repository>
+    <repository>
+        <id>nexus-third</id>
+        <url>http://maven.oschina.net/content/repositories/thirdparty/</url>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 ```
 
 * 2.添加依赖坐标
 ```xml
 <dependency>
-  <groupId>org.elkan1788.osc</groupId>
-  <artifactId>mpsdk4j</artifactId>
-  <version>1.a.19</version>
+    <groupId>org.elkan1788.osc</groupId>
+    <artifactId>mpsdk4j</artifactId>
+    <version>1.a.19</version>
 </dependency>
 ```
 
@@ -112,7 +121,7 @@ public class WeiXinServlet extends WxServletSupport {
 
 ```java
 @Controller
-@RequestMapping("/mp")
+@RequestMapping("/weixin/mp")
 public class WeiXinController extends WxSpringSupport {
 
     @Override
