@@ -20,6 +20,7 @@ public class TestSupport {
     protected String token;
     protected String openId;
     protected String aesKey;
+    protected String jsTicket;
     
     protected String templateId;
     protected String mediaId;
@@ -47,6 +48,7 @@ public class TestSupport {
         templateId = p.getProperty("templateId");
         mediaId = p.getProperty("mediaId");
         accessToken = p.getProperty("accessToken", "NOT");
+        jsTicket = p.getProperty("jsTicket", "NOT");
 
         msgSing = p.getProperty("msgSing");
         timestamp = p.getProperty("timestamp");
@@ -61,7 +63,11 @@ public class TestSupport {
         mpAct.setAESKey(aesKey);
         if (!accessToken.equals("NOT")||!accessToken.isEmpty()) {
             mpAct.setAccessToken(accessToken);
-            mpAct.setExpiresIn(7000 * 1000 + System.currentTimeMillis());
+            mpAct.setExpiresIn(6000 * 1000 + System.currentTimeMillis());
+        }
+        if (!jsTicket.equals("NOT")||!jsTicket.isEmpty()) {
+            mpAct.setJsTicket(jsTicket);
+            mpAct.setJsExpiresIn(6000 * 1000 + System.currentTimeMillis());
         }
     }
 }

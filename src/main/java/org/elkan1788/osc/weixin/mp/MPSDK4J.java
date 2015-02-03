@@ -26,7 +26,7 @@ public class MPSDK4J {
     }
 
     public static int minorVersion() {
-        return 17;
+        return 20;
     }
 
     public static String releaseLevel() {

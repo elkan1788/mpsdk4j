@@ -1,6 +1,7 @@
 package org.elkan1788.osc.weixin.mp.core;
 
 import org.elkan1788.osc.testunit.TestSupport;
+import org.elkan1788.osc.weixin.mp.util.SimpleHttpReq;
 import org.elkan1788.osc.weixin.mp.vo.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 微信API接口测试
@@ -24,20 +26,25 @@ public class WxApiImplTest extends TestSupport {
         super.init();
 
         wxApi = new WxApiImpl(mpAct);
+        // 创建高级API令牌
         if ("NOT".equals(accessToken)
-                || "".equals(accessToken)
                 || accessToken.isEmpty()) {
-            mpAct.setToken(wxApi.getAccessToken());
-            mpAct.setExpiresIn(7000 * 1000 + System.currentTimeMillis());
+            wxApi.refreshAccessToken();
+            accessToken = mpAct.getAccessToken();
         }
-        System.out.println("ACCESS_TOKEN: " + mpAct.getAccessToken());
+        // 创建JSAPI凭证
+        if ("NOT".equals(jsTicket)
+                || jsTicket.isEmpty()) {
+            wxApi.refreshJsAPITicket();
+            jsTicket = mpAct.getJsTicket();
+        }
+        System.out.println("ACCESS_TOKEN: " + accessToken);
     }
 
     @Test
     public void testGetAccessToken() throws Exception {
         String token = wxApi.getAccessToken();
-        System.out.println("token:"+token);
-        System.out.println("create time:"+System.currentTimeMillis()+60*1000);
+        System.out.println(token);
     }
 
     @Test
@@ -211,5 +218,12 @@ public class WxApiImplTest extends TestSupport {
     public void testDelSendAll() throws Exception {
         boolean flag = wxApi.delSendAll("2348282861");
         System.out.println("delsendall:"+flag);
+    }
+
+    @Test
+    public void  testGetJsAPISign() throws Exception {
+        System.out.println("JSAPI_TICKET: "+jsTicket);
+        Map<String, String> map = wxApi.getJsAPISign("JSAPI页面地址");
+        System.out.println(map);
     }
 }

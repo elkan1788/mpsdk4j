@@ -3,6 +3,8 @@ package org.elkan1788.osc.weixin.mp.core;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.PropertyFilter;
+import com.qq.weixin.mp.aes.AesException;
+import com.qq.weixin.mp.aes.SHA1;
 import org.elkan1788.osc.weixin.mp.commons.WxMsgType;
 import org.elkan1788.osc.weixin.mp.commons.WxApiUrl;
 import org.elkan1788.osc.weixin.mp.exception.WxRespException;
@@ -14,10 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 微信公众平台开发者API接口实现
@@ -537,5 +536,61 @@ public class WxApiImpl implements WxApi {
         }
 
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getJsAPISign(String url) throws WxRespException {
+        // 1.创建JSTICKET
+        String ticket = mpAct.getJsTicket();
+        if (null == ticket
+                || ticket.isEmpty()
+                || mpAct.getJsExpiresIn() < System.currentTimeMillis()) {
+            synchronized (mpAct){
+                refreshJsAPITicket();
+            }
+            ticket = mpAct.getJsTicket();
+        }
+
+        // 2.生成签名
+        String sign_param = "jsapi_ticket=%1$s&noncestr=%2$s&timestamp=%3$s&url=%4$s";
+        String nonce = UUID.randomUUID().toString().toLowerCase();
+        long time = System.currentTimeMillis() / 1000;
+        String sign = null;
+        try {
+            sign = SHA1.calculate(String.format(sign_param, ticket, nonce, time, url));
+        } catch (AesException e) {
+            log.error("生成JSTICKET的签名时出现异常!!!");
+            log.error(e.getLocalizedMessage(), e);
+        }
+
+        // 3.返回参数与值
+        Map<String, Object> sign_map = new HashMap<>();
+        sign_map.put("url", url);
+        sign_map.put("ticket", ticket);
+        sign_map.put("nonce", nonce);
+        sign_map.put("timestamp", time);
+        sign_map.put("sign", sign);
+        return sign_map;
+    }
+
+    @Override
+    public void refreshJsAPITicket() throws WxRespException {
+
+        String token_url = WxApiUrl.JSAPI_TICKET_URL+getAccessToken();
+
+        String result = "";
+        try {
+            result = SimpleHttpReq.get(token_url);
+        } catch (IOException e) {
+            log.error("刷新JSTICKET时出现异常!!!");
+            log.error(e.getLocalizedMessage(), e);
+        }
+
+        if (result.isEmpty()
+                || !result.contains("ok")) {
+            throw new WxRespException(result);
+        }
+
+        mpAct.createJsTicket(result);
     }
 }

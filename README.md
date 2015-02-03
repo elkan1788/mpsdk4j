@@ -83,13 +83,13 @@
 <dependency>
     <groupId>org.elkan1788.osc</groupId>
     <artifactId>mpsdk4j</artifactId>
-    <version>1.a.19</version>
+    <version>1.a.20</version>
 </dependency>
 ```
 
 或者自己编译jar包。
 ```
-mvn clean package
+mvn clean package -Dmaven.test.skip=true
 ```
 
 <a name="示例代码"></a>
