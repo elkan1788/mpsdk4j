@@ -45,11 +45,11 @@ public enum WxEventType {
     /**
      * 扫码推事件
      */
-    scancodpush,
+    scancode_push,
     /**
      * 扫码推事件且弹出“消息接收中”提示框
      */
-    scancodwaitmsg,
+    scancode_waitmsg,
     /**
      * 弹出系统拍照发图
      */
@@ -65,5 +65,5 @@ public enum WxEventType {
     /**
      * 弹出地理位置选择器
      */
-    location_select;
+    location_select
 }

@@ -82,29 +82,31 @@ public class WxBase {
             log.error("设置微信服务器请求编辑时出现异常!!!");
             log.error(e.getLocalizedMessage(), e);
         }
+        // 获取各请求参数值
         String sign = req.getParameter("signature");
         String time = req.getParameter("timestamp");
         String nonce = req.getParameter("nonce");
         String echo = req.getParameter("echostr");
         String encrypt = req.getParameter("encrypt_type");
-        String msgSign = req.getParameter("msg_signature");
-        InputStream wxInMsg = null;
-        try {
-            wxInMsg = req.getInputStream();
-        } catch (IOException e) {
-            log.error("接收微信消息时出现异常!!!");
-            log.error(e.getLocalizedMessage(), e);
-        }
-
+        // 设置各参数值
         setSignature(sign);
         setTimeStamp(time);
         setNonce(nonce);
         setEchostr(echo);
+        // 判断是否启用AES加密
         if ("aes".equals(encrypt)) {
-            setAesEncrypt(true);
+            String msgSign = req.getParameter("msg_signature");
             setMsgSignature(msgSign);
+            setAesEncrypt(true);
         }
-        this.wxInMsg = wxInMsg;
+        // 读取微信消息
+        try {
+            InputStream wxInMsg = req.getInputStream();
+            this.wxInMsg = wxInMsg;
+        } catch (IOException e) {
+            log.error("接收微信消息时出现异常!!!");
+            log.error(e.getLocalizedMessage(), e);
+        }
     }
 
     /**
@@ -127,6 +129,7 @@ public class WxBase {
      * @throws Exception
      */
     public String handler() throws Exception {
+        // 释放缓存
         clear();
         String reply = "";
         this.rm = convert2VO(this.wxInMsg);
@@ -139,7 +142,7 @@ public class WxBase {
         }
         // 输出消息
         if (null != this.om) {
-            reply = reply(this.om);
+            reply = this.convert2XML(this.om);
         }
         return reply;
     }
@@ -202,7 +205,7 @@ public class WxBase {
                 wxHandler.eUnSub(this.rm);
                 break;
             case SCAN:
-                wxHandler.eScan(this.rm);
+                om = wxHandler.eScan(this.rm);
                 break;
             case CLICK:
                 om = wxHandler.eClick(this.rm);
@@ -210,10 +213,10 @@ public class WxBase {
             case VIEW:
                 wxHandler.eView(this.rm);
                 break;
-            case scancodpush:
+            case scancode_push:
                 om = wxHandler.eScanCodePush(this.rm);
                 break;
-            case scancodwaitmsg:
+            case scancode_waitmsg:
                 om = wxHandler.eScanCodeWait(this.rm);
                 break;
             case pic_sysphoto:
@@ -229,7 +232,7 @@ public class WxBase {
                 om = wxHandler.eLocationSelect(this.rm);
                 break;
             case LOCATION:
-                wxHandler.eLocation(this.rm);
+                om = wxHandler.eLocation(this.rm);
                 break;
             case TEMPLATESENDJOBFINISH:
                 wxHandler.eTemplateFinish(this.rm);
@@ -309,15 +312,22 @@ public class WxBase {
     }
 
     /**
-     * 回复微信消息
+     * 将VO对象转换成XML消息体
      *
      * @param msg 输出消息VO对象
      * @return 微信消息
      * @throws AesException
      */
-    private String reply(OutPutMsg msg) throws AesException {
+    private String convert2XML(OutPutMsg msg) throws AesException {
 
         String reply_msg = "";
+
+        // 自定义内容回复
+        if (null != msg.getCustomReply()
+                && !msg.getCustomReply().isEmpty()) {
+            return  msg.getCustomReply();
+        }
+
         // 获取消息类型
         WxMsgType msg_type = WxMsgType.valueOf(msg.getMsgType());
         switch (msg_type) {

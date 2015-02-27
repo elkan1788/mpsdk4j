@@ -47,5 +47,5 @@ public enum WxMsgType {
     /**
      * 群发消息中的视频消息
      */
-    mpvideo;
+    mpvideo
 }
