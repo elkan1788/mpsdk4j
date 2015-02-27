@@ -1,6 +1,7 @@
 package org.elkan1788.osc.weixin.mp.core;
 
 import org.elkan1788.osc.testunit.TestSupport;
+import org.elkan1788.osc.weixin.mp.util.SimpleHttpReq;
 import org.elkan1788.osc.weixin.mp.vo.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,8 +37,7 @@ public class WxApiImplTest extends TestSupport {
     @Test
     public void testGetAccessToken() throws Exception {
         String token = wxApi.getAccessToken();
-        System.out.println("token:"+token);
-        System.out.println("create time:"+System.currentTimeMillis()+60*1000);
+        System.out.println(token);
     }
 
     @Test
@@ -56,9 +56,25 @@ public class WxApiImplTest extends TestSupport {
 
     @Test
     public void testCreateMenu() throws Exception {
-        Menu m1 = new Menu("菜单一", Menu.VIEW, "http://www.csdn.net");
-        Menu m2 = new Menu("菜单二", Menu.VIEW, "http://www.iteye.com");
-        Menu m3 = new Menu("菜单三", Menu.VIEW, "http://www.oschina.net");
+        // 点击或视图菜单
+        Menu m1 = new Menu("基本");
+        Menu csdn = new Menu("CSDN", Menu.VIEW, "http://www.csdn.net");
+        Menu osc = new Menu("OSC", Menu.VIEW, "http://www.oschina.net");
+        Menu click = new Menu("点击我", Menu.CLICK, "Thanks you click me!");
+        m1.setSubButtons(Arrays.asList(csdn, osc, click));
+        // 发送相片或位置
+        Menu m2 = new Menu("发送");
+        Menu sysphoto = new Menu("拍照", Menu.PIC_SYSPHOTO, "pic_sysphoto");
+        Menu album = new Menu("拍照或相册", Menu.PIC_PHOTO_OR_ALBUM, "pic_photo_or_album");
+        Menu weixin = new Menu("微信相册", Menu.PIC_WEIXIN, "pic_weixin");
+        Menu location = new Menu("位置", Menu.LOCATION_SELECT, "location_select");
+        m2.setSubButtons(Arrays.asList(sysphoto, album, weixin, location));
+        // 扫码菜单
+        Menu m3 = new Menu("扫码");
+        Menu push = new Menu("推送", Menu.SCANCODE_PUSH, "scancode_push");
+        Menu wait = new Menu("等待", Menu.SCANCODE_WAITMSG, "scancode_waitmsg");
+        m3.setSubButtons(Arrays.asList(push, wait));
+
         boolean flag = wxApi.createMenu(m1, m2, m3);
         System.out.println("创建菜单: " + flag);
     }

@@ -56,7 +56,7 @@ public class TestSupport {
         mpAct = new MPAct();
         mpAct.setMpId(mpId);
         mpAct.setAppId(appId);
-        mpAct.setAppSecert(appSecret);
+        mpAct.setAppSecret(appSecret);
         mpAct.setToken(token);
         mpAct.setAESKey(aesKey);
         if (!accessToken.equals("NOT")||!accessToken.isEmpty()) {

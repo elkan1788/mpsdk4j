@@ -17,6 +17,7 @@ public class Menu {
     public static final String VIEW = "view";
     public static final String SCANCODE_PUSH = "scancode_push";
     public static final String SCANCODE_WAITMSG = "scancode_waitmsg";
+    public static final String PIC_SYSPHOTO = "pic_sysphoto";
     public static final String PIC_PHOTO_OR_ALBUM = "pic_photo_or_album";
     public static final String PIC_WEIXIN = "pic_weixin";
     public static final String LOCATION_SELECT = "location_select";
@@ -59,6 +60,10 @@ public class Menu {
     public Menu() {
     }
 
+    public Menu(String name) {
+        this.name = name;
+    }
+
     /**
      * 构造函数
      *
@@ -69,7 +74,7 @@ public class Menu {
     public Menu(String name, String type, String val) {
         this.name = name;
         this.type = type;
-        if (type.equals("view")) {
+        if (VIEW.equals(type)) {
             this.url = val;
         } else {
             this.key = val;
@@ -123,7 +128,7 @@ public class Menu {
                 ", type='" + type + '\'' +
                 ", key='" + key + '\'' +
                 ", url='" + url + '\'' +
-                ", subButtons=" + (null==subButtons ? 0 : subButtons.size()) +
+                ", subButtons=" + subButtons +
                 '}';
     }
 }
