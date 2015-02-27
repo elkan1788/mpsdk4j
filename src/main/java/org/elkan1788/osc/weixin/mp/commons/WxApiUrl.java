@@ -76,7 +76,7 @@ public interface WxApiUrl {
     /**
      * 发送模板消息地址
      */
-    public static final String TEMPLATE_MESSAGE_API = WX_API + "/message/template/send?access_token=%1$";
+    public static final String TEMPLATE_MESSAGE_API = WX_API + "/message/template/send?access_token=%1$s";
     /**
      * 上传图文素材地址
      */
@@ -97,4 +97,8 @@ public interface WxApiUrl {
      * 获取服务组件token地址
      */
     public static final String COMPONENT_TOKEN_API = WX_API + "/component/api_component_token";
+    /**
+     * 获取JSTICKET地址
+     */
+    public static final String JSAPI_TICKET_URL = WX_API + "/ticket/getticket?type=jsapi&access_token=";
 }
