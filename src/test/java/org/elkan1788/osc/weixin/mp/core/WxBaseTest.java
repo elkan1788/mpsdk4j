@@ -30,6 +30,7 @@ public class WxBaseTest extends TestSupport {
         this.wxBase.setTimeStamp(timestamp);
         this.wxBase.setNonce(nonce);
         this.wxBase.setMpAct(mpAct);
+        this.wxBase.setAesEncrypt(true);
     }
 
 

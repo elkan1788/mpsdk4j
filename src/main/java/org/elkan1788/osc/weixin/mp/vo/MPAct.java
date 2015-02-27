@@ -30,7 +30,7 @@ public class MPAct {
 	/**
 	 * 应用密钥
 	 */
-	private String appSecert;
+	private String appSecret;
 
     /**
      * 令牌
@@ -62,7 +62,7 @@ public class MPAct {
 	private String accessToken;
 
 	/**
-	 * 凭证有效时间
+	 * 凭证有效时间(秒)
 	 */
 	private long expiresIn;
 
@@ -72,9 +72,19 @@ public class MPAct {
     private String preAuthCode;
 
     /**
-     * 预授权码有效时间
+     * 预授权码有效时间(秒)
      */
     private long preAuthExpiresIn;
+
+    /**
+     * JSAPI凭证
+     */
+    private String jsTicket;
+
+    /**
+     * JSAPI凭证有效时间(秒)
+     */
+    private long jsExpiresIn;
 
     public String getMpId() {
         return mpId;
@@ -100,12 +110,12 @@ public class MPAct {
         this.appId = appId;
     }
 
-    public String getAppSecert() {
-        return appSecert;
+    public String getAppSecret() {
+        return appSecret;
     }
 
-    public void setAppSecert(String appSecert) {
-        this.appSecert = appSecert;
+    public void setAppSecret(String appSecret) {
+        this.appSecret = appSecret;
     }
 
     public String getToken() {
@@ -156,15 +166,22 @@ public class MPAct {
         this.expiresIn = expiresIn;
     }
 
+    /**
+     * 解析微信服务器返回消息生成高级API或服务的凭证
+     *
+     * @param result    返回消息
+     */
     public void createAccessToken(String result) {
 
         JSONObject tmp = JSON.parseObject(result);
-        if (result.contains("access_token")) {
+        if (tmp.containsKey("access_token")) {
             setAccessToken(tmp.getString("access_token"));
         } else {
             setAccessToken(tmp.getString("component_access_token"));
         }
-        setExpiresIn((tmp.getLong("expires_in") - 60)* 1000);
+        long lose_time = (tmp.getLong("expires_in")-60) * 1000
+                + System.currentTimeMillis();
+        setExpiresIn(lose_time);
     }
 
     public String getPreAuthCode() {
@@ -183,10 +200,46 @@ public class MPAct {
         this.preAuthExpiresIn = preAuthExpiresIn;
     }
 
+    /**
+     * 解析微信服务器返回消息生成预授权码
+     *
+     * @param result    返回消息
+     */
     public void createPreAuthCode(String result) {
         JSONObject tmp = JSONObject.parseObject(result);
         setPreAuthCode(tmp.getString("pre_auth_code"));
-        setPreAuthExpiresIn((tmp.getLong("expires_in")-60) * 1000);
+        long lose_time = (tmp.getLong("expires_in")-60) * 1000
+                + System.currentTimeMillis();
+        setPreAuthExpiresIn(lose_time);
+    }
+
+    public String getJsTicket() {
+        return jsTicket;
+    }
+
+    public void setJsTicket(String jsTicket) {
+        this.jsTicket = jsTicket;
+    }
+
+    public long getJsExpiresIn() {
+        return jsExpiresIn;
+    }
+
+    public void setJsExpiresIn(long jsExpiresIn) {
+        this.jsExpiresIn = jsExpiresIn;
+    }
+
+    /**
+     * 解析微信服务器返回消息生成JSTICKET
+     *
+     * @param result    返回消息
+     */
+    public void createJsTicket(String result) {
+        JSONObject tmp = JSONObject.parseObject(result);
+        setJsTicket(tmp.getString("ticket"));
+        long lose_time = (tmp.getLong("expires_in")-60) * 1000
+                + System.currentTimeMillis();
+        setJsExpiresIn(lose_time);
     }
 
     @Override
@@ -195,13 +248,17 @@ public class MPAct {
                 "mpId='" + mpId + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", appId='" + appId + '\'' +
-                ", appSecert='" + appSecert + '\'' +
+                ", appSecret='" + appSecret + '\'' +
                 ", token='" + token + '\'' +
                 ", AESKey='" + AESKey + '\'' +
                 ", mpType='" + mpType + '\'' +
                 ", pass=" + pass +
                 ", accessToken='" + accessToken + '\'' +
                 ", expiresIn=" + expiresIn +
+                ", preAuthCode='" + preAuthCode + '\'' +
+                ", preAuthExpiresIn=" + preAuthExpiresIn +
+                ", jsTicket='" + jsTicket + '\'' +
+                ", jsExpiresIn=" + jsExpiresIn +
                 '}';
     }
 }

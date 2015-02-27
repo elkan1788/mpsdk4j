@@ -5,6 +5,7 @@ import org.elkan1788.osc.weixin.mp.vo.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 微信公众平台开发者API接口设计
@@ -26,16 +27,22 @@ public interface WxApi {
 
 	/**
 	 * 创建ACCESS_TOKEN
+     *
+     * @return 高级API需要的access_token
+     * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
 	String getAccessToken() throws WxRespException;
 
     /**
-     * 刷新ACCESS_TOKE
+     * 刷新过期的ACCESS_TOKE
+     *
+     * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
      */
 	void refreshAccessToken() throws WxRespException;
 
 	/**
 	 * 获取微信服务器IP列表
+     *
 	 * @return IP地址集合
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
@@ -62,12 +69,14 @@ public interface WxApi {
 
     /**
      * 获取微信菜单
+     *
      * @return  微信菜单集合
      */
 	List<Menu> getMenu() throws WxRespException;
 
     /**
      * 创建微信菜单
+     *
      * @param menus 微信菜单
      * @return  true或false
      */
@@ -75,12 +84,14 @@ public interface WxApi {
 
 	/**
 	 * 删除自定义菜单
+     *
 	 * @return true或false
 	 */
 	boolean deleteMenu() throws WxRespException;
 
 	/**
-	 * 创建分组，成功返回分组ID，否则抛出异常
+	 * 创建分组
+     *
 	 * @param name 分组名称
 	 * @return 分组ID
 	 */
@@ -88,12 +99,14 @@ public interface WxApi {
 
 	/**
 	 * 获取所有分组
+     *
 	 * @return  Groups集合
 	 */
 	List<Group> getGroups() throws WxRespException;
 
 	/**
 	 * 重命名分组
+     *
 	 * @param id	分组ID
 	 * @param name	新的分组名称
 	 * @return true或false
@@ -102,6 +115,7 @@ public interface WxApi {
 
 	/**
 	 * 获取用户分组ID
+     *
 	 * @param openId 	用户ID
 	 * @return 分组ID
 	 */
@@ -109,6 +123,7 @@ public interface WxApi {
 
 	/**
 	 * 移动用户分组
+     *
 	 * @param openId	用户ID
 	 * @param groupId	新分组ID
 	 * @return true或false
@@ -117,6 +132,7 @@ public interface WxApi {
 
 	/**
 	 * 获取关注用户列表
+     *
 	 * @param	nextOpenId	 	拉取列表的后一个用户的OPENID
 	 * @return 关注用户ID列表
 	 */
@@ -124,6 +140,7 @@ public interface WxApi {
 
 	/**
 	 * 获取关注者的信息
+     *
 	 * @param	openId	用户ID
 	 * @param 	lang	使用语言
 	 * @return 关注者的基本信息
@@ -174,6 +191,7 @@ public interface WxApi {
 
 	/**
 	 * 群发消息[分组或指定用户]
+     *
 	 * @param msg	消息输出实体[groupId或toUsers, content, msgType, mediaId]
 	 * @return	消息ID
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
@@ -191,4 +209,20 @@ public interface WxApi {
 	 * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
 	 */
 	boolean delSendAll(String msgId) throws WxRespException;
+
+    /**
+     * 获取JSAPI签名
+     *
+     * @param url 使用jsapi页面地址
+     * @return  集合[url, ticket, nonce, timestamp, sign]
+     * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+     */
+    Map<String, Object> getJsAPISign(String url) throws WxRespException;
+
+    /**
+     * 刷新过期的JSAPI TICKET
+     *
+     * @throws org.elkan1788.osc.weixin.mp.exception.WxRespException
+     */
+    void refreshJsAPITicket() throws WxRespException;
 }
