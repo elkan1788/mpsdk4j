@@ -38,6 +38,13 @@ public class OutPutMsg extends BaseMsg {
     private List<String> toUsers = new ArrayList<>();
 
     /**
+     * 自定义回复内容<p/>
+     * 微信太坑人,在开放平台中,LOCATION事件居然可以回复消息<p/>
+     * 因此为后续扩展考虑,增加此字段
+     */
+    private String customReply;
+
+    /**
      * 带基础参数的构造函数
      * @param fromUserName 微信用户openId
      * @param toUserName   微信公众号原始ID
@@ -106,6 +113,14 @@ public class OutPutMsg extends BaseMsg {
         this.toUsers = toUsers;
     }
 
+    public String getCustomReply() {
+        return customReply;
+    }
+
+    public void setCustomReply(String customReply) {
+        this.customReply = customReply;
+    }
+
     @Override
     public String toString() {
         return "OutPutMsg{" +
@@ -125,6 +140,7 @@ public class OutPutMsg extends BaseMsg {
                 ", groupId='" + groupId + '\'' +
                 ", articles=" + ((null==articles) ? 0 : articles.size()) +
                 ", toUsers=" + ((null==toUsers) ? 0 : toUsers.size()) +
+                ", customReply=" + customReply +
                 "} " + super.toString();
     }
 }

@@ -196,23 +196,25 @@ public class WxDefaultHandler implements WxHandler {
     }
 
     @Override
-    public void eScan(ReceiveMsg rm) {
+    public OutPutMsg eScan(ReceiveMsg rm) {
         if (log.isInfoEnabled()) {
             log.info("接收到扫描消息...");
             log.info("msgid={}, from={}, to={}, event={}, key={}, ticket={}",
                     rm.getMsgId(), rm.getFromUserName(), rm.getToUserName(),
                     rm.getEvent(), rm.getEventKey(), rm.getTicket());
         }
+        return null;
     }
 
     @Override
-    public void eLocation(ReceiveMsg rm) {
+    public OutPutMsg eLocation(ReceiveMsg rm) {
         if (log.isInfoEnabled()) {
             log.info("接收到地理位置消息...");
             log.info("msgid={}, from={}, to={}, x={}, y={}, precision={}",
                     rm.getMsgId(), rm.getFromUserName(), rm.getToUserName(),
                     rm.getLatitude(), rm.getLongitude(), rm.getPrecision());
         }
+        return null;
     }
 
     @Override

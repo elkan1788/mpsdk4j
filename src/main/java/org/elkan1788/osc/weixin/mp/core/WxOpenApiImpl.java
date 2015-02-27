@@ -29,6 +29,9 @@ public class WxOpenApiImpl implements WxOpenApi {
 
     private String ticket;
 
+    public WxOpenApiImpl() {
+    }
+
     /**
      * 微信开放平台接口构建
      *
@@ -37,6 +40,16 @@ public class WxOpenApiImpl implements WxOpenApi {
      */
     public WxOpenApiImpl(MPAct mpAct, String ticket) {
         this.mpAct = mpAct;
+        this.ticket = ticket;
+    }
+
+    @Override
+    public void setMpAct(MPAct mpAct) {
+        this.mpAct = mpAct;
+    }
+
+    @Override
+    public void setTicket(String ticket) {
         this.ticket = ticket;
     }
 
@@ -60,7 +73,7 @@ public class WxOpenApiImpl implements WxOpenApi {
 
         String data = "{" +
                 "\"component_appid\":\"" + mpAct.getAppId() + "\"," +
-                "\"component_appsecret\":\"" + mpAct.getAppSecert() + "\"," +
+                "\"component_appsecret\":\"" + mpAct.getAppSecret() + "\"," +
                 "\"component_verify_ticket\":\"" + ticket + "\"" +
                 "}";
 
@@ -82,7 +95,7 @@ public class WxOpenApiImpl implements WxOpenApi {
     }
 
     @Override
-    public void createPreauthcode() throws WxRespException {
+    public void createPreAuthCode() throws WxRespException {
         String url = String.format(WxApiUrl.COMPONENT_API,
                 "api_create_preauthcode", getComponentToken());
         String result = "";
@@ -105,12 +118,12 @@ public class WxOpenApiImpl implements WxOpenApi {
     }
 
     @Override
-    public String getPreauthcode() throws WxRespException {
+    public String getPreAuthCode() throws WxRespException {
         String auth_code = mpAct.getPreAuthCode();
         if (null == auth_code
                 || mpAct.getPreAuthExpiresIn() < System.currentTimeMillis()){
             synchronized (this.mpAct){
-                createPreauthcode();
+                createPreAuthCode();
             }
         }
         return auth_code;

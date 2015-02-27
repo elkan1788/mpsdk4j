@@ -2,6 +2,7 @@ package org.elkan1788.osc.weixin.mp.core;
 
 import org.elkan1788.osc.weixin.mp.exception.WxRespException;
 import org.elkan1788.osc.weixin.mp.vo.AuthInfo;
+import org.elkan1788.osc.weixin.mp.vo.MPAct;
 
 /**
  * 微信开放平台API接口设计
@@ -11,6 +12,18 @@ import org.elkan1788.osc.weixin.mp.vo.AuthInfo;
  * @version 1.0.0
  */
 public interface WxOpenApi {
+
+    /**
+     * 设置公众号信息
+     * @param mpAct 公众号信息
+     */
+    void setMpAct(MPAct mpAct);
+
+    /**
+     * 设置凭证
+     * @param ticket    凭证
+     */
+    void setTicket(String ticket);
 
     /**
      * 获取公众号服务组件的令牌
@@ -30,13 +43,13 @@ public interface WxOpenApi {
      * @return  预授权码
      * @throws WxRespException
      */
-    String getPreauthcode() throws WxRespException;
+    String getPreAuthCode() throws WxRespException;
 
     /**
      * 创建公众号预授权码
      * @throws WxRespException
      */
-    void createPreauthcode() throws WxRespException;
+    void createPreAuthCode() throws WxRespException;
 
     /**
      * 使用授权码换取授权公众号的授权信息<pre/>

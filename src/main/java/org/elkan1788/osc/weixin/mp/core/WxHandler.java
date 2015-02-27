@@ -124,14 +124,14 @@ public interface WxHandler {
      *
      * @param rm    接收到的消息
      */
-    void eScan(ReceiveMsg rm);
+    OutPutMsg eScan(ReceiveMsg rm);
 
     /**
      * 处理自动上传地理事件消息
      *
      * @param rm    接收到的消息
      */
-    void eLocation(ReceiveMsg rm);
+    OutPutMsg eLocation(ReceiveMsg rm);
 
     /**
      * 处理二维码扫描事件消息
