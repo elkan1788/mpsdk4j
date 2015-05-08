@@ -1,5 +1,7 @@
 package org.elkan1788.osc.weixin.mp.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 微信订阅者信息
  *
@@ -59,6 +61,7 @@ public class Follower {
     /**
      * 用户关注时间，为时间戳。如果用户曾多次关注，则取最后关注时间
      */
+    @JSONField(name = "subscribe_time")
 	private long subscribeTime;
 
     /**
