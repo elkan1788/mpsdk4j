@@ -68,7 +68,7 @@ public class Template {
     public String templateData() {
         StringBuffer data = new StringBuffer("\"" + name + "\":{");
         data.append("\"value\":\"").append(value).append("\",");
-        data.append("\"color\":").append(color).append("\"}");
+        data.append("\"color\":\"").append(color).append("\"}");
         return data.toString();
     }
 
