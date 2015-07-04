@@ -160,14 +160,13 @@ public class JsonMsgBuilder {
                     .append(art.getPicUrl())
                     .append("\",");
             art_buf.append(" \"url\":\"")
-                    .append(art.getUrl())
-                    .append("\",");
-            art_buf.append("},");
-            arts_buf.append(art_buf);
+                    .append(art.getUrl());
+            art_buf.append("\"},");
         }
+        arts_buf.append(art_buf.substring(0, art_buf.lastIndexOf(",")));
         arts_buf.append("]");
         msgBuf.append("\"news\": {");
-        msgBuf.append(arts_buf.substring(0, arts_buf.lastIndexOf(",")));
+        msgBuf.append(arts_buf);
         msgBuf.append("}");
         return this;
     }
