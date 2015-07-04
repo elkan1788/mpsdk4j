@@ -13,19 +13,6 @@
         腾讯微信公众平台开发者服务,Java平台开发下的SDK包
     </description>
 
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <name>Local Releases</name>
-            <url>http://localhost:88/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>Local Snapshots</name>
-            <url>http://localhost:88/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <developers>
         <developer>
             <id>0</id>
