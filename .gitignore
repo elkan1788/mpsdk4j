@@ -1,4 +1,7 @@
 target/
+.settings/
 *.iml
 *.class
 *.jar
+*.classpath
+*.project
