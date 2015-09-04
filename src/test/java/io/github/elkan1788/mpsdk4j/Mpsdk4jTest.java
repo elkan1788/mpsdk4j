@@ -13,7 +13,7 @@ import org.nutz.log.Logs;
  */
 public class Mpsdk4jTest {
 
-    private Log log = Logs.get();
+    private static final Log log = Logs.get();
 
     /**
      * Test method for {@link io.github.elkan1788.mpsdk4j.Mpsdk4j#version()}.
