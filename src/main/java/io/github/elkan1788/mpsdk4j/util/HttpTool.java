@@ -33,6 +33,7 @@ public class HttpTool {
         if (log.isDebugEnabled()) {
             log.debugf("Request url: %s, default timeout: %d", url, CONNECT_TIME_OUT);
         }
+
         try {
             Response resp = Http.get(url, CONNECT_TIME_OUT);
             if (resp.isOK()) {
@@ -120,7 +121,7 @@ public class HttpTool {
                 if (log.isInfoEnabled()) {
                     log.infof("Get download file info: %s", cd);
                 }
-                cd = cd.substring(cd.indexOf(FILE_NAME_FLAG) + "filename=".length());
+                cd = cd.substring(cd.indexOf(FILE_NAME_FLAG) + FILE_NAME_FLAG.length());
                 String tmp = cd.startsWith("\"") ? cd.substring(1) : cd;
                 tmp = tmp.endsWith("\"") ? cd.replace("\"", "") : cd;
                 if (log.isInfoEnabled()) {
