@@ -3,7 +3,9 @@ package io.github.elkan1788.mpsdk4j;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import io.github.elkan1788.mpsdk4j.api.APITest;
 import io.github.elkan1788.mpsdk4j.util.UtilTest;
+import io.github.elkan1788.mpsdk4j.vo.VOTest;
 
 /**
  * Test all class
@@ -13,7 +15,7 @@ import io.github.elkan1788.mpsdk4j.util.UtilTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-                     Mpsdk4jTest.class, UtilTest.class
+                     Mpsdk4jTest.class, UtilTest.class, VOTest.class, APITest.class
 })
 public class RunTest {
 
