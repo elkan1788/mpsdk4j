@@ -32,7 +32,7 @@ class XMLParse {
 		try {
 			SAXParserFactory sax = SAXParserFactory.newInstance();
 			SAXParser parser = sax.newSAXParser();
-			final Map<String, Object[]> map = new HashMap<>();
+			final Map<String, Object[]> map = new HashMap<String, Object[]>();
 			DefaultHandler handler = new DefaultHandler() {
 				private Object[] result = new Object[3];
 				private String temp;
