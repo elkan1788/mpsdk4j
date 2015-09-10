@@ -1,5 +1,16 @@
 package io.github.elkan1788.mpsdk4j.api;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.nutz.castor.Castors;
+import org.nutz.json.Json;
+import org.nutz.json.JsonFormat;
+import org.nutz.lang.Lang;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+
 import io.github.elkan1788.mpsdk4j.common.Constants;
 import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
 import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
@@ -9,15 +20,6 @@ import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 import io.github.elkan1788.mpsdk4j.vo.credential.AccessToken;
 import io.github.elkan1788.mpsdk4j.vo.menu.Menu;
-
-import java.util.List;
-import java.util.Map;
-
-import org.nutz.castor.Castors;
-import org.nutz.json.Json;
-import org.nutz.lang.Lang;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
 
 /**
  * 微信公众平台所有接口实现
@@ -30,16 +32,34 @@ public class WechatAPIImpl implements WechatAPI {
 
     private static final Log log = Logs.get();
 
-    static final MemoryCache<AccessToken> _atmc = new AccessTokenMemoryCache();
+    static MemoryCache<AccessToken> _atmc;
 
     private MPAccount mpAct;
 
     public WechatAPIImpl(MPAccount mpAct) {
         this.mpAct = mpAct;
+        synchronized (this) {
+            if (_atmc == null) {
+                _atmc = new AccessTokenMemoryCache();
+            }
+        }
+    }
+
+    public WechatAPIImpl(MPAccount mpAct, MemoryCache<AccessToken> atmc) {
+        this.mpAct = mpAct;
+        synchronized (this) {
+            if (_atmc == null) {
+                _atmc = atmc;
+            }
+        }
     }
 
     public static WechatAPI create(MPAccount mpAct) {
         return new WechatAPIImpl(mpAct);
+    }
+
+    public static WechatAPI create(MPAccount mpAct, MemoryCache<AccessToken> atmc) {
+        return new WechatAPIImpl(mpAct, atmc);
     }
 
     private String mergeUrl(String url) {
@@ -64,10 +84,17 @@ public class WechatAPIImpl implements WechatAPI {
             }
 
             if (log.isInfoEnabled()) {
-                log.infof("Get access_token url: %s", url);
-                log.infof("Get access_token failed. There try %d items.", i + 1);
+                log.infof("Get mp[%s] access_token url: %s", mpAct.getMpId(), url);
+                log.infof("Get mp[%s]access_token failed. There try %d items.",
+                          mpAct.getMpId(),
+                          i + 1);
+            }
+
+            if (i == Constants.TRY_COUNT - 1) {
+                throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
             }
         }
+
     }
 
     @Override
@@ -90,8 +117,10 @@ public class WechatAPIImpl implements WechatAPI {
             }
 
             if (log.isInfoEnabled()) {
-                log.infof("Get custom menu url: %s", url);
-                log.infof("Get custom menu failed. There try %d items.", i + 1);
+                log.infof("Get mp[%s] server ips url: %s", mpAct.getMpId(), url);
+                log.infof("Get mp[%s] server ips failed. There try %d items.",
+                          mpAct.getMpId(),
+                          i + 1);
             }
 
             if (i == Constants.TRY_COUNT - 1) {
@@ -109,13 +138,21 @@ public class WechatAPIImpl implements WechatAPI {
             ApiResult ar = ApiResult.create(HttpTool.get(url));
             if (ar.isSuccess()) {
                 Map<String, Object> button = Json.fromJson(Map.class,
-                                                           Json.toJson(ar.getContent().get("menu")));
+                                                           Json.toJson(ar.getContent()
+                                                                         .get("menu")));
                 return Json.fromJsonAsList(Menu.class, Json.toJson(button.get("button")));
             }
 
+            // 菜单为空
+            if (ar.getErrCode().intValue() == 46003) {
+                break;
+            }
+
             if (log.isInfoEnabled()) {
-                log.infof("Get custom menu url: %s", url);
-                log.infof("Get custom menu failed. There try %d items.", i + 1);
+                log.infof("Get mp[%s] custom menu url: %s", mpAct.getAppId(), url);
+                log.infof("Get mp[%s] custom menu failed. There try %d items.",
+                          mpAct.getAppId(),
+                          i + 1);
             }
 
             if (i == Constants.TRY_COUNT - 1) {
@@ -128,12 +165,49 @@ public class WechatAPIImpl implements WechatAPI {
     @Override
     public boolean createMenu(Menu... menu) {
         String url = mergeUrl(create_menu + getAccessToken());
+        Map<String, Object> body = new HashMap<String, Object>();
+        body.put("button", menu);
+        String data = Json.toJson(body, JsonFormat.compact());
+        for (int i = 0; i < Constants.TRY_COUNT; i++) {
+            ApiResult ar = ApiResult.create(HttpTool.post(url, data));
+            if (ar.isSuccess()) {
+                return true;
+            }
+
+            if (log.isInfoEnabled()) {
+                log.infof("Create mp[%s] custom menu url: %s", mpAct.getAppId(), url);
+                log.infof("Create mp[%s] custom menu failed. There try %d items.",
+                          mpAct.getAppId(),
+                          i + 1);
+            }
+
+            if (i == Constants.TRY_COUNT - 1) {
+                throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+            }
+        }
         return false;
     }
 
     @Override
     public boolean delMenu() {
         String url = mergeUrl(del_menu + getAccessToken());
+        for (int i = 0; i < Constants.TRY_COUNT; i++) {
+            ApiResult ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                return true;
+            }
+
+            if (log.isInfoEnabled()) {
+                log.infof("Delete mp[%s] custom menu url: %s", mpAct.getAppId(), url);
+                log.infof("Delete mp[%s] custom menu failed. There try %d items.",
+                          mpAct.getMpId(),
+                          i + 1);
+            }
+
+            if (i == Constants.TRY_COUNT - 1) {
+                throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+            }
+        }
         return false;
     }
 
