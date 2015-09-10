@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-                     CredentialApiTest.class
+        CredentialApiTest.class, CustomMenuAPITest.class
 })
 public class APITest {
 

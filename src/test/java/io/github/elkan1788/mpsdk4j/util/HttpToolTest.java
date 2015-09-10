@@ -12,6 +12,12 @@ import org.nutz.json.Json;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
 
+/**
+ * HttpTool 测试
+ * 
+ * @author 凡梦星尘(elkan1788@gmail.com)
+ * @since 2.0
+ */
 @SuppressWarnings("unchecked")
 public class HttpToolTest {
 
