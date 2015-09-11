@@ -1,8 +1,8 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import io.github.elkan1788.mpsdk4j.vo.menu.Menu;
-
 import java.util.List;
+
+import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 
 /**
  * 微信自定义菜单接口
@@ -10,7 +10,7 @@ import java.util.List;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public interface CustomMenuAPI {
+public interface MenuAPI {
 
     // 菜单查询地址
     static String query_menu = "/menu/get?access_token=";
@@ -22,7 +22,7 @@ public interface CustomMenuAPI {
     /**
      * 查询当前自定菜单
      * 
-     * @return 菜单项
+     * @return 菜单项{@link io.github.elkan1788.mpsdk4j.vo.api.Menu}
      */
     List<Menu> getMenu();
 

@@ -9,7 +9,7 @@ package io.github.elkan1788.mpsdk4j.common;
 public class Constants {
 
     // 失败重试次数
-    public static final int TRY_COUNT = 3;
+    public static final int RETRY_COUNT = 3;
 
     // 默认有效时间
     public static final int DEFAULT_EXPIRE_TIME = 7200 - 30;

@@ -4,7 +4,10 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
@@ -14,19 +17,27 @@ import org.nutz.log.Logs;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CredentialApiTest extends APITestSupport {
 
     private static final Log log = Logs.get();
 
+    private CredentialAPI ca;
+
+    @Override
+    @Before
+    public void init() {
+        super.init();
+        ca = WechatAPIImpl.create(mpAct);
+    }
+
     @Test
     public void testGetAccessToken() {
-        CredentialAPI ca = WechatAPIImpl.create(mpAct);
         assertNotNull(ca.getAccessToken());
     }
 
     @Test
     public void testGetServerIps() {
-        CredentialAPI ca = WechatAPIImpl.create(mpAct);
         log.infof("access_token: %s", ca.getAccessToken());
         List<String> ips = ca.getServerIps();
         assertNotNull(ips);

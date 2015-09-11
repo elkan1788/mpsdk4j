@@ -12,6 +12,8 @@ import org.nutz.json.Json;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
 
+import io.github.elkan1788.mpsdk4j.vo.ApiResult;
+
 /**
  * HttpTool 测试
  * 
@@ -67,6 +69,7 @@ public class HttpToolTest {
         Map<String, String> nm = (Map<String, String>) Json.fromJson(content);
         Assert.assertNotNull(nm.get("created_at"));
         mediaId = nm.get("media_id");
+        System.out.println(mediaId);
     }
 
     @Test
@@ -74,9 +77,15 @@ public class HttpToolTest {
         String url = String.format("https://api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s",
                                    accessToken,
                                    mediaId);
-        File file = HttpTool.download(url);
+        Object tmp = HttpTool.download(url);
         try {
-            Files.copyFile(file, new File("/hom/usr/mpsdk4j-logo.png"));
+            if (tmp instanceof File) {
+                Files.copyFile((File) tmp, new File("D:/tmp/mpsdk4j-logo.png"));
+            }
+            else {
+                ApiResult ar = ApiResult.create((String) tmp);
+                System.out.println(ar);
+            }
         }
         catch (IOException e) {
             throw Lang.wrapThrow(e);

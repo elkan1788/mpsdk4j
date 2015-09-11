@@ -1,13 +1,13 @@
 /**
  * @author senhui.li
  */
-package io.github.elkan1788.mpsdk4j.vo.menu;
-
-import io.github.elkan1788.mpsdk4j.common.EventType;
+package io.github.elkan1788.mpsdk4j.vo.api;
 
 import java.util.List;
 
 import org.nutz.json.JsonField;
+
+import io.github.elkan1788.mpsdk4j.common.EventType;
 
 /**
  * 自定义菜单
@@ -76,7 +76,7 @@ public class Menu {
      *            菜单名字
      */
     public Menu(String name) {
-        this.name = name;
+        setName(name);
     }
 
     /**
@@ -90,13 +90,13 @@ public class Menu {
      *            KEY值/URL
      */
     public Menu(String name, String type, String val) {
-        this.name = name;
-        this.type = type;
+        setName(name);
+        setType(type);
         if (EventType.VIEW.name().equals(type)) {
-            this.url = val;
+            setUrl(val);
         }
         else {
-            this.key = val;
+            setKey(val);
         }
     }
 
@@ -113,7 +113,7 @@ public class Menu {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.type = type.toLowerCase();
     }
 
     public String getKey() {

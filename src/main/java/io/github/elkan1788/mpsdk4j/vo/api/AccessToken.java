@@ -1,4 +1,4 @@
-package io.github.elkan1788.mpsdk4j.vo.credential;
+package io.github.elkan1788.mpsdk4j.vo.api;
 
 import org.nutz.json.JsonField;
 import org.nutz.lang.Lang;
@@ -9,9 +9,15 @@ import org.nutz.lang.Lang;
  */
 public class AccessToken {
 
+    /**
+     * 获取到的凭证
+     */
     @JsonField(value = "access_token")
     private String accessToken;
 
+    /**
+     * 凭证有效时间,单位:秒
+     */
     @JsonField(value = "expires_in")
     private long expiresIn;
 

@@ -3,7 +3,7 @@ package io.github.elkan1788.mpsdk4j.session;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.github.elkan1788.mpsdk4j.vo.credential.AccessToken;
+import io.github.elkan1788.mpsdk4j.vo.api.AccessToken;
 
 /**
  * 本地缓存AccessToken信息
