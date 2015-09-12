@@ -39,16 +39,16 @@ public interface MediaAPI {
      *            多媒体类型 {@link io.github.elkan1788.mpsdk4j.common.MediaType}
      * @param media
      *            多媒体文件
-     * @return 实体{@link io.github.elkan1788.mpsdk4j.vo.api.Media}
+     * @return 实体{@link Media}
      */
-    Media upload(String type, File media);
+    Media upMedia(String type, File media);
 
     /**
      * 下载多媒体文件
      * 
      * @param mediaId
      *            媒体文件ID
-     * @return {@link java.io.File}
+     * @return {@link File}
      */
-    File get(String mediaId);
+    File dlMedia(String mediaId);
 }

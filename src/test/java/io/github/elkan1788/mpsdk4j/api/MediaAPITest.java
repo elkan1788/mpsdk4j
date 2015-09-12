@@ -35,7 +35,7 @@ public class MediaAPITest extends APITestSupport {
     @Test
     public void testUploadImage() {
         File media = new File(this.getClass().getResource("/mpsdk4j-logo.png").getFile());
-        Media m = ma.upload(MediaType.image.name(), media);
+        Media m = ma.upMedia(MediaType.image.name(), media);
         assertNotNull(m);
         log.info(m);
     }
@@ -43,7 +43,7 @@ public class MediaAPITest extends APITestSupport {
     @Test
     public void testGet() {
         String mediaId = "";
-        File media = ma.get(mediaId);
+        File media = ma.dlMedia(mediaId);
         assertNotNull(media);
         log.info(media.getAbsolutePath());
         log.info(media.getName());
