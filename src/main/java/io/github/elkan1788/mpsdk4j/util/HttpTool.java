@@ -109,7 +109,7 @@ public class HttpTool {
         }
     }
 
-    public static File download(String url) {
+    public static Object download(String url) {
         if (log.isDebugEnabled()) {
             log.debugf("Upload url: %s, default timeout: %d", url, CONNECT_TIME_OUT);
         }
@@ -121,14 +121,20 @@ public class HttpTool {
                 if (log.isInfoEnabled()) {
                     log.infof("Get download file info: %s", cd);
                 }
+
+                if (Lang.isEmpty(cd)) {
+                    return resp.getContent();
+                }
+
                 cd = cd.substring(cd.indexOf(FILE_NAME_FLAG) + FILE_NAME_FLAG.length());
                 String tmp = cd.startsWith("\"") ? cd.substring(1) : cd;
                 tmp = tmp.endsWith("\"") ? cd.replace("\"", "") : cd;
-                if (log.isInfoEnabled()) {
-                    log.infof("Download file name: %s", tmp);
-                }
                 String filename = tmp.substring(0, tmp.lastIndexOf("."));
                 String fileext = tmp.substring(tmp.lastIndexOf("."));
+                if (log.isInfoEnabled()) {
+                    log.infof("Download file name: %s", filename);
+                    log.infof("Download file ext: %s", fileext);
+                }
 
                 File tmpfile = File.createTempFile(filename, fileext);
                 InputStream is = resp.getStream();
@@ -137,9 +143,10 @@ public class HttpTool {
                 return tmpfile;
             }
 
-            throw Lang.wrapThrow(new RuntimeException(String.format("Download file [%s] failed. status: %d",
+            throw Lang.wrapThrow(new RuntimeException(String.format("Download file [%s] failed. status: %d, content: %s",
                                                                     url,
-                                                                    resp.getStatus())));
+                                                                    resp.getStatus(),
+                                                                    resp.getContent())));
         }
         catch (Exception e) {
             throw Lang.wrapThrow(e);
