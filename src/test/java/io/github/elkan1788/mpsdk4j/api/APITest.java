@@ -14,7 +14,8 @@ import org.junit.runners.Suite;
                      CredentialApiTest.class,
                      MenuAPITest.class,
                      MediaAPITest.class,
-                     GroupsAPITest.class
+                     GroupsAPITest.class,
+                     QRCodeAPITest.class
 })
 public class APITest {
 

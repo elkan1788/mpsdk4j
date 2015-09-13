@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.nutz.castor.Castors;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Lang;
+import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
@@ -23,6 +25,7 @@ import io.github.elkan1788.mpsdk4j.vo.api.AccessToken;
 import io.github.elkan1788.mpsdk4j.vo.api.Groups;
 import io.github.elkan1788.mpsdk4j.vo.api.Media;
 import io.github.elkan1788.mpsdk4j.vo.api.Menu;
+import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
 
 /**
  * 微信公众平台所有接口实现
@@ -355,6 +358,56 @@ public class WechatAPIImpl implements WechatAPI {
             }
 
             log.errorf("Delete mp[%s] groups[%d] failed: %s", mpAct.getMpId(), id, ar.getJson());
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public QRTicket createQR(Object sceneId, int expireSeconds) {
+        String url = mergeUrl(create_qrcode + getAccessToken());
+        ApiResult ar = null;
+        NutMap data = new NutMap();
+        NutMap scene;
+        // 临时二维码
+        if (expireSeconds > 0) {
+            data.put("action_name", "QR_SCENE");
+            data.put("expire_seconds", expireSeconds);
+
+            scene = Lang.map("scene_id", Castors.me().castTo(sceneId, Integer.class));
+        }
+        // 永久二维码
+        else if (sceneId instanceof Number) {
+            data.put("action_name", "QR_LIMIT_SCENE");
+            scene = Lang.map("scene_id", Castors.me().castTo(sceneId, Integer.class));
+        }
+        // 永久字符串二维码
+        else {
+            data.put("action_name", "QR_LIMIT_STR_SCENE");
+            scene = Lang.map("scene_str", sceneId.toString());
+        }
+        data.put("action_info", Lang.map("scene", scene));
+        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(url, Json.toJson(data, JsonFormat.compact())));
+            if (ar.isSuccess()) {
+                return Json.fromJson(QRTicket.class, Json.toJson(ar.getContent()));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public File getQR(String ticket) {
+        String url = mergeUrl(show_qrcode + ticket);
+        ApiResult ar = null;
+        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+            Object tmp = HttpTool.get(url);
+            if (tmp instanceof File) {
+                return (File) tmp;
+            }
+
+            ar = ApiResult.create((String) tmp);
+            log.errorf("Download mp[%s] qrcode image failed: %s", mpAct.getMpId(), ar.getJson());
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
