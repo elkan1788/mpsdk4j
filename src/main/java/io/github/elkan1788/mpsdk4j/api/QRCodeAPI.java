@@ -1,8 +1,8 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import java.io.File;
-
 import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
+
+import java.io.File;
 
 /**
  * 微信二维码接口
@@ -13,12 +13,12 @@ import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
 public interface QRCodeAPI {
 
     /**
-     * 创建二维码ticket
+     * 创建二维码ticket地址
      */
     static String create_qrcode = "/qrcode/create?access_token=";
 
     /**
-     * 下载二维码
+     * 下载二维码地址
      */
     static String show_qrcode = "/showqrcode?ticket=";
 
