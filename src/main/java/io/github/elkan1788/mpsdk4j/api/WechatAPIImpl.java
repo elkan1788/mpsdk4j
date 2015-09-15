@@ -1,5 +1,20 @@
 package io.github.elkan1788.mpsdk4j.api;
 
+import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
+import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
+import io.github.elkan1788.mpsdk4j.session.MemoryCache;
+import io.github.elkan1788.mpsdk4j.util.HttpTool;
+import io.github.elkan1788.mpsdk4j.vo.ApiResult;
+import io.github.elkan1788.mpsdk4j.vo.MPAccount;
+import io.github.elkan1788.mpsdk4j.vo.api.AccessToken;
+import io.github.elkan1788.mpsdk4j.vo.api.FollowList;
+import io.github.elkan1788.mpsdk4j.vo.api.Follower;
+import io.github.elkan1788.mpsdk4j.vo.api.Follower2;
+import io.github.elkan1788.mpsdk4j.vo.api.Groups;
+import io.github.elkan1788.mpsdk4j.vo.api.Media;
+import io.github.elkan1788.mpsdk4j.vo.api.Menu;
+import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,22 +25,10 @@ import org.nutz.castor.Castors;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.common.Constants;
-import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
-import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
-import io.github.elkan1788.mpsdk4j.session.MemoryCache;
-import io.github.elkan1788.mpsdk4j.util.HttpTool;
-import io.github.elkan1788.mpsdk4j.vo.ApiResult;
-import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-import io.github.elkan1788.mpsdk4j.vo.api.AccessToken;
-import io.github.elkan1788.mpsdk4j.vo.api.Groups;
-import io.github.elkan1788.mpsdk4j.vo.api.Media;
-import io.github.elkan1788.mpsdk4j.vo.api.Menu;
-import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
 
 /**
  * 微信公众平台所有接口实现
@@ -37,6 +40,8 @@ import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
 public class WechatAPIImpl implements WechatAPI {
 
     private static final Log log = Logs.get();
+
+    static int RETRY_COUNT = 3;
 
     static MemoryCache<AccessToken> _atmc;
 
@@ -82,7 +87,7 @@ public class WechatAPIImpl implements WechatAPI {
         String url = mergeUrl(get_at, mpAct.getAppId(), mpAct.getAppSecret());
         AccessToken at = null;
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
             if (ar.isSuccess()) {
                 at = Json.fromJson(AccessToken.class, ar.getJson());
@@ -93,9 +98,7 @@ public class WechatAPIImpl implements WechatAPI {
                 return;
             }
 
-            log.errorf("Get mp[%s]access_token failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i + 1);
+            log.errorf("Get mp[%s]access_token failed. There try %d items.", mpAct.getMpId(), i + 1);
 
         }
 
@@ -116,7 +119,7 @@ public class WechatAPIImpl implements WechatAPI {
     public List<String> getServerIps() {
         String url = mergeUrl(cb_ips + getAccessToken());
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
             if (ar.isSuccess()) {
                 return Json.fromJsonAsList(String.class, Json.toJson(ar.get("ip_list")));
@@ -132,7 +135,7 @@ public class WechatAPIImpl implements WechatAPI {
     public List<Menu> getMenu() {
         String url = mergeUrl(query_menu + getAccessToken());
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
             if (ar.isSuccess()) {
                 Map<String, Object> button = Json.fromJson(Map.class, Json.toJson(ar.get("menu")));
@@ -159,7 +162,7 @@ public class WechatAPIImpl implements WechatAPI {
         body.put("button", menu);
         String data = Json.toJson(body, JsonFormat.compact());
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 return true;
@@ -178,7 +181,7 @@ public class WechatAPIImpl implements WechatAPI {
     public boolean delMenu() {
         String url = mergeUrl(del_menu + getAccessToken());
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
             if (ar.isSuccess()) {
                 return true;
@@ -196,7 +199,7 @@ public class WechatAPIImpl implements WechatAPI {
     public Media upMedia(String type, File media) {
         String url = mergeUrl(upload_media, getAccessToken(), type);
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.upload(url, media));
             if (ar.isSuccess()) {
                 return Json.fromJson(Media.class, ar.getJson());
@@ -212,14 +215,14 @@ public class WechatAPIImpl implements WechatAPI {
     public File dlMedia(String mediaId) {
         String url = mergeUrl(get_media, getAccessToken(), mediaId);
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             Object tmp = HttpTool.download(url);
             if (tmp instanceof File) {
                 return (File) tmp;
             }
 
             ar = ApiResult.create((String) tmp);
-            log.errorf("Download mp[%s] media failed: %s", mpAct.getMpId(), ar.getJson());
+            log.errorf("Download mp[%s] media failed. There try %d items.", mpAct.getMpId(), i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -230,17 +233,17 @@ public class WechatAPIImpl implements WechatAPI {
         String url = mergeUrl(create_groups + getAccessToken());
         String data = "{\"group\":{\"name\":\"" + name + "\"}}";
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 Groups g = Json.fromJson(Groups.class, Json.toJson(ar.get("group")));
                 return g.getId();
             }
 
-            log.errorf("Create mp[%s] group name[%s] failed: %s",
+            log.errorf("Create mp[%s] group name[%s] failed. There try %d items.",
                        mpAct.getMpId(),
                        name,
-                       ar.getJson());
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -250,13 +253,13 @@ public class WechatAPIImpl implements WechatAPI {
     public List<Groups> getGroups() {
         String url = mergeUrl(get_groups + getAccessToken());
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
             if (ar.isSuccess()) {
                 return Json.fromJsonAsList(Groups.class, Json.toJson(ar.get("groups")));
             }
 
-            log.errorf("Get mp[%s] groups failed: %s", mpAct.getMpId(), ar.getJson());
+            log.errorf("Get mp[%s] groups failed. There try %d items.", mpAct.getMpId(), i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -267,16 +270,16 @@ public class WechatAPIImpl implements WechatAPI {
         String url = mergeUrl(get_member_group + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\"}";
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 return Integer.parseInt(String.valueOf(ar.get("groupid")));
             }
 
-            log.errorf("Get mp[%s] openId[%s] groups failed: %s",
+            log.errorf("Get mp[%s] openId[%s] groups failed. There try %d items.",
                        mpAct.getMpId(),
                        openId,
-                       ar.getJson());
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -287,17 +290,17 @@ public class WechatAPIImpl implements WechatAPI {
         String url = mergeUrl(update_group + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + ",\"name\":\"" + name + "\"}}";
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 return true;
             }
 
-            log.errorf("Rename mp[%s] groups[%d-%s] failed: %s",
+            log.errorf("Rename mp[%s] groups[%d-%s] failed. There try %d items.",
                        mpAct.getMpId(),
                        id,
                        name,
-                       ar.getJson());
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -308,17 +311,17 @@ public class WechatAPIImpl implements WechatAPI {
         String url = mergeUrl(update_member_group + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\",\"to_groupid\":" + groupId + "}";
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 return true;
             }
 
-            log.errorf("Move mp[%s] openId[%s] to groups[%d] failed: %s",
+            log.errorf("Move mp[%s] openId[%s] to groups[%d] failed. There try %d items.",
                        mpAct.getMpId(),
                        openId,
                        groupId,
-                       ar.getJson());
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -331,16 +334,16 @@ public class WechatAPIImpl implements WechatAPI {
         data.put("openid_list", Json.toJson(openIds));
         data.put("to_groupid", groupId);
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, Json.toJson(data, JsonFormat.compact())));
             if (ar.isSuccess()) {
                 return true;
             }
 
-            log.errorf("Move mp[%s] openIds to groups[%d] failed: %s",
+            log.errorf("Move mp[%s] openIds to groups[%d] failed. There try %d items.",
                        mpAct.getMpId(),
                        groupId,
-                       ar.getJson());
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -351,13 +354,16 @@ public class WechatAPIImpl implements WechatAPI {
         String url = mergeUrl(delete_groups + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + "}}";
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 return true;
             }
 
-            log.errorf("Delete mp[%s] groups[%d] failed: %s", mpAct.getMpId(), id, ar.getJson());
+            log.errorf("Delete mp[%s] groups[%d] failed. There try %d items.",
+                       mpAct.getMpId(),
+                       id,
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -387,27 +393,113 @@ public class WechatAPIImpl implements WechatAPI {
             scene = Lang.map("scene_str", sceneId.toString());
         }
         data.put("action_info", Lang.map("scene", scene));
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.post(url, Json.toJson(data, JsonFormat.compact())));
             if (ar.isSuccess()) {
                 return Json.fromJson(QRTicket.class, Json.toJson(ar.getContent()));
             }
+
+            log.infof("Create mp[%s] scene[%s] qrcode failed. There try %d items.",
+                      mpAct.getMpId(),
+                      data.get("action_name"),
+                      i);
         }
-        return null;
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
     }
 
     @Override
     public File getQR(String ticket) {
         String url = mergeUrl(show_qrcode + ticket);
         ApiResult ar = null;
-        for (int i = 0; i < Constants.RETRY_COUNT; i++) {
+        for (int i = 0; i < RETRY_COUNT; i++) {
             Object tmp = HttpTool.get(url);
             if (tmp instanceof File) {
                 return (File) tmp;
             }
 
             ar = ApiResult.create((String) tmp);
-            log.errorf("Download mp[%s] qrcode image failed: %s", mpAct.getMpId(), ar.getJson());
+            log.errorf("Download mp[%s] qrcode image failed. There try %d items.",
+                       mpAct.getMpId(),
+                       i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public boolean updateRemark(String openId, String remark) {
+        String url = mergeUrl(user_remark + getAccessToken());
+        ApiResult ar = null;
+        String data = "{\"openid\":\"" + openId + "\",\"remark\":\"" + remark + "\"}";
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(url, data));
+            if (ar.isSuccess()) {
+                return true;
+            }
+
+            log.errorf("Update mp[%s] user[%d] remark[%s] failed. There try %d items.",
+                       mpAct.getMpId(),
+                       openId,
+                       remark,
+                       i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public FollowList getFollowerList(String nextOpenId) {
+        String url = mergeUrl(user_list, getAccessToken(), Strings.sNull(nextOpenId, ""));
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                FollowList fl = Json.fromJson(FollowList.class, ar.getJson());
+                Map<String, Object> openid = (Map<String, Object>) ar.get("data");
+                fl.setOpenIds(Json.fromJson(List.class, Json.toJson(openid.get("openid"))));
+                return fl;
+            }
+
+            log.infof("Get mp[%s] follow list failed. There try %d items.", mpAct.getMpId(), i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public Follower getFollower(String openId, String lang) {
+        String url = mergeUrl(user_info, getAccessToken(), openId, Strings.sNull(lang, "zh_CN"));
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                return Json.fromJson(Follower.class, ar.getJson());
+            }
+
+            log.errorf("Get mp[%s] follower[%s] information failed. There try %d items.",
+                       mpAct.getMpId(),
+                       openId,
+                       i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public List<Follower> getFollowers(Collection<Follower2> users) {
+        String url = mergeUrl(batch_user_info + getAccessToken());
+        ApiResult ar = null;
+        String data = Json.toJson(Lang.map("user_list", users), JsonFormat.compact());
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(url, data));
+            if (ar.isSuccess()) {
+                return Json.fromJsonAsList(Follower.class, Json.toJson(ar.get("user_info_list")));
+            }
+
+            log.errorf("Get mp[%s] followers information failed. There try %d items.",
+                       mpAct.getMpId(),
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));

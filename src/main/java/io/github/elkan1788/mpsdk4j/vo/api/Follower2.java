@@ -21,6 +21,17 @@ public class Follower2 {
      */
     private String lang;
 
+    public Follower2() {}
+
+    public Follower2(String openid) {
+        this(openid, "zh_CN");
+    }
+
+    public Follower2(String openid, String lang) {
+        this.openid = openid;
+        this.lang = lang;
+    }
+
     public String getOpenid() {
         return openid;
     }

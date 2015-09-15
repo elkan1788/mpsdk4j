@@ -3,6 +3,8 @@ package io.github.elkan1788.mpsdk4j.vo.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nutz.json.JsonField;
+
 /**
  * 关注者列表
  *
@@ -25,6 +27,7 @@ public class FollowList {
     /**
      * 拉取列表的后一个用户的OPENID
      */
+    @JsonField(value = "next_openid")
     private String nextOpenId;
 
     public int getTotal() {

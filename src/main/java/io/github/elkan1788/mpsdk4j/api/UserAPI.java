@@ -33,7 +33,7 @@ public interface UserAPI {
     /**
      * 批量用户基本信息地址
      */
-    static String batch_user_info = "/user/info/batchget?access_token=%s";
+    static String batch_user_info = "/user/info/batchget?access_token=";
 
     /**
      * 设置用户备注名
@@ -67,7 +67,7 @@ public interface UserAPI {
     Follower getFollower(String openId, String lang);
 
     /**
-     * 批量获取用户基本信息
+     * 批量获取用户基本信息[最多拉取100条]
      * 
      * @param users
      *            批量用户集合{@link Follower2}
