@@ -34,34 +34,38 @@ public class UserAPITest extends APITestSupport {
 
     @Before
     public void init() {
+        log.info("====== UserAPITest ====== ");
         super.init();
         ua = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testGetFollowerList() {
+        log.info("====== UserAPI#getFollowerList ====== ");
         FollowList fl = ua.getFollowerList(null);
         assertNotNull(fl);
-        log.info("====== UserAPI#getFollowerList ====== ");
         log.info(fl);
     }
 
     @Test
     public void testGetFollower() {
+        log.info("====== UserAPI#getFollower ====== ");
         Follower f = ua.getFollower(openId, null);
         assertNotNull(f);
-        log.info("====== UserAPI#getFollower ====== ");
         log.info(f);
     }
 
     @Test
     public void testUpdateRemark() {
+        log.info("====== UserAPI#updateRemark ====== ");
         boolean flag = ua.updateRemark(openId, "Youself");
         assertTrue(flag);
+        log.info(flag);
     }
 
     @Test
     public void testGetFollowers() {
+        log.info("====== UserAPI#getFollowers ====== ");
         List<Follower2> getfs = new ArrayList<Follower2>();
         getfs.add(new Follower2(openId));
         getfs.add(new Follower2(""));
@@ -69,7 +73,6 @@ public class UserAPITest extends APITestSupport {
         List<Follower> fs = ua.getFollowers(getfs);
         assertNotNull(fs);
         assertEquals(2, fs.size());
-        log.info("====== UserAPI#getFollowers ====== ");
         log.info(fs);
     }
 }

@@ -2,6 +2,7 @@ package io.github.elkan1788.mpsdk4j.api;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
 
 import java.io.File;
 
@@ -9,8 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
 
 /**
  * QRCodeAPI 测试
@@ -30,12 +29,14 @@ public class QRCodeAPITest extends APITestSupport {
     @Override
     @Before
     public void init() {
+        log.info("====== QRCodeAPITest ======");
         super.init();
         qa = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testCreateQR() {
+        log.info("====== QRCodeAPI#createQR ======");
         QRTicket qrt = qa.createQR(10, expireSeconds);
         assertNotNull(qrt);
         assertEquals(qrt.getExpireSeconds(), expireSeconds);
@@ -46,6 +47,7 @@ public class QRCodeAPITest extends APITestSupport {
 
     @Test(expected = RuntimeException.class)
     public void testGetQR() {
+        log.info("====== QRCodeAPI#getQR ======");
         File qrImg = qa.getQR(ticket);
         assertNotNull(qrImg);
         log.infof("temp path: %s", qrImg.getAbsolutePath());

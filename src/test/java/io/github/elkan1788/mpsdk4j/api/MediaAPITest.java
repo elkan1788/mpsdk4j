@@ -1,6 +1,8 @@
 package io.github.elkan1788.mpsdk4j.api;
 
 import static org.junit.Assert.assertNotNull;
+import io.github.elkan1788.mpsdk4j.common.MediaType;
+import io.github.elkan1788.mpsdk4j.vo.api.Media;
 
 import java.io.File;
 
@@ -10,9 +12,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.common.MediaType;
-import io.github.elkan1788.mpsdk4j.vo.api.Media;
 
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
@@ -28,12 +27,14 @@ public class MediaAPITest extends APITestSupport {
     @Override
     @Before
     public void init() {
+        log.info("====== MediaAPITest ======");
         super.init();
         ma = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testUploadImage() {
+        log.info("====== MediaAPI#upMedia ======");
         File media = new File(this.getClass().getResource("/mpsdk4j-logo.png").getFile());
         Media m = ma.upMedia(MediaType.image.name(), media);
         assertNotNull(m);
@@ -42,6 +43,7 @@ public class MediaAPITest extends APITestSupport {
 
     @Test
     public void testGet() {
+        log.info("====== MediaAPI#dlMedia ======");
         String mediaId = "";
         File media = ma.dlMedia(mediaId);
         assertNotNull(media);

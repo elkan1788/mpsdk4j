@@ -18,7 +18,7 @@ import org.nutz.log.Logs;
  * @since 2.0
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CredentialApiTest extends APITestSupport {
+public class CredentialAPITest extends APITestSupport {
 
     private static final Log log = Logs.get();
 
@@ -27,18 +27,21 @@ public class CredentialApiTest extends APITestSupport {
     @Override
     @Before
     public void init() {
+        log.info("====== CredentialAPITest ======");
         super.init();
         ca = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testGetAccessToken() {
+        log.info("====== CredentialAPI#getAccessToken ======");
         assertNotNull(ca.getAccessToken());
+        log.info(ca.getAccessToken());
     }
 
     @Test
     public void testGetServerIps() {
-        log.infof("access_token: %s", ca.getAccessToken());
+        log.info("====== CredentialAPI#getServerIps ======");
         List<String> ips = ca.getServerIps();
         assertNotNull(ips);
         int i = 0;
@@ -46,6 +49,15 @@ public class CredentialApiTest extends APITestSupport {
             i++;
             log.infof("Wechat server[%d] ip: %s", i, ip);
         }
+    }
+
+    @Test
+    public void testGetShorUrl() {
+        log.info("====== CredentialAPI#getShortUrl ======");
+        String longurl = "https://mp.weixin.qq.com/wiki/10/165c9b15eddcfbd8699ac12b0bd89ae6.html";
+        String shorurl = ca.getShortUrl(longurl);
+        assertNotNull(shorurl);
+        log.info(shorurl);
     }
 
 }

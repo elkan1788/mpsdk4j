@@ -2,6 +2,8 @@ package io.github.elkan1788.mpsdk4j.api;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import io.github.elkan1788.mpsdk4j.common.EventType;
+import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,9 +14,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.common.EventType;
-import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 
 /**
  * CustomMenuAPI 测试
@@ -32,12 +31,14 @@ public class MenuAPITest extends APITestSupport {
     @Override
     @Before
     public void init() {
+        log.info("====== MenuAPITest ======");
         super.init();
         cma = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testDelMenu() {
+        log.info("====== MenuAPI#delMenu ======");
         boolean flag = cma.delMenu();
         assertTrue(flag);
 
@@ -47,6 +48,7 @@ public class MenuAPITest extends APITestSupport {
 
     @Test
     public void testCreateMenu() {
+        log.info("====== MenuAPI#createMenu ======");
         Menu csdn = new Menu("CSND");
         csdn.setType(EventType.VIEW.name());
         csdn.setUrl("http://www.csdn.net");

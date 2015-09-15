@@ -132,6 +132,23 @@ public class WechatAPIImpl implements WechatAPI {
     }
 
     @Override
+    public String getShortUrl(String longUrl) {
+        String url = mergeUrl(short_url + getAccessToken());
+        String data = "{\"action\":\"long2short\",\"long_url\":\"" + longUrl + "\"}";
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(url, data));
+            if (ar.isSuccess()) {
+                return String.valueOf(ar.get("short_url"));
+            }
+
+            log.errorf("Create mp[%p] short url failed. There try %d items.", mpAct.getMpId(), i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
     public List<Menu> getMenu() {
         String url = mergeUrl(query_menu + getAccessToken());
         ApiResult ar = null;

@@ -3,6 +3,7 @@ package io.github.elkan1788.mpsdk4j.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import io.github.elkan1788.mpsdk4j.vo.api.Groups;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.vo.api.Groups;
 
 /**
  * GroupsAPI 测试
@@ -35,6 +34,7 @@ public class GroupsAPITest extends APITestSupport {
     @Override
     @Before
     public void init() {
+        log.info("====== GroupsAPITest ======");
         super.init();
         ga = WechatAPIImpl.create(mpAct);
         openIds = new ArrayList<String>();
@@ -44,16 +44,18 @@ public class GroupsAPITest extends APITestSupport {
 
     @Test
     public void testCreateGroup() {
+        log.info("====== GroupsAPI#createGroup ======");
         groupId = ga.createGroup("测试分组");
         assertTrue(groupId > 0);
+        log.info(groupId);
     }
 
     @Test
     public void testGetGroups() {
+        log.info("====== GroupsAPI#getGroups  ======");
         log.infof("groupId: %d", groupId);
         List<Groups> gs = ga.getGroups();
         assertNotNull(gs);
-        log.infof(" ========== mp[%s] groups ==========", mpAct.getMpId());
         for (Groups g : gs) {
             log.info(g);
         }
@@ -61,32 +63,42 @@ public class GroupsAPITest extends APITestSupport {
 
     @Test
     public void testRenGroups() {
+        log.info("====== GroupsAPI#renGroups ======");
         boolean flag = ga.renGroups(groupId, "测试分组改名");
         assertTrue(flag);
+        log.info(flag);
     }
 
     @Test
     public void testMove2Group() {
+        log.info("====== GroupsAPI#move2Group ======");
         boolean flag = ga.move2Group(openId, groupId);
         assertTrue(flag);
+        log.info(flag);
     }
 
     @Test
     public void testGetGroup() {
+        log.info("====== GroupsAPI#getGroup ======");
         int id = ga.getGroup(openId);
         assertEquals(id, groupId);
+        log.info(id);
     }
 
     @Test
     public void testBatchMove2Group() {
+        log.info("====== GroupsAPI#batchMove2Group ======");
         boolean flag = ga.batchMove2Group(openIds, groupId);
         assertTrue(flag);
+        log.info(flag);
     }
 
     @Test
     public void testDelGroup() {
+        log.info("====== GroupsAPI#delGroup ======");
         boolean flag = ga.delGroup(groupId);
         assertTrue(flag);
+        log.info(flag);
     }
 
 }
