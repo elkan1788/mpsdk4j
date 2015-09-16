@@ -1,8 +1,8 @@
-package io.github.elkan1788.mpsdk4j.vo.normal;
+package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMessage;
+import io.github.elkan1788.mpsdk4j.vo.BaseMsg;
 
 /**
  * 图像消息
@@ -10,18 +10,23 @@ import io.github.elkan1788.mpsdk4j.vo.BaseMessage;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class ImageMessage extends BaseMessage {
+public class ImageMsg extends BaseMsg {
 
-    // 图片链接
+    /**
+     * 图片链接
+     */
     private String picUrl;
-    // 图片消息媒体id，可以调用多媒体文件下载接口拉取数据
+    /**
+     * 图片消息媒体id，可以调用多媒体文件下载接口拉取数据
+     */
     private String mediaId;
 
-    public ImageMessage() {
+    public ImageMsg() {
+        super();
         this.msgType = "image";
     }
 
-    public ImageMessage(Map<String, String> values) {
+    public ImageMsg(Map<String, String> values) {
         super(values);
         this.picUrl = values.get("picUrl");
         this.mediaId = values.get("mediaId");
@@ -45,7 +50,7 @@ public class ImageMessage extends BaseMessage {
 
     @Override
     public String toString() {
-        return "ImageMessage [toUserName="
+        return "ImageMsg [toUserName="
                + toUserName
                + ", fromUserName="
                + fromUserName

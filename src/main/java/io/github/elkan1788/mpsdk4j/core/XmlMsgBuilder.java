@@ -3,9 +3,9 @@ package io.github.elkan1788.mpsdk4j.core;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMessage;
-import io.github.elkan1788.mpsdk4j.vo.normal.ImageMessage;
-import io.github.elkan1788.mpsdk4j.vo.normal.TextMessage;
+import io.github.elkan1788.mpsdk4j.vo.BaseMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 
 /**
  * 创建微信公众平台被动响应消息
@@ -32,7 +32,7 @@ public class XmlMsgBuilder {
      * @param msg
      *            输出消息实体
      */
-    void msgPrefix(BaseMessage msg) {
+    void msgPrefix(BaseMsg msg) {
         msgBuf.append("<ToUserName><![CDATA[")
               .append(msg.getToUserName())
               .append("]]></ToUserName>\n");
@@ -49,7 +49,7 @@ public class XmlMsgBuilder {
      * @param msg
      *            输出消息实体
      */
-    public XmlMsgBuilder text(TextMessage msg) {
+    public XmlMsgBuilder text(TextMsg msg) {
         msgPrefix(msg);
         msgBuf.append("<Content><![CDATA[").append(msg.getContent()).append("]]></Content>\n");
         return this;
@@ -61,7 +61,7 @@ public class XmlMsgBuilder {
      * @param msg
      *            输出消息实体
      */
-    public XmlMsgBuilder image(ImageMessage msg) {
+    public XmlMsgBuilder image(ImageMsg msg) {
         msgPrefix(msg);
         msgBuf.append("<Image>");
         msgBuf.append("<MediaId><![CDATA[").append(msg.getMediaId()).append("]]></MediaId>\n");

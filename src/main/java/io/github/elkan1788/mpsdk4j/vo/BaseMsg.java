@@ -8,7 +8,7 @@ import java.util.Map;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class BaseMessage {
+public class BaseMsg {
 
     /**
      * 微信公众号Id/OpenId
@@ -34,7 +34,7 @@ public class BaseMessage {
     /**
      * 默认构造方法
      */
-    public BaseMessage() {
+    public BaseMsg() {
         this.createTime = Long.valueOf(System.currentTimeMillis() / 1000).intValue();
     }
 
@@ -44,7 +44,7 @@ public class BaseMessage {
      * @param values
      *            XML值
      */
-    public BaseMessage(Map<String, String> values) {
+    public BaseMsg(Map<String, String> values) {
         this.fromUserName = values.get("fromUserName");
         this.toUserName = values.get("toUserName");
         this.createTime = Integer.parseInt(values.get("createTime"));

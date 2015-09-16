@@ -1,11 +1,11 @@
 /**
  * @author senhui.li
  */
-package io.github.elkan1788.mpsdk4j.vo.normal;
+package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMessage;
+import io.github.elkan1788.mpsdk4j.vo.BaseMsg;
 
 /**
  * 文本消息
@@ -13,16 +13,19 @@ import io.github.elkan1788.mpsdk4j.vo.BaseMessage;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class TextMessage extends BaseMessage {
+public class TextMsg extends BaseMsg {
 
-    // 文本内容
+    /**
+     * 文本内容
+     */
     private String content;
 
-    public TextMessage() {
+    public TextMsg() {
+        super();
         this.msgType = "text";
     }
 
-    public TextMessage(Map<String, String> values) {
+    public TextMsg(Map<String, String> values) {
         super(values);
         this.content = values.get("content");
     }
@@ -37,7 +40,7 @@ public class TextMessage extends BaseMessage {
 
     @Override
     public String toString() {
-        return "TextMessage [toUserName="
+        return "TextMsg [toUserName="
                + toUserName
                + ", fromUserName="
                + fromUserName

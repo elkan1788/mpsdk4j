@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import io.github.elkan1788.mpsdk4j.vo.normal.ImageMessage;
-import io.github.elkan1788.mpsdk4j.vo.normal.TextMessage;
+import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 
 /**
  * XmlMsgBuilder 测试
@@ -29,7 +29,7 @@ public class XmlMsgBuilderTest {
     @Test
     public void testText() {
         log.info("====== XmlMsgBuilder#text ======");
-        TextMessage tm = new TextMessage();
+        TextMsg tm = new TextMsg();
         tm.setFromUserName(mpId);
         tm.setToUserName(openId);
         tm.setContent("Hello world! 世界, 你好！");
@@ -40,7 +40,7 @@ public class XmlMsgBuilderTest {
     @Test
     public void testImage() {
         log.info("====== XmlMsgBuilder#image ======");
-        ImageMessage im = new ImageMessage();
+        ImageMsg im = new ImageMsg();
         im.setFromUserName(mpId);
         im.setToUserName(openId);
         im.setMediaId("yfdy-fdOdkfdsFfdsfs323");
