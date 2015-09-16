@@ -1,8 +1,8 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-
 import org.junit.Before;
+
+import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 
 public class APITestSupport {
 

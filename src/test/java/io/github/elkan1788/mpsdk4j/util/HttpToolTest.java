@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.nutz.json.Json;
@@ -31,7 +30,7 @@ public class HttpToolTest {
 
     // 注意access_token接口调用次数,建议跑一次就关闭
     @Ignore
-    @Before
+    // @Before
     public void testGet() {
         String url = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s",
                                    appId,

@@ -1,5 +1,6 @@
 package io.github.elkan1788.mpsdk4j.api;
 
+import io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder;
 import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
 import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.JSTicketMemoryCache;
@@ -16,6 +17,7 @@ import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
 import io.github.elkan1788.mpsdk4j.vo.api.Media;
 import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
+import io.github.elkan1788.mpsdk4j.vo.api.Template;
 
 import java.io.File;
 import java.util.Collection;
@@ -588,6 +590,29 @@ public class WechatAPIImpl implements WechatAPI {
             }
 
             log.errorf("Get mp[%s] template id failed. There try %d items.", mpAct.getMpId(), i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public long sendTemplateMsg(String openId,
+                                String tmlId,
+                                String topColor,
+                                String url,
+                                Template... tmls) {
+        String apiurl = mergeUrl(send_template + getAccessToken());
+        ApiResult ar = null;
+        String data = JsonMsgBuilder.create().template(openId, tmlId, topColor, url, tmls).build();
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(apiurl, data));
+            if (ar.isSuccess()) {
+                return Long.valueOf(ar.get("msgid").toString());
+            }
+
+            log.errorf("Send mp[%s] template message failed. There try %d items.",
+                       mpAct.getMpId(),
+                       i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
