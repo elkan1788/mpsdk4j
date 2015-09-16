@@ -2,6 +2,7 @@ package io.github.elkan1788.mpsdk4j.api;
 
 import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
 import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
+import io.github.elkan1788.mpsdk4j.session.JSTicketMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.MemoryCache;
 import io.github.elkan1788.mpsdk4j.util.HttpTool;
 import io.github.elkan1788.mpsdk4j.vo.ApiResult;
@@ -11,6 +12,7 @@ import io.github.elkan1788.mpsdk4j.vo.api.FollowList;
 import io.github.elkan1788.mpsdk4j.vo.api.Follower;
 import io.github.elkan1788.mpsdk4j.vo.api.Follower2;
 import io.github.elkan1788.mpsdk4j.vo.api.Groups;
+import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
 import io.github.elkan1788.mpsdk4j.vo.api.Media;
 import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
@@ -45,6 +47,8 @@ public class WechatAPIImpl implements WechatAPI {
 
     static MemoryCache<AccessToken> _atmc;
 
+    static MemoryCache<JSTicket> _jstmc;
+
     private MPAccount mpAct;
 
     public WechatAPIImpl(MPAccount mpAct) {
@@ -53,24 +57,21 @@ public class WechatAPIImpl implements WechatAPI {
             if (_atmc == null) {
                 _atmc = new AccessTokenMemoryCache();
             }
-        }
-    }
-
-    public WechatAPIImpl(MPAccount mpAct, MemoryCache<AccessToken> atmc) {
-        this.mpAct = mpAct;
-        synchronized (this) {
-            if (_atmc == null) {
-                _atmc = atmc;
+            if (_jstmc == null) {
+                _jstmc = new JSTicketMemoryCache();
             }
         }
     }
 
+    /**
+     * WechatAPI 实现方法
+     * 
+     * @param mpAct
+     *            微信公众号信息{@link MPAccount}
+     * @return 对应的API
+     */
     public static WechatAPI create(MPAccount mpAct) {
         return new WechatAPIImpl(mpAct);
-    }
-
-    public static WechatAPI create(MPAccount mpAct, MemoryCache<AccessToken> atmc) {
-        return new WechatAPIImpl(mpAct, atmc);
     }
 
     private String mergeUrl(String url, Object... values) {
@@ -99,6 +100,30 @@ public class WechatAPIImpl implements WechatAPI {
             }
 
             log.errorf("Get mp[%s]access_token failed. There try %d items.", mpAct.getMpId(), i + 1);
+
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    private synchronized void refreshJSTicket() {
+        String url = mergeUrl(js_ticket + getAccessToken());
+        JSTicket jst = null;
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                jst = Json.fromJson(JSTicket.class, ar.getJson());
+                _jstmc.set(mpAct.getMpId(), jst);
+            }
+
+            if (jst != null && jst.isAvailable()) {
+                return;
+            }
+
+            log.errorf("Get mp[%s] JSSDK ticket failed. There try %d items.",
+                       mpAct.getMpId(),
+                       i + 1);
 
         }
 
@@ -146,6 +171,16 @@ public class WechatAPIImpl implements WechatAPI {
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public String getJSTicket() {
+        JSTicket jst = _jstmc.get(mpAct.getMpId());
+        if (jst == null || !jst.isAvailable()) {
+            refreshJSTicket();
+            jst = _jstmc.get(mpAct.getMpId());
+        }
+        return jst.getTicket();
     }
 
     @Override
@@ -517,6 +552,42 @@ public class WechatAPIImpl implements WechatAPI {
             log.errorf("Get mp[%s] followers information failed. There try %d items.",
                        mpAct.getMpId(),
                        i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public boolean setIndustry(int id1, int id2) {
+        String url = mergeUrl(set_industry + getAccessToken());
+        ApiResult ar = null;
+        String data = "{\"industry_id1\":\"" + id1 + "\",\"industry_id2\":\"" + id2 + "\"}";
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(url, data));
+            if (ar.isSuccess()) {
+                return true;
+            }
+
+            log.errorf("Set mp[%s] template industry failed. There try %d items.",
+                       mpAct.getMpId(),
+                       i);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public String getTemplateId(String tmlShortId) {
+        String url = mergeUrl(add_template + getAccessToken());
+        ApiResult ar = null;
+        String data = "{\"template_id_short\":\"" + tmlShortId + "\"}";
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.post(url, data));
+            if (ar.isSuccess()) {
+                return String.valueOf(ar.get("template_id"));
+            }
+
+            log.errorf("Get mp[%s] template id failed. There try %d items.", mpAct.getMpId(), i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));

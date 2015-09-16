@@ -4,18 +4,17 @@ import org.nutz.json.JsonField;
 import org.nutz.lang.Lang;
 
 /**
- * 微信API凭证
+ * 微信JSSDK凭证
  * 
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class AccessToken {
+public class JSTicket {
 
     /**
-     * 获取到的凭证
+     * 调用微信JS接口的临时票据
      */
-    @JsonField(value = "access_token")
-    private String accessToken;
+    private String ticket;
 
     /**
      * 凭证有效时间,单位:秒
@@ -23,12 +22,12 @@ public class AccessToken {
     @JsonField(value = "expires_in")
     private long expiresIn;
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getTicket() {
+        return ticket;
     }
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
+    public void setTicket(String ticket) {
+        this.ticket = ticket;
     }
 
     public long getExpiresIn() {
@@ -40,7 +39,7 @@ public class AccessToken {
     }
 
     public boolean isAvailable() {
-        if (!Lang.isEmpty(accessToken) || this.expiresIn >= System.currentTimeMillis()) {
+        if (!Lang.isEmpty(ticket) || this.expiresIn >= System.currentTimeMillis()) {
             return true;
         }
         return false;
@@ -48,6 +47,7 @@ public class AccessToken {
 
     @Override
     public String toString() {
-        return "AccessToken [accessToken=" + accessToken + ", expiresIn=" + expiresIn + "]";
+        return "JSTicket [ticket=" + ticket + ", expiresIn=" + expiresIn + "]";
     }
+
 }

@@ -114,4 +114,25 @@ public class MPAccount {
     public void setPass(boolean pass) {
         this.pass = pass;
     }
+
+    @Override
+    public String toString() {
+        return "MPAccount [mpId="
+               + mpId
+               + ", nickName="
+               + nickName
+               + ", appId="
+               + appId
+               + ", appSecret="
+               + appSecret
+               + ", token="
+               + token
+               + ", AESKey="
+               + AESKey
+               + ", mpType="
+               + mpType
+               + ", pass="
+               + pass
+               + "]";
+    }
 }

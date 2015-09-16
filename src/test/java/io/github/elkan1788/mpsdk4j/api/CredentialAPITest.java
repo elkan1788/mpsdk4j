@@ -60,4 +60,11 @@ public class CredentialAPITest extends APITestSupport {
         log.info(shorurl);
     }
 
+    @Test
+    public void testGetJSTicket() {
+        log.info("====== CredentialAPI#getJSTicket ======");
+        String jsticket = ca.getJSTicket();
+        assertNotNull(jsticket);
+        log.info(jsticket);
+    }
 }

@@ -25,6 +25,11 @@ public interface CredentialAPI {
     static String short_url = "/shorturl?access_token=";
 
     /**
+     * JSSDK临时凭证地址
+     */
+    static String js_ticket = "/ticket/getticket?type=jsapi&access_token=";
+
+    /**
      * 获取微信服务凭证
      * 
      * @return 凭证
@@ -46,4 +51,11 @@ public interface CredentialAPI {
      * @return 短链接
      */
     String getShortUrl(String longUrl);
+
+    /**
+     * 获取JSSDK凭证
+     * 
+     * @return 凭证
+     */
+    String getJSTicket();
 }
