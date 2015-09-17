@@ -2,14 +2,12 @@ package io.github.elkan1788.mpsdk4j.api;
 
 import org.junit.Before;
 
-import io.github.elkan1788.mpsdk4j.util.ConfigReader;
+import io.github.elkan1788.mpsdk4j.TestSupport;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 
-public class APITestSupport {
+public class APITestSupport extends TestSupport {
 
     protected MPAccount mpAct;
-
-    static ConfigReader _cr = new ConfigReader("/mpconf.properties");
 
     @Before
     public void init() {
