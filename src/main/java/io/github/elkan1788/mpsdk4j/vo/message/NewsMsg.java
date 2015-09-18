@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.nutz.lang.Lang;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMsg;
-
 /**
  * 多图文消息
  * 

@@ -2,8 +2,6 @@ package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMsg;
-
 /**
  * 视频消息
  * 

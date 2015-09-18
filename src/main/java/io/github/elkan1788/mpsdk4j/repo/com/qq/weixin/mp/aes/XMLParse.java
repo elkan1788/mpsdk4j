@@ -23,12 +23,12 @@ class XMLParse {
 	/**
 	 * 提取出xml数据包中的加密消息
 	 *
-	 * @param xmltext
+	 * @param xml
 	 *            待提取的xml字符串
 	 * @return 提取出的加密消息字符串
 	 * @throws com.qq.weixin.mp.aes.AesException
 	 */
-	public static Object[] extract(String xmltext) throws AesException {
+	public static Object[] extract(String xml) throws AesException {
 		try {
 			SAXParserFactory sax = SAXParserFactory.newInstance();
 			SAXParser parser = sax.newSAXParser();
@@ -70,7 +70,7 @@ class XMLParse {
 				}
 			};
 
-			InputStream is = new ByteArrayInputStream(xmltext.getBytes());
+			InputStream is = new ByteArrayInputStream(xml.getBytes());
 			parser.parse(is, handler);
 			return map.get("result");
 		} catch (Exception e) {

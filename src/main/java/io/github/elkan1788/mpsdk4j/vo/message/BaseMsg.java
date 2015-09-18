@@ -1,4 +1,4 @@
-package io.github.elkan1788.mpsdk4j.vo;
+package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 

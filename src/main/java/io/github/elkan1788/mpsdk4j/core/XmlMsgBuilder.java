@@ -3,8 +3,8 @@ package io.github.elkan1788.mpsdk4j.core;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
+import io.github.elkan1788.mpsdk4j.vo.message.BaseMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
