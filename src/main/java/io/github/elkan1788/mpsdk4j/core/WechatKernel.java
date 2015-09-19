@@ -13,6 +13,7 @@ import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.common.EventType;
 import io.github.elkan1788.mpsdk4j.common.MessageType;
+import io.github.elkan1788.mpsdk4j.exception.WechatRunTimeException;
 import io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.AesException;
 import io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.SHA1;
 import io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.WXBizMsgCrypt;
@@ -54,15 +55,27 @@ public class WechatKernel {
     // 公众号信息
     private MPAccount mpAct;
 
-    public WechatKernel(MPAccount mpAct, Map<String, String> params) {
-        this.mpAct = mpAct;
-        this.params = params;
+    public WechatKernel() {
         try {
             xmlParser = factory.newSAXParser();
         }
         catch (Exception e) {
-            throw Lang.wrapThrow(e);
+            throw Lang.wrapThrow(new WechatRunTimeException("初始化SAXParserFactory出现异常", e));
         }
+    }
+
+    public WechatKernel(MPAccount mpAct, Map<String, String> params) {
+        this();
+        this.mpAct = mpAct;
+        this.params = params;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
+
+    public void setMpAct(MPAccount mpAct) {
+        this.mpAct = mpAct;
     }
 
     public String check() {
@@ -88,7 +101,7 @@ public class WechatKernel {
             return echo;
         }
         catch (AesException e) {
-            throw Lang.wrapThrow(e);
+            throw Lang.wrapThrow(new WechatRunTimeException("校验服务器认证出现异常", e));
         }
     }
 
@@ -113,7 +126,7 @@ public class WechatKernel {
                 respmsg = pc.encryptMsg(responseXML(msg), ts, nonce);
             }
             catch (Exception e) {
-                throw Lang.wrapThrow(e);
+                throw Lang.wrapThrow(new WechatRunTimeException("使用密文模式出现异常", e));
             }
         }
         // 明文模式
@@ -122,7 +135,7 @@ public class WechatKernel {
                 xmlParser.parse(is, msgHandler);
             }
             catch (Exception e) {
-                throw Lang.wrapThrow(e);
+                throw Lang.wrapThrow(new WechatRunTimeException("明文模式下解析消息出现异常", e));
             }
             msg = handle(msgHandler.getValues(), handler);
             respmsg = responseXML(msg);
