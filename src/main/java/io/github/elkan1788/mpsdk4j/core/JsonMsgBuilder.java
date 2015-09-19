@@ -3,10 +3,10 @@ package io.github.elkan1788.mpsdk4j.core;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import io.github.elkan1788.mpsdk4j.vo.BaseMessage;
 import io.github.elkan1788.mpsdk4j.vo.api.Template;
-import io.github.elkan1788.mpsdk4j.vo.normal.ImageMessage;
-import io.github.elkan1788.mpsdk4j.vo.normal.TextMessage;
+import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 
 /**
  * 创建微信公众平台高级接口消息
@@ -33,7 +33,7 @@ public class JsonMsgBuilder {
      * @param msg
      *            客服消息实体
      */
-    void msgPrefix(BaseMessage msg) {
+    void msgPrefix(BasicMsg msg) {
         msgBuf.append("\"touser\":\"").append(msg.getToUserName()).append("\",");
         msgBuf.append("\"msgtype\":\"").append(msg.getMsgType()).append("\",");
     }
@@ -44,7 +44,7 @@ public class JsonMsgBuilder {
      * @param msg
      *            客服消息实体
      */
-    public JsonMsgBuilder text(TextMessage msg) {
+    public JsonMsgBuilder text(TextMsg msg) {
         msgPrefix(msg);
         msgBuf.append("\"text\": {");
         msgBuf.append(" \"content\":\"").append(msg.getContent()).append("\"");
@@ -58,7 +58,7 @@ public class JsonMsgBuilder {
      * @param msg
      *            客服消息实体
      */
-    public JsonMsgBuilder image(ImageMessage msg) {
+    public JsonMsgBuilder image(ImageMsg msg) {
         msgPrefix(msg);
         msgBuf.append("\"image\": {");
         msgBuf.append(" \"media_id\":\"").append(msg.getMediaId()).append("\"");

@@ -83,6 +83,46 @@ public class MessageHandler extends DefaultHandler2 {
             _vals.put("mediaId", attrVal);
             return;
         }
+        if ("Format".equals(qName)) {
+            _vals.put("format", attrVal);
+            return;
+        }
+        if ("Recognition".equals(qName)) {
+            _vals.put("recognition", attrVal);
+            return;
+        }
+        if ("ThumbMediaId".equals(qName)) {
+            _vals.put("thumbMediaId", attrVal);
+            return;
+        }
+        if ("Location_X".equals(qName)) {
+            _vals.put("locationX", attrVal);
+            return;
+        }
+        if ("Location_Y".equals(qName)) {
+            _vals.put("locationY", attrVal);
+            return;
+        }
+        if ("Scale".equals(qName)) {
+            _vals.put("scale", attrVal);
+            return;
+        }
+        if ("Label".equals(qName)) {
+            _vals.put("label", attrVal);
+            return;
+        }
+        if ("Title".equals(qName)) {
+            _vals.put("title", attrVal);
+            return;
+        }
+        if ("Description".equals(qName)) {
+            _vals.put("description", attrVal);
+            return;
+        }
+        if ("Url".equals(qName)) {
+            _vals.put("url", attrVal);
+            return;
+        }
         if ("MsgId".equals(qName)) {
             _vals.put("msgId", attrVal);
             return;

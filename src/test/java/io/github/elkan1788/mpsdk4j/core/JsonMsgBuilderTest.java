@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import io.github.elkan1788.mpsdk4j.vo.normal.ImageMessage;
-import io.github.elkan1788.mpsdk4j.vo.normal.TextMessage;
+import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 
 /**
  * JsonBuilder 测试
@@ -28,7 +28,7 @@ public class JsonMsgBuilderTest {
     @Test
     public void testText() {
         log.info("====== JsonMsgBuilder#text ======");
-        TextMessage tm = new TextMessage();
+        TextMsg tm = new TextMsg();
         tm.setToUserName(openId);
         tm.setContent("Hello world! 世界,你好！");
         String txtJson = JsonMsgBuilder.create().text(tm).build();
@@ -38,7 +38,7 @@ public class JsonMsgBuilderTest {
     @Test
     public void testImage() {
         log.info("====== JsonMsgBuilder#image ======");
-        ImageMessage im = new ImageMessage();
+        ImageMsg im = new ImageMsg();
         im.setToUserName(openId);
         im.setMediaId("Mjdfjio3ioxjflkjeadsiosdjfs-32jk");
         String imgJson = JsonMsgBuilder.create().image(im).build();

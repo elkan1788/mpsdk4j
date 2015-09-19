@@ -1,14 +1,14 @@
-package io.github.elkan1788.mpsdk4j.vo;
+package io.github.elkan1788.mpsdk4j.vo.event;
 
 import java.util.Map;
 
 /**
- * 消息基础类
+ * 事件消息
  * 
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class BaseMessage {
+public class BasicEvent {
 
     /**
      * 微信公众号Id/OpenId
@@ -23,33 +23,28 @@ public class BaseMessage {
      */
     protected int createTime;
     /**
-     * 消息类型: text, image, voice ...
+     * 消息类型: event
      */
     protected String msgType;
     /**
-     * 消息Id, 64位整型
+     * 事件类型:subscribe(订阅),unsubscribe(取消订阅)...
      */
-    protected long msgId;
-
+    protected String event;
     /**
-     * 默认构造方法
+     * 事件KEY值:扫码(二维码场景Id),菜单值...
      */
-    public BaseMessage() {
-        this.createTime = Long.valueOf(System.currentTimeMillis() / 1000).intValue();
+    protected String eventKey;
+
+    public BasicEvent() {
+        this.event = "event";
     }
 
-    /**
-     * 带XML解析值构造方法
-     * 
-     * @param values
-     *            XML值
-     */
-    public BaseMessage(Map<String, String> values) {
+    public BasicEvent(Map<String, String> values) {
         this.fromUserName = values.get("fromUserName");
         this.toUserName = values.get("toUserName");
         this.createTime = Integer.parseInt(values.get("createTime"));
-        this.msgType = values.get("msgType");
-        this.msgId = Long.parseLong(values.get("msgId"));
+        this.event = "event";
+        this.eventKey = values.get("eventKey");
     }
 
     public String getToUserName() {
@@ -84,12 +79,19 @@ public class BaseMessage {
         this.msgType = msgType;
     }
 
-    public long getMsgId() {
-        return msgId;
+    public String getEvent() {
+        return event;
     }
 
-    public void setMsgId(long msgId) {
-        this.msgId = msgId;
+    public void setEvent(String event) {
+        this.event = event;
     }
 
+    public String getEventKey() {
+        return eventKey;
+    }
+
+    public void setEventKey(String eventKey) {
+        this.eventKey = eventKey;
+    }
 }
