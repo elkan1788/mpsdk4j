@@ -8,7 +8,7 @@ import java.util.Map;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class VideoMsg extends BaseMsg {
+public class VideoMsg extends BasicMsg {
 
     /**
      * 视频消息媒体id,可以调用多媒体文件下载接口拉取数据

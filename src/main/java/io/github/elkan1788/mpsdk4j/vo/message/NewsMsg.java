@@ -11,7 +11,7 @@ import org.nutz.lang.Lang;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class NewsMsg extends BaseMsg {
+public class NewsMsg extends BasicMsg {
 
     /**
      * 图文消息个数,限制为10条以内

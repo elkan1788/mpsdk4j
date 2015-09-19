@@ -5,13 +5,15 @@ package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
+import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
+
 /**
  * 文本消息
  * 
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class TextMsg extends BaseMsg {
+public class TextMsg extends BasicMsg {
 
     /**
      * 文本内容
@@ -21,6 +23,14 @@ public class TextMsg extends BaseMsg {
     public TextMsg() {
         super();
         this.msgType = "text";
+    }
+
+    public TextMsg(BasicEvent event) {
+        this();
+    }
+
+    public TextMsg(BasicMsg msg) {
+        this();
     }
 
     public TextMsg(Map<String, String> values) {
@@ -36,7 +46,7 @@ public class TextMsg extends BaseMsg {
         this.content = content;
     }
 
-    @Override
+    @ Override
     public String toString() {
         return "TextMsg [toUserName="
                + toUserName

@@ -4,7 +4,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.vo.api.Template;
-import io.github.elkan1788.mpsdk4j.vo.message.BaseMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 
@@ -33,7 +33,7 @@ public class JsonMsgBuilder {
      * @param msg
      *            客服消息实体
      */
-    void msgPrefix(BaseMsg msg) {
+    void msgPrefix(BasicMsg msg) {
         msgBuf.append("\"touser\":\"").append(msg.getToUserName()).append("\",");
         msgBuf.append("\"msgtype\":\"").append(msg.getMsgType()).append("\",");
     }

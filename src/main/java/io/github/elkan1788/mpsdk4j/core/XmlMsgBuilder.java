@@ -4,7 +4,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
-import io.github.elkan1788.mpsdk4j.vo.message.BaseMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
@@ -37,7 +37,7 @@ public class XmlMsgBuilder {
      * @param msg
      *            输出消息实体
      */
-    void msgPrefix(BaseMsg msg) {
+    void msgPrefix(BasicMsg msg) {
         msgBuf.append("<ToUserName><![CDATA[")
               .append(msg.getToUserName())
               .append("]]></ToUserName>\n");
@@ -164,7 +164,7 @@ public class XmlMsgBuilder {
      * AES加密信息
      *
      * @param xml
-     *            消息原文
+     *            密文消息
      * @param msgSignature
      *            消息签名
      * @param timeStamp

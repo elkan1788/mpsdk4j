@@ -8,7 +8,7 @@ import java.util.Map;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class ImageMsg extends BaseMsg {
+public class ImageMsg extends BasicMsg {
 
     /**
      * 图片链接

@@ -33,7 +33,7 @@ class XMLParse {
             SAXParser parser = sax.newSAXParser();
             final Map<String, Object[]> map = new HashMap<String, Object[]>();
             DefaultHandler handler = new DefaultHandler() {
-                private Object[] result = new Object[ 3];
+                private Object[] result = new Object[3];
                 private String temp;
 
                 @Override
@@ -48,17 +48,17 @@ class XMLParse {
                 public void endElement(String uri, String localName, String qName)
                         throws SAXException {
                     if (qName.equalsIgnoreCase("Encrypt")) {
-                        result[ 1] = temp;
+                        result[1] = temp;
                         return;
                     }
 
                     if (qName.equalsIgnoreCase("ToUserName")) {
-                        result[ 2] = temp;
+                        result[2] = temp;
                         return;
                     }
 
                     if (qName.equalsIgnoreCase("xml")) {
-                        result[ 0] = 0;
+                        result[0] = 0;
                         map.put("result", result);
                     }
                 }
