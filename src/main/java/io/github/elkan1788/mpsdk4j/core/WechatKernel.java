@@ -257,6 +257,12 @@ public class WechatKernel {
             return respmsg;
         }
 
+        // 交互 fromUser 和 toUser
+        String fromUser = msg.getFromUserName();
+        String toUser = msg.getToUserName();
+        msg.setFromUserName(toUser);
+        msg.setToUserName(fromUser);
+
         MessageType mt = MessageType.valueOf(msg.getMsgType());
         switch (mt) {
             case text:
