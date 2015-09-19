@@ -8,6 +8,8 @@ import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import io.github.elkan1788.mpsdk4j.util.StreamTool;
+
 public class WXBizMsgCryptTest {
 
     private static final Log log = Logs.get();
@@ -53,7 +55,10 @@ public class WXBizMsgCryptTest {
     public void testDecryptMsg() {
         log.info("====== WXBizMsgCrypt#decryptMsg ======");
         try {
-            String decryptmsg = pc.decryptMsg(msgSignature, timeStamp, nonce, fromMsg);
+            String decryptmsg = pc.decryptMsg(msgSignature,
+                                              timeStamp,
+                                              nonce,
+                                              StreamTool.toStream(fromMsg));
             assertNotNull(decryptmsg);
             log.info(decryptmsg);
             log.info(pc.getFromAppid());

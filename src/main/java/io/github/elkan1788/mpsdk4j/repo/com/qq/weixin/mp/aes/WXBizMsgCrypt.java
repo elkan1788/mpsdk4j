@@ -1,7 +1,6 @@
 package io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes;
 
-import io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder;
-
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Random;
@@ -12,6 +11,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+import io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder;
+
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
  * <ol>
@@ -20,8 +21,7 @@ import org.apache.commons.codec.binary.Base64;
  * </ol>
  * 说明：异常java.security.InvalidKeyException:illegal Key Size的解决方案
  * <ol>
- * <li>在官方网站下载JCE无限制权限策略文件（JDK7的下载地址： http://www.oracle.com/technetwork/java/javase
- * /downloads/jce-7-download-432124.html</li>
+ * <li>在本项目中的jce-patch目录中找到对应JDK版本的文件</li>
  * <li>下载后解压，可以看到local_policy.jar和US_export_policy.jar以及readme.txt</li>
  * <li>如果安装了JRE，将两个jar文件放到%JRE_HOME%\lib\security目录下覆盖原来的文件</li>
  * <li>如果安装了JDK，将两个jar文件放到%JDK_HOME%\jre\lib\security目录下覆盖原来文件</li>
@@ -60,11 +60,11 @@ public class WXBizMsgCrypt {
 
     // 生成4个字节的网络字节序
     private byte[] getNetworkBytesOrder(int sourceNumber) {
-        byte[] orderBytes = new byte[ 4];
-        orderBytes[ 3] = (byte) (sourceNumber & 0xFF);
-        orderBytes[ 2] = (byte) (sourceNumber >> 8 & 0xFF);
-        orderBytes[ 1] = (byte) (sourceNumber >> 16 & 0xFF);
-        orderBytes[ 0] = (byte) (sourceNumber >> 24 & 0xFF);
+        byte[] orderBytes = new byte[4];
+        orderBytes[3] = (byte) (sourceNumber & 0xFF);
+        orderBytes[2] = (byte) (sourceNumber >> 8 & 0xFF);
+        orderBytes[1] = (byte) (sourceNumber >> 16 & 0xFF);
+        orderBytes[0] = (byte) (sourceNumber >> 24 & 0xFF);
         return orderBytes;
     }
 
@@ -73,7 +73,7 @@ public class WXBizMsgCrypt {
         int sourceNumber = 0;
         for (int i = 0; i < 4; i++) {
             sourceNumber <<= 8;
-            sourceNumber |= orderBytes[ i] & 0xff;
+            sourceNumber |= orderBytes[i] & 0xff;
         }
         return sourceNumber;
     }
@@ -183,7 +183,8 @@ public class WXBizMsgCrypt {
             int xmlLength = recoverNetworkBytesOrder(networkOrder);
 
             xmlContent = new String(Arrays.copyOfRange(bytes, 20, 20 + xmlLength), CHARSET);
-            fromAppId = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length), CHARSET);
+            fromAppId = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
+                                   CHARSET);
         }
         catch (Exception e) {
             throw new AesException(AesException.IllegalBuffer);
@@ -227,7 +228,6 @@ public class WXBizMsgCrypt {
 
         String signature = SHA1.calculate(token, timeStamp, nonce, encrypt);
 
-        // TODO 后续在修改完成
         // 生成发送的xml
         String result = XmlMsgBuilder.create().encrypt(encrypt, signature, timeStamp, nonce);
         return result;
@@ -253,15 +253,17 @@ public class WXBizMsgCrypt {
      * @throws AesException
      *             执行失败，请查看该异常的错误码和具体的错误信息
      */
-    public String decryptMsg(String msgSignature, String timeStamp, String nonce, String postData)
-            throws AesException {
+    public String decryptMsg(String msgSignature,
+                             String timeStamp,
+                             String nonce,
+                             InputStream postData) throws AesException {
 
         // 密钥，公众账号的app secret
         // 提取密文
         Object[] encrypt = XMLParse.extract(postData);
 
         // 验证安全签名
-        String signature = SHA1.calculate(token, timeStamp, nonce, encrypt[ 1].toString());
+        String signature = SHA1.calculate(token, timeStamp, nonce, String.valueOf(encrypt[1]));
 
         // 和URL中的签名比较是否相等
         if (!signature.equals(msgSignature)) {
@@ -269,7 +271,7 @@ public class WXBizMsgCrypt {
         }
 
         // 解密
-        String result = decrypt(encrypt[ 1].toString());
+        String result = decrypt(String.valueOf(encrypt[1]));
         return result;
     }
 
