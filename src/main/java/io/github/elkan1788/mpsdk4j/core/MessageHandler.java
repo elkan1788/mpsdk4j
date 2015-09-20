@@ -127,6 +127,10 @@ public class MessageHandler extends DefaultHandler2 {
             _vals.put("msgId", attrVal);
             return;
         }
+        if ("Event".equals(qName)) {
+            _vals.put("event", attrVal);
+            return;
+        }
     }
 
     @Override

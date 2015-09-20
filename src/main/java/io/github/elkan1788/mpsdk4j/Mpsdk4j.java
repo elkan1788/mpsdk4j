@@ -29,7 +29,7 @@ public final class Mpsdk4j {
     }
 
     private static int minorVersion() {
-        return 1;
+        return 9;
     }
 
     private static String releaseLevel() {

@@ -36,14 +36,15 @@ public class BasicEvent {
     protected String eventKey;
 
     public BasicEvent() {
-        this.event = "event";
+        this.msgType = "event";
     }
 
     public BasicEvent(Map<String, String> values) {
         this.fromUserName = values.get("fromUserName");
         this.toUserName = values.get("toUserName");
         this.createTime = Integer.parseInt(values.get("createTime"));
-        this.event = "event";
+        this.msgType = "event";
+        this.event = values.get("event");
         this.eventKey = values.get("eventKey");
     }
 

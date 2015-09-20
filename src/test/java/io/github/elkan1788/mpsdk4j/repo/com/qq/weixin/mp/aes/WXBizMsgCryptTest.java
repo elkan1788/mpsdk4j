@@ -10,6 +10,12 @@ import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
 
+/**
+ * WXBizMsgCrypt 测试
+ * 
+ * @author 凡梦星尘(elkan1788@gmail.com)
+ * @since 2.0
+ */
 public class WXBizMsgCryptTest {
 
     private static final Log log = Logs.get();
