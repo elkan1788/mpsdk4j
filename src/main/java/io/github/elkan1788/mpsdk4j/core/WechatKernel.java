@@ -31,6 +31,7 @@ import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LinkMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
@@ -121,7 +122,7 @@ public class WechatKernel {
      */
     protected String get(String param) {
         String[] vals = params.get(param);
-        return vals == null ? "" : vals[ 0];
+        return vals == null ? null : vals[ 0];
     }
 
     /**
@@ -154,7 +155,6 @@ public class WechatKernel {
             return get("echostr");
         }
         catch (AesException e) {
-            e.printStackTrace();
             throw Lang.wrapThrow(new WechatRunTimeException("校验服务器认证出现异常", e));
         }
     }
@@ -185,9 +185,6 @@ public class WechatKernel {
                 xmlParser.parse(StreamTool.toStream(decmsg), msgHandler);
                 msg = handleMsg();
                 respmsg = pc.encryptMsg(responseXML(msg), ts, nonce);
-                if (log.isDebugEnabled()) {
-                    log.debugf("Encrypt reponse xml content: %s", respmsg);
-                }
             }
             catch (Exception e) {
                 throw Lang.wrapThrow(new WechatRunTimeException("使用密文模式出现异常", e));
@@ -203,9 +200,6 @@ public class WechatKernel {
             }
             msg = handleMsg();
             respmsg = responseXML(msg);
-            if (log.isDebugEnabled()) {
-                log.debugf("Reponse xml content: %s", respmsg);
-            }
         }
 
         return respmsg;
@@ -248,8 +242,13 @@ public class WechatKernel {
                 msg = handler.voice(vom);
                 break;
             case video:
+            case shortvideo:
                 VideoMsg vim = new VideoMsg(msgHandler.getValues());
                 msg = handler.video(vim);
+                break;
+            case location:
+                LocationMsg locm = new LocationMsg(msgHandler.getValues());
+                msg = handler.location(locm);
                 break;
             case link:
                 LinkMsg lm = new LinkMsg(msgHandler.getValues());
@@ -270,7 +269,7 @@ public class WechatKernel {
      */
     protected BasicMsg handleEventMsg() {
         BasicMsg msg = null;
-        EventType et = EventType.valueOf(msgHandler.getValues().get("msgType"));
+        EventType et = EventType.valueOf(msgHandler.getValues().get("event"));
         switch (et) {
             case subscribe:
                 BasicEvent sube = new BasicEvent(msgHandler.getValues());

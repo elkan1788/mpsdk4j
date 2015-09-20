@@ -26,11 +26,13 @@ public class TextMsg extends BasicMsg {
     }
 
     public TextMsg(BasicEvent event) {
-        this();
+        super(event);
+        this.msgType = "text";
     }
 
     public TextMsg(BasicMsg msg) {
-        this();
+        super(msg);
+        this.msgType = "text";
     }
 
     public TextMsg(Map<String, String> values) {
@@ -46,7 +48,7 @@ public class TextMsg extends BasicMsg {
         this.content = content;
     }
 
-    @ Override
+    @Override
     public String toString() {
         return "TextMsg [toUserName="
                + toUserName

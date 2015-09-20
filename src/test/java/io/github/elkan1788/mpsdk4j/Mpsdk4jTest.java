@@ -22,7 +22,7 @@ public class Mpsdk4jTest {
     public void testVersion() {
         new Mpsdk4j(); // Just cover testing
         log.debug(Mpsdk4j.version());
-        String curver = "2.a.1";
+        String curver = "2.a.9";
         Assert.assertEquals(curver, Mpsdk4j.version());
     }
 

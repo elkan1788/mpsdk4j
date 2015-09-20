@@ -9,6 +9,7 @@ import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LinkMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
@@ -76,6 +77,15 @@ public interface WechatHandler {
      * @return 回复消息
      */
     BasicMsg video(VideoMsg vim);
+
+    /**
+     * 处理地理位置消息
+     * 
+     * @param lm
+     *            地理位置
+     * @return 回复消息
+     */
+    BasicMsg location(LocationMsg lm);
 
     /**
      * 处理链接消息

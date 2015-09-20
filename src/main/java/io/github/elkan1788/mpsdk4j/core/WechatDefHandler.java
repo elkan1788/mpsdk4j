@@ -12,6 +12,7 @@ import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LinkMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
@@ -26,78 +27,93 @@ import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
  */
 public class WechatDefHandler implements WechatHandler {
 
-    @ Override
+    @Override
     public BasicMsg defMsg(BasicMsg bm) {
         TextMsg tm = new TextMsg(bm);
         tm.setContent(bm.getMsgType());
         return bm;
     }
 
-    @ Override
+    @Override
     public BasicMsg defEvent(BasicEvent be) {
         TextMsg tm = new TextMsg(be);
         tm.setContent(Strings.join("\n", be.getEvent(), be.getEventKey()));
         return tm;
     }
 
-    @ Override
+    @Override
     public BasicMsg text(TextMsg tm) {
         return tm;
     }
 
-    @ Override
+    @Override
     public BasicMsg image(ImageMsg im) {
         return im;
     }
 
-    @ Override
+    @Override
     public BasicMsg voice(VoiceMsg vm) {
-        return vm;
-    }
-
-    @ Override
-    public BasicMsg video(VideoMsg vm) {
-        return vm;
-    }
-
-    @ Override
-    public BasicMsg link(LinkMsg lm) {
-        TextMsg tm = new TextMsg(lm);
-        tm.setContent(Strings.join("\n", lm.getTitle(), lm.getUrl()));
+        TextMsg tm = new TextMsg(vm);
+        tm.setContent(Strings.join("\n", vm.getMediaId(), vm.getFormat(), vm.getRecognition()));
         return tm;
     }
 
-    @ Override
+    @Override
+    public BasicMsg video(VideoMsg vm) {
+        TextMsg tm = new TextMsg(vm);
+        tm.setContent(Strings.join("\n", vm.getMsgType(), vm.getMediaId(), vm.getThumbMediaId()));
+        return tm;
+    }
+
+    @Override
+    public BasicMsg location(LocationMsg lm) {
+        TextMsg tm = new TextMsg(lm);
+        tm.setContent(Strings.join("\n",
+                                   lm.getX(),
+                                   lm.getY(),
+                                   String.valueOf(lm.getScale()),
+                                   lm.getLabel()));
+        return tm;
+    }
+
+    @Override
+    public BasicMsg link(LinkMsg lm) {
+        TextMsg tm = new TextMsg(lm);
+        tm.setContent(Strings.join("\n", lm.getTitle(), lm.getDescription(), lm.getUrl()));
+        return tm;
+    }
+
+    @Override
     public BasicMsg eClick(MenuEvent me) {
         TextMsg tm = new TextMsg(me);
         tm.setContent(me.getEventKey());
         return tm;
     }
 
-    @ Override
+    @Override
     public void eView(MenuEvent me) {}
 
-    @ Override
+    @Override
     public BasicMsg eSub(BasicEvent be) {
         TextMsg tm = new TextMsg(be);
-        tm.setContent("Welcom, wechat with use mpsdk4j!");
+        tm.setContent("Welcom, wechat develop with use mpsdk4j!");
         return tm;
     }
 
-    @ Override
+    @Override
     public void eUnSub(BasicEvent be) {}
 
-    @ Override
+    @Override
     public BasicMsg eScan(BasicEvent be) {
         TextMsg tm = new TextMsg(be);
         tm.setContent(be.getEventKey());
         return tm;
     }
 
-    @ Override
-    public void eLocation(LocationEvent lm) {}
+    @Override
+    public void eLocation(LocationEvent le) {}
 
-    @ Override
+    @Override
     public BasicMsg eScanCodePush(ScanCodeEvent sce) {
         TextMsg tm = new TextMsg(sce);
         tm.setContent(Strings.join("\n",
@@ -107,12 +123,12 @@ public class WechatDefHandler implements WechatHandler {
         return tm;
     }
 
-    @ Override
+    @Override
     public BasicMsg eScanCodeWait(ScanCodeEvent sce) {
         return this.eScanCodePush(sce);
     }
 
-    @ Override
+    @Override
     public BasicMsg ePicSysPhoto(SendPhotosEvent spe) {
         TextMsg tm = new TextMsg(spe);
         tm.setContent(Strings.join("\n",
@@ -121,17 +137,17 @@ public class WechatDefHandler implements WechatHandler {
         return tm;
     }
 
-    @ Override
+    @Override
     public BasicMsg ePicPhotoOrAlbum(SendPhotosEvent spe) {
         return this.ePicSysPhoto(spe);
     }
 
-    @ Override
+    @Override
     public BasicMsg ePicWeixin(SendPhotosEvent spe) {
         return this.ePicSysPhoto(spe);
     }
 
-    @ Override
+    @Override
     public BasicMsg eLocationSelect(LocationSelectEvent lse) {
         TextMsg tm = new TextMsg(lse);
         SendLocationInfo sli = lse.getSendLocationInfo();
@@ -144,10 +160,10 @@ public class WechatDefHandler implements WechatHandler {
         return tm;
     }
 
-    @ Override
+    @Override
     public void eTemplateFinish(SentTmlJobEvent stje) {}
 
-    @ Override
+    @Override
     public void eSendJobFinish(SentAllJobEvent saje) {}
 
 }
