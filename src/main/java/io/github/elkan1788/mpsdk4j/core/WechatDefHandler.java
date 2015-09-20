@@ -1,5 +1,7 @@
 package io.github.elkan1788.mpsdk4j.core;
 
+import java.util.Arrays;
+
 import org.nutz.lang.Strings;
 
 import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
@@ -9,10 +11,12 @@ import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfo;
 import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
+import io.github.elkan1788.mpsdk4j.vo.message.Article;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LinkMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
@@ -78,9 +82,14 @@ public class WechatDefHandler implements WechatHandler {
 
     @Override
     public BasicMsg link(LinkMsg lm) {
-        TextMsg tm = new TextMsg(lm);
-        tm.setContent(Strings.join("\n", lm.getTitle(), lm.getDescription(), lm.getUrl()));
-        return tm;
+        NewsMsg news = new NewsMsg(lm);
+        Article art = new Article();
+        art.setTitle(lm.getTitle());
+        art.setDescription(lm.getDescription());
+        art.setPicUrl("http://j2ee.u.qiniudn.com/mpsdk4j-logo.png-aliassmall");
+        art.setUrl(lm.getUrl());
+        news.setArticles(Arrays.asList(art));
+        return news;
     }
 
     @Override

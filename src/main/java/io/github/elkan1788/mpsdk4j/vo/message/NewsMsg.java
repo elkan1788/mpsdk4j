@@ -1,9 +1,10 @@
 package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.List;
-import java.util.Map;
 
 import org.nutz.lang.Lang;
+
+import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 
 /**
  * 多图文消息
@@ -26,10 +27,17 @@ public class NewsMsg extends BasicMsg {
 
     public NewsMsg() {
         super();
+        this.msgType = "news";
     }
 
-    public NewsMsg(Map<String, String> values) {
-        super(values);
+    public NewsMsg(BasicEvent event) {
+        super(event);
+        this.msgType = "news";
+    }
+
+    public NewsMsg(BasicMsg msg) {
+        super(msg);
+        this.msgType = "news";
     }
 
     public int getCount() {

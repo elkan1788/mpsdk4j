@@ -154,7 +154,6 @@ public class XmlMsgBuilder {
             arts_buf.append(item_buf);
         }
         arts_buf.append("</Articles>\n");
-        msgPrefix(msg);
         msgBuf.append("<ArticleCount>").append(msg.getCount()).append("</ArticleCount>\n");
         msgBuf.append(arts_buf);
         return this;
