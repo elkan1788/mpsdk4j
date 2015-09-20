@@ -75,30 +75,60 @@ public class WechatKernel {
         this.params = params;
     }
 
+    /**
+     * 设置微信服务器请求参数
+     * 
+     * @param params
+     *            请求参数
+     */
     public void setParams(Map<String, String[]> params) {
         this.params = params;
         if (log.isDebugEnabled()) {
             Set<Entry<String, String[]>> es = params.entrySet();
             log.debug("wechat server request params.");
             for (Entry<String, String[]> e : es) {
-                log.debugf("%s, %s", e.getKey(), e.getValue()[ 0]);
+                log.debugf("%s-%s", e.getKey(), e.getValue()[ 0]);
             }
         }
     }
 
+    /**
+     * 设置公众号信息
+     * 
+     * @param mpAct
+     *            公众号信息
+     */
     public void setMpAct(MPAccount mpAct) {
         this.mpAct = mpAct;
     }
 
+    /**
+     * 设置微信消息处理器
+     * 
+     * @param handler
+     *            消息处理器
+     */
     public void setWechatHandler(WechatHandler handler) {
         this.handler = handler;
     }
 
+    /**
+     * 获取参数值
+     * 
+     * @param param
+     *            参数名
+     * @return 参数值
+     */
     protected String get(String param) {
         String[] vals = params.get(param);
-        return vals == null ? "" : vals[0];
+        return vals == null ? "" : vals[ 0];
     }
 
+    /**
+     * 微信服务器校验
+     * 
+     * @return 微信服务器随机字符串
+     */
     public String check() {
         String sign = get("signature");
         String ts = get("timestamp");
@@ -129,6 +159,13 @@ public class WechatKernel {
         }
     }
 
+    /**
+     * 与微信服务器交互处理过程
+     * 
+     * @param is
+     *            微信服务器推送消息
+     * @return 响应消息
+     */
     // TODO 是否考虑添加重复消息过滤功能
     public String handle(InputStream is) {
         String encrypt = get("encrypt_type");
@@ -146,8 +183,11 @@ public class WechatKernel {
 
                 String decmsg = pc.decryptMsg(msgsign, ts, nonce, is);
                 xmlParser.parse(StreamTool.toStream(decmsg), msgHandler);
-                msg = handle(msgHandler.getValues());
+                msg = handleMsg();
                 respmsg = pc.encryptMsg(responseXML(msg), ts, nonce);
+                if (log.isDebugEnabled()) {
+                    log.debugf("Encrypt reponse xml content: %s", respmsg);
+                }
             }
             catch (Exception e) {
                 throw Lang.wrapThrow(new WechatRunTimeException("使用密文模式出现异常", e));
@@ -161,26 +201,39 @@ public class WechatKernel {
             catch (Exception e) {
                 throw Lang.wrapThrow(new WechatRunTimeException("明文模式下解析消息出现异常", e));
             }
-            msg = handle(msgHandler.getValues());
+            msg = handleMsg();
             respmsg = responseXML(msg);
+            if (log.isDebugEnabled()) {
+                log.debugf("Reponse xml content: %s", respmsg);
+            }
         }
 
         return respmsg;
     }
 
-    protected BasicMsg handle(Map<String, String> data) {
+    /**
+     * 微信消息处理
+     * 
+     * @return 回复消息
+     */
+    protected BasicMsg handleMsg() {
         String msgtype = msgHandler.getValues().get("msgType");
         if ("event".equals(msgtype)) {
-            return handleEventMsg(msgtype, handler);
+            return handleEventMsg();
         }
         else {
-            return handleNormalMsg(msgtype);
+            return handleNormalMsg();
         }
     }
 
-    protected BasicMsg handleNormalMsg(String msgType) {
+    /**
+     * 处理普通消息
+     * 
+     * @return 回复消息
+     */
+    protected BasicMsg handleNormalMsg() {
         BasicMsg msg = null;
-        MessageType mt = MessageType.valueOf(msgType);
+        MessageType mt = MessageType.valueOf(msgHandler.getValues().get("msgType"));
         switch (mt) {
             case text:
                 TextMsg tm = new TextMsg(msgHandler.getValues());
@@ -210,9 +263,14 @@ public class WechatKernel {
         return msg;
     }
 
-    protected BasicMsg handleEventMsg(String msgType, WechatHandler handler) {
+    /**
+     * 处理事件消息
+     * 
+     * @return 回复消息
+     */
+    protected BasicMsg handleEventMsg() {
         BasicMsg msg = null;
-        EventType et = EventType.valueOf(msgType);
+        EventType et = EventType.valueOf(msgHandler.getValues().get("msgType"));
         switch (et) {
             case subscribe:
                 BasicEvent sube = new BasicEvent(msgHandler.getValues());
@@ -262,6 +320,7 @@ public class WechatKernel {
                 LocationSelectEvent lse = new LocationSelectEvent(msgHandler.getValues());
                 msg = handler.eLocationSelect(lse);
                 break;
+            // TODO 暂不清楚微信的推送
             case media_id:
             case view_limited:
                 BasicEvent mvbe = new BasicEvent(msgHandler.getValues());
@@ -275,13 +334,20 @@ public class WechatKernel {
         return msg;
     }
 
+    /**
+     * 输出回复消息
+     * 
+     * @param msg
+     *            回复消息数据
+     * @return XML消息
+     */
     protected String responseXML(BasicMsg msg) {
         String respmsg = "success";
         if (msg == null || Strings.isBlank(msg.getMsgType())) {
             return respmsg;
         }
 
-        // 交互 fromUser 和 toUser
+        // 交换 fromUser 和 toUser
         String fromUser = msg.getFromUserName();
         String toUser = msg.getToUserName();
         msg.setFromUserName(toUser);
