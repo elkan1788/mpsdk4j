@@ -2,6 +2,8 @@ package io.github.elkan1788.mpsdk4j.core;
 
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -50,8 +52,10 @@ public class WechatKernel {
     private SAXParser xmlParser;
     private MessageHandler msgHandler = new MessageHandler();
 
+    // 消息处理器
+    private WechatHandler handler;
     // Request参数
-    private Map<String, String> params;
+    private Map<String, String[]> params;
     // 公众号信息
     private MPAccount mpAct;
 
@@ -64,24 +68,41 @@ public class WechatKernel {
         }
     }
 
-    public WechatKernel(MPAccount mpAct, Map<String, String> params) {
+    public WechatKernel(MPAccount mpAct, WechatHandler handler, Map<String, String[]> params) {
         this();
         this.mpAct = mpAct;
+        this.handler = handler;
         this.params = params;
     }
 
-    public void setParams(Map<String, String> params) {
+    public void setParams(Map<String, String[]> params) {
         this.params = params;
+        if (log.isDebugEnabled()) {
+            Set<Entry<String, String[]>> es = params.entrySet();
+            log.debug("wechat server request params.");
+            for (Entry<String, String[]> e : es) {
+                log.debugf("%s, %s", e.getKey(), e.getValue()[ 0]);
+            }
+        }
     }
 
     public void setMpAct(MPAccount mpAct) {
         this.mpAct = mpAct;
     }
 
+    public void setWechatHandler(WechatHandler handler) {
+        this.handler = handler;
+    }
+
+    protected String get(String param) {
+        String[] vals = params.get(param);
+        return vals == null ? "" : vals[0];
+    }
+
     public String check() {
-        String sign = params.get("signature");
-        String ts = params.get("timestamp");
-        String nonce = params.get("nonce");
+        String sign = get("signature");
+        String ts = get("timestamp");
+        String nonce = get("nonce");
 
         if (sign == null
             || sign.length() > 128
@@ -89,25 +110,28 @@ public class WechatKernel {
             || ts.length() > 128
             || nonce == null
             || nonce.length() > 128) {
-            log.warnf("The sign params are too long. Please check them.");
+            log.warnf("The sign params are null or too long. Please check them.");
             return "error";
         }
 
         try {
-            String echo = SHA1.calculate(mpAct.getToken(), sign, ts, nonce);
+            String validsign = SHA1.calculate(mpAct.getToken(), ts, nonce);
             if (log.isDebugEnabled()) {
-                log.debugf("Sign echo string succes. echo: %s", echo);
+                log.debugf("Valid wechat server sign %b. sign: %s",
+                           Lang.equals(validsign, sign),
+                           validsign);
             }
-            return echo;
+            return get("echostr");
         }
         catch (AesException e) {
+            e.printStackTrace();
             throw Lang.wrapThrow(new WechatRunTimeException("校验服务器认证出现异常", e));
         }
     }
 
     // TODO 是否考虑添加重复消息过滤功能
-    public String handle(InputStream is, WechatHandler handler) {
-        String encrypt = params.get("encrypt_type");
+    public String handle(InputStream is) {
+        String encrypt = get("encrypt_type");
         WXBizMsgCrypt pc = null;
         BasicMsg msg = null;
         String respmsg = "success";
@@ -116,13 +140,13 @@ public class WechatKernel {
             try {
                 pc = new WXBizMsgCrypt(mpAct.getToken(), mpAct.getAESKey(), mpAct.getAppId());
 
-                String ts = params.get("timestamp");
-                String nonce = params.get("nonce");
-                String msgsign = params.get("msg_signature");
+                String ts = get("timestamp");
+                String nonce = get("nonce");
+                String msgsign = get("msg_signature");
 
                 String decmsg = pc.decryptMsg(msgsign, ts, nonce, is);
                 xmlParser.parse(StreamTool.toStream(decmsg), msgHandler);
-                msg = handle(msgHandler.getValues(), handler);
+                msg = handle(msgHandler.getValues());
                 respmsg = pc.encryptMsg(responseXML(msg), ts, nonce);
             }
             catch (Exception e) {
@@ -137,24 +161,24 @@ public class WechatKernel {
             catch (Exception e) {
                 throw Lang.wrapThrow(new WechatRunTimeException("明文模式下解析消息出现异常", e));
             }
-            msg = handle(msgHandler.getValues(), handler);
+            msg = handle(msgHandler.getValues());
             respmsg = responseXML(msg);
         }
 
         return respmsg;
     }
 
-    protected BasicMsg handle(Map<String, String> data, WechatHandler handler) {
+    protected BasicMsg handle(Map<String, String> data) {
         String msgtype = msgHandler.getValues().get("msgType");
         if ("event".equals(msgtype)) {
             return handleEventMsg(msgtype, handler);
         }
         else {
-            return handleNormalMsg(msgtype, handler);
+            return handleNormalMsg(msgtype);
         }
     }
 
-    protected BasicMsg handleNormalMsg(String msgType, WechatHandler handler) {
+    protected BasicMsg handleNormalMsg(String msgType) {
         BasicMsg msg = null;
         MessageType mt = MessageType.valueOf(msgType);
         switch (mt) {
