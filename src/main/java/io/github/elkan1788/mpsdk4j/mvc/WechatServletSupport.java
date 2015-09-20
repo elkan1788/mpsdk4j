@@ -22,8 +22,8 @@ public class WechatServletSupport extends HttpServlet {
 
     private static final long serialVersionUID = 8041879868339754244L;
 
-    private static WechatKernel _wk = new WechatKernel();
-    private static WechatHandler _wh = new WechatDefHandler();
+    protected static WechatKernel _wk = new WechatKernel();
+    protected static WechatHandler _wh = new WechatDefHandler();
 
     @Override
     public void init() throws ServletException {
