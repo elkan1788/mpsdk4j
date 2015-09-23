@@ -89,13 +89,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Apache Commons -->
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.9</version>
-		</dependency>
-
 		<!-- Nutz -->
 		<dependency>
 			<groupId>org.nutz</groupId>

@@ -1,5 +1,7 @@
 package io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes;
 
+import io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder;
+
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -9,9 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
-
-import io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder;
+import org.nutz.repo.Base64;
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -30,7 +30,6 @@ import io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder;
 public class WXBizMsgCrypt {
 
     private static Charset CHARSET = Charset.forName("utf-8");
-    private Base64 base64 = new Base64();
     private byte[] aesKey;
     private String token;
     private String appId;
@@ -55,16 +54,16 @@ public class WXBizMsgCrypt {
 
         this.token = token;
         this.appId = appId;
-        aesKey = Base64.decodeBase64(encodingAesKey + "=");
+        aesKey = Base64.decode(encodingAesKey + "=");
     }
 
     // 生成4个字节的网络字节序
     private byte[] getNetworkBytesOrder(int sourceNumber) {
-        byte[] orderBytes = new byte[4];
-        orderBytes[3] = (byte) (sourceNumber & 0xFF);
-        orderBytes[2] = (byte) (sourceNumber >> 8 & 0xFF);
-        orderBytes[1] = (byte) (sourceNumber >> 16 & 0xFF);
-        orderBytes[0] = (byte) (sourceNumber >> 24 & 0xFF);
+        byte[] orderBytes = new byte[ 4];
+        orderBytes[ 3] = (byte) (sourceNumber & 0xFF);
+        orderBytes[ 2] = (byte) (sourceNumber >> 8 & 0xFF);
+        orderBytes[ 1] = (byte) (sourceNumber >> 16 & 0xFF);
+        orderBytes[ 0] = (byte) (sourceNumber >> 24 & 0xFF);
         return orderBytes;
     }
 
@@ -73,7 +72,7 @@ public class WXBizMsgCrypt {
         int sourceNumber = 0;
         for (int i = 0; i < 4; i++) {
             sourceNumber <<= 8;
-            sourceNumber |= orderBytes[i] & 0xff;
+            sourceNumber |= orderBytes[ i] & 0xff;
         }
         return sourceNumber;
     }
@@ -135,7 +134,7 @@ public class WXBizMsgCrypt {
             byte[] encrypted = cipher.doFinal(unencrypted);
 
             // 使用BASE64对加密后的字符串进行编码
-            String base64Encrypted = base64.encodeToString(encrypted);
+            String base64Encrypted = Base64.encodeToString(encrypted, false);
 
             return base64Encrypted;
         }
@@ -163,7 +162,7 @@ public class WXBizMsgCrypt {
             cipher.init(Cipher.DECRYPT_MODE, key_spec, iv);
 
             // 使用BASE64对密文进行解码
-            byte[] encrypted = Base64.decodeBase64(text);
+            byte[] encrypted = Base64.decode(text);
 
             // 解密
             original = cipher.doFinal(encrypted);
@@ -183,8 +182,7 @@ public class WXBizMsgCrypt {
             int xmlLength = recoverNetworkBytesOrder(networkOrder);
 
             xmlContent = new String(Arrays.copyOfRange(bytes, 20, 20 + xmlLength), CHARSET);
-            fromAppId = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
-                                   CHARSET);
+            fromAppId = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length), CHARSET);
         }
         catch (Exception e) {
             throw new AesException(AesException.IllegalBuffer);
@@ -263,7 +261,7 @@ public class WXBizMsgCrypt {
         Object[] encrypt = XMLParse.extract(postData);
 
         // 验证安全签名
-        String signature = SHA1.calculate(token, timeStamp, nonce, String.valueOf(encrypt[1]));
+        String signature = SHA1.calculate(token, timeStamp, nonce, String.valueOf(encrypt[ 1]));
 
         // 和URL中的签名比较是否相等
         if (!signature.equals(msgSignature)) {
@@ -271,7 +269,7 @@ public class WXBizMsgCrypt {
         }
 
         // 解密
-        String result = decrypt(String.valueOf(encrypt[1]));
+        String result = decrypt(String.valueOf(encrypt[ 1]));
         return result;
     }
 
