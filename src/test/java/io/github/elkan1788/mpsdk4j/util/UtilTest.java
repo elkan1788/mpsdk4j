@@ -11,6 +11,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-                     ConfigReaderTest.class, HttpToolTest.class
+     ConfigReaderTest.class, 
+     HttpToolTest.class
 })
 public class UtilTest {}

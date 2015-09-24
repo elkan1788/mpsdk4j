@@ -1,10 +1,12 @@
 package io.github.elkan1788.mpsdk4j.vo.event;
 
+import java.util.Map;
+
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class SendLocationInfo {
+public class SendLocationInfoEvent extends MenuEvent {
 
     /**
      * X坐标信息
@@ -27,19 +29,15 @@ public class SendLocationInfo {
      */
     private String poiname;
 
-    public SendLocationInfo() {}
+    public SendLocationInfoEvent() {}
 
-    public SendLocationInfo(String locationX,
-                            String locationY,
-                            int scale,
-                            String label,
-                            String poiname) {
-        super();
-        this.locationX = locationX;
-        this.locationY = locationY;
-        this.scale = scale;
-        this.label = label;
-        this.poiname = poiname;
+    public SendLocationInfoEvent(Map<String, String> values) {
+        super(values);
+        this.locationX = values.get("locationX");
+        this.locationY = values.get("locationY");
+        this.scale = Integer.parseInt(values.get("scale"));
+        this.label = values.get("label");
+        this.poiname = values.get("poiname");
     }
 
     public String getLocationX() {
@@ -82,9 +80,21 @@ public class SendLocationInfo {
         this.poiname = poiname;
     }
 
-    @ Override
+    @Override
     public String toString() {
-        return "SendLocationInfo [locationX="
+        return "SendLocationInfoEvent [toUserName="
+               + toUserName
+               + ", fromUserName="
+               + fromUserName
+               + ", createTime="
+               + createTime
+               + ", msgType="
+               + msgType
+               + ", event="
+               + event
+               + ", eventKey="
+               + eventKey
+               + ", locationX="
                + locationX
                + ", locationY="
                + locationY

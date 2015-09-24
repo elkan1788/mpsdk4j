@@ -6,10 +6,9 @@ import org.nutz.lang.Strings;
 
 import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.LocationSelectEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfo;
+import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
@@ -157,15 +156,14 @@ public class WechatDefHandler implements WechatHandler {
     }
 
     @Override
-    public BasicMsg eLocationSelect(LocationSelectEvent lse) {
-        TextMsg tm = new TextMsg(lse);
-        SendLocationInfo sli = lse.getSendLocationInfo();
+    public BasicMsg eLocationSelect(SendLocationInfoEvent slie) {
+        TextMsg tm = new TextMsg(slie);
         tm.setContent(Strings.join("\n",
-                                   sli.getLocationX(),
-                                   sli.getLocationY(),
-                                   sli.getLabel(),
-                                   String.valueOf(sli.getScale()),
-                                   sli.getPoiname()));
+                                   slie.getLocationX(),
+                                   slie.getLocationY(),
+                                   slie.getLabel(),
+                                   String.valueOf(slie.getScale()),
+                                   slie.getPoiname()));
         return tm;
     }
 

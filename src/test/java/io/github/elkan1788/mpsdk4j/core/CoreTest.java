@@ -11,9 +11,11 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-                     JsonMsgBuilderTest.class, MessageHandlerTest.class, XmlMsgBuilderTest.class
+    JsonMsgBuilderTest.class,
+    MessageHandlerTest.class,
+    XmlMsgBuilderTest.class,
+    WechatKernelTest.class
 })
-
 public class CoreTest {
 
 }

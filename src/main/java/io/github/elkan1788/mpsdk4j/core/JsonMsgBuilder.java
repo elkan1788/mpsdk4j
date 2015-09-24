@@ -31,7 +31,7 @@ public class JsonMsgBuilder {
      * 创建消息体前缀
      *
      * @param msg
-     *            客服消息实体
+     *            客服消息
      */
     void msgPrefix(BasicMsg msg) {
         msgBuf.append("\"touser\":\"").append(msg.getToUserName()).append("\",");
@@ -42,7 +42,7 @@ public class JsonMsgBuilder {
      * 文本客服消息
      *
      * @param msg
-     *            客服消息实体
+     *            文消息
      */
     public JsonMsgBuilder text(TextMsg msg) {
         msgPrefix(msg);
@@ -56,7 +56,7 @@ public class JsonMsgBuilder {
      * 图像客服消息
      *
      * @param msg
-     *            客服消息实体
+     *            图像消息
      */
     public JsonMsgBuilder image(ImageMsg msg) {
         msgPrefix(msg);

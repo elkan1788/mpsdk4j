@@ -2,9 +2,9 @@ package io.github.elkan1788.mpsdk4j.core;
 
 import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.LocationSelectEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
+import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
@@ -195,11 +195,11 @@ public interface WechatHandler {
     /**
      * 处理弹出地理位置选择器的事件推送消息
      *
-     * @param lse
+     * @param slie
      *            地理位置选取事件
      * @return 回复消息
      */
-    BasicMsg eLocationSelect(LocationSelectEvent lse);
+    BasicMsg eLocationSelect(SendLocationInfoEvent slie);
 
     /**
      * 处理模板发送事件消息

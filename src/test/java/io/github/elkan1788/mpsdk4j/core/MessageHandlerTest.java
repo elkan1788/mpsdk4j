@@ -12,6 +12,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
+import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
+import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LinkMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
@@ -166,5 +168,47 @@ public class MessageHandlerTest {
         LinkMsg lm = new LinkMsg(msgHandler.getValues());
         assertNotNull(lm);
         log.info(lm);
+    }
+
+    @Test
+    public void testSendLocationMessage() throws Exception {
+        log.info("====== MessageHandler#sendlocation ======");
+        String videoXml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182361</CreateTime>\n"
+                          + "<MsgType><![CDATA[shortvideo]]></MsgType>\n"
+                          + "<Event><![CDATA[location_select]]></Event>\n"
+                          + "<EventKey><![CDATA[6]]></EventKey>\n"
+                          + "<SendLocationInfo><Location_X><![CDATA[23]]></Location_X>\n"
+                          + "<Location_Y><![CDATA[113]]></Location_Y>\n"
+                          + "<Scale><![CDATA[15]]></Scale>\n"
+                          + "<Label><![CDATA[ 广州市海珠区客村艺苑路 106号]]></Label>\n"
+                          + "<Poiname><![CDATA[朋友圈]]></Poiname>\n"
+                          + "</SendLocationInfo>\n"
+                          + "</xml>";
+        xmlParser.parse(StreamTool.toStream(videoXml), msgHandler);
+        SendLocationInfoEvent slife = new SendLocationInfoEvent(msgHandler.getValues());
+        assertNotNull(slife);
+        log.info(slife);
+    }
+
+    @Test
+    public void testSendPicsMessage() throws Exception {
+        log.info("====== MessageHandler#sendpics ======");
+        String videoXml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182361</CreateTime>\n"
+                          + "<MsgType><![CDATA[shortvideo]]></MsgType>\n"
+                          + "<Event><![CDATA[pic_photo_or_album]]></Event>\n"
+                          + "<EventKey><![CDATA[6]]></EventKey>\n"
+                          + "<SendPicsInfo><Count>2</Count>\n"
+                          + "<PicList><item><PicMd5Sum><![CDATA[5a75aaca956d97be686719218f275c6b]]></PicMd5Sum>\n"
+                          + "</item><item><PicMd5Sum><![CDATA[5a75aaca956d97be686719218f275c6b]]></PicMd5Sum>\n"
+                          + "</item></PicList></SendPicsInfo>\n"
+                          + "</xml>";
+        xmlParser.parse(StreamTool.toStream(videoXml), msgHandler);
+        SendPhotosEvent spe = new SendPhotosEvent(msgHandler.getValues());
+        assertNotNull(spe);
+        log.info(spe);
     }
 }

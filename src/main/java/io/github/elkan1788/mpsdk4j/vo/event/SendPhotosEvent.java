@@ -1,6 +1,9 @@
 package io.github.elkan1788.mpsdk4j.vo.event;
 
+import java.util.List;
 import java.util.Map;
+
+import org.nutz.json.Json;
 
 /**
  * 用户拍照/相册发图事件
@@ -19,8 +22,11 @@ public class SendPhotosEvent extends MenuEvent {
 
     }
 
+    @SuppressWarnings("unchecked")
     public SendPhotosEvent(Map<String, String> values) {
         super(values);
+        this.sendPicsInfo = new SendPicsInfo(Integer.parseInt(values.get("count")),
+                                             Json.fromJson(List.class, values.get("picList")));
     }
 
     public SendPicsInfo getSendPicsInfo() {
@@ -31,7 +37,7 @@ public class SendPhotosEvent extends MenuEvent {
         this.sendPicsInfo = sendPicsInfo;
     }
 
-    @ Override
+    @Override
     public String toString() {
         return "ScanSysPhotoEvent [toUserName="
                + toUserName

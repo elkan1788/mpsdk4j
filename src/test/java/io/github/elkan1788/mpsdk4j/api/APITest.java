@@ -11,13 +11,13 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CredentialAPITest.class,
-        MenuAPITest.class,
-        MediaAPITest.class,
-        GroupsAPITest.class,
-        QRCodeAPITest.class,
-        UserAPITest.class,
-        TemplateAPITest.class
+    CredentialAPITest.class,
+    MenuAPITest.class,
+    MediaAPITest.class,
+    GroupsAPITest.class,
+    QRCodeAPITest.class,
+    UserAPITest.class,
+    TemplateAPITest.class
 })
 public class APITest {
 

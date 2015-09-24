@@ -23,10 +23,10 @@ import io.github.elkan1788.mpsdk4j.util.StreamTool;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.LocationSelectEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanEvent;
+import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
@@ -316,7 +316,7 @@ public class WechatKernel {
                 msg = handler.ePicWeixin(spewx);
                 break;
             case location_select:
-                LocationSelectEvent lse = new LocationSelectEvent(msgHandler.getValues());
+                SendLocationInfoEvent lse = new SendLocationInfoEvent(msgHandler.getValues());
                 msg = handler.eLocationSelect(lse);
                 break;
             // TODO 暂不清楚微信的推送

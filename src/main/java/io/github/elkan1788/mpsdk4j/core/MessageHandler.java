@@ -25,6 +25,8 @@ public class MessageHandler extends DefaultHandler2 {
 
     static Map<String, String> _vals = new ConcurrentHashMap<String, String>();
 
+    static StringBuffer _sb = new StringBuffer();
+
     public Map<String, String> getValues() {
         return _vals;
     }
@@ -32,16 +34,14 @@ public class MessageHandler extends DefaultHandler2 {
     @Override
     public void startDocument() throws SAXException {
         _vals.clear();
+        _sb.setLength(0);
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes)
             throws SAXException {
         if ("PicList".equals(qName)) {
-            return;
-        }
-
-        if ("item".equals(qName)) {
+            _sb.append("[");
             return;
         }
     }
@@ -49,7 +49,12 @@ public class MessageHandler extends DefaultHandler2 {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (log.isInfoEnabled()) {
-            if (!Strings.equals("xml", qName)) {
+            if (!Strings.equals("xml", qName)
+                && !Strings.equals("ScanCodeInfo", qName)
+                && !Strings.equals("SendLocationInfo", qName)
+                && !Strings.equals("SendPicsInfo", qName)
+                && !Strings.equals("PicList", qName)
+                && !Strings.equals("item", qName)) {
                 log.infof("Current node vaule: [%s-%s]", qName, attrVal);
             }
         }
@@ -129,6 +134,36 @@ public class MessageHandler extends DefaultHandler2 {
         }
         if ("Event".equals(qName)) {
             _vals.put("event", attrVal);
+            return;
+        }
+        if ("EventKey".equals(qName)) {
+            _vals.put("eventKey", attrVal);
+            return;
+        }
+        if ("ScanType".equals(qName)) {
+            _vals.put("scanType", attrVal);
+            return;
+        }
+        if ("ScanResult".equals(qName)) {
+            _vals.put("scanResult", attrVal);
+            return;
+        }
+        if ("Poiname".equals(qName)) {
+            _vals.put("poiname", attrVal);
+            return;
+        }
+        if ("Count".equals(qName)) {
+            _vals.put("count", attrVal);
+            return;
+        }
+        if ("PicMd5Sum".equals(qName)) {
+            _sb.append("{\"picMd5Sum\":\"").append(attrVal).append("\"},");
+            return;
+        }
+        if ("PicList".equals(qName)) {
+            _sb.deleteCharAt(_sb.lastIndexOf(","));
+            _sb.append("]");
+            _vals.put("picList", _sb.toString());
             return;
         }
     }
