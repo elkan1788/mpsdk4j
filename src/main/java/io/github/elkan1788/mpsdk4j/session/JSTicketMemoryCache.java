@@ -1,6 +1,3 @@
-/**
- * @author senhui.li
- */
 package io.github.elkan1788.mpsdk4j.session;
 
 import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
