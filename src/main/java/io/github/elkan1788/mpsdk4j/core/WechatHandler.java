@@ -4,6 +4,7 @@ import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
+import io.github.elkan1788.mpsdk4j.vo.event.ScanEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
@@ -133,11 +134,11 @@ public interface WechatHandler {
     /**
      * 处理扫描事件消息
      *
-     * @param be
+     * @param se
      *            事件消息
      * @return 回复消息
      */
-    BasicMsg eScan(BasicEvent be);
+    BasicMsg eScan(ScanEvent se);
 
     /**
      * 处理自动上传地理事件消息

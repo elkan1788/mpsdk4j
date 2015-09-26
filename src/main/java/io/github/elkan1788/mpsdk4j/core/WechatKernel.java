@@ -227,7 +227,14 @@ public class WechatKernel {
      */
     protected BasicMsg handleNormalMsg() {
         BasicMsg msg = null;
-        MessageType mt = MessageType.valueOf(msgHandler.getValues().get("msgType"));
+        MessageType mt;
+        try {
+            mt = MessageType.valueOf(msgHandler.getValues().get("msgType"));
+        }
+        catch (Exception e) {
+            log.error("There are have found new meessage type in wechat.");
+            mt = MessageType.def;
+        }
         switch (mt) {
             case text:
                 TextMsg tm = new TextMsg(msgHandler.getValues());
@@ -269,7 +276,14 @@ public class WechatKernel {
      */
     protected BasicMsg handleEventMsg() {
         BasicMsg msg = null;
-        EventType et = EventType.valueOf(msgHandler.getValues().get("event"));
+        EventType et;
+        try {
+            et = EventType.valueOf(msgHandler.getValues().get("event"));
+        }
+        catch (Exception e) {
+            log.error("There are have found new event type from wechat.");
+            et = EventType.def;
+        }
         switch (et) {
             case subscribe:
                 BasicEvent sube = new BasicEvent(msgHandler.getValues());

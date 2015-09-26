@@ -8,6 +8,7 @@ import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
+import io.github.elkan1788.mpsdk4j.vo.event.ScanEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
@@ -34,7 +35,7 @@ public class WechatDefHandler implements WechatHandler {
     public BasicMsg defMsg(BasicMsg bm) {
         TextMsg tm = new TextMsg(bm);
         tm.setContent(bm.getMsgType());
-        return bm;
+        return tm;
     }
 
     @Override
@@ -112,9 +113,9 @@ public class WechatDefHandler implements WechatHandler {
     public void eUnSub(BasicEvent be) {}
 
     @Override
-    public BasicMsg eScan(BasicEvent be) {
-        TextMsg tm = new TextMsg(be);
-        tm.setContent(be.getEventKey());
+    public BasicMsg eScan(ScanEvent se) {
+        TextMsg tm = new TextMsg(se);
+        tm.setContent(se.getEventKey() + se.getTicket());
         return tm;
     }
 

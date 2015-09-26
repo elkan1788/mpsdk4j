@@ -9,6 +9,10 @@ package io.github.elkan1788.mpsdk4j.common;
 public enum EventType {
 
     /**
+     * 新事件
+     */
+    def,
+    /**
      * 用户订阅事件
      */
     subscribe,
