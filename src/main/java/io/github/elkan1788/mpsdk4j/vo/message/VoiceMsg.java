@@ -2,6 +2,8 @@ package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
+import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
+
 /**
  * 音频消息
  * 
@@ -25,6 +27,16 @@ public class VoiceMsg extends BasicMsg {
 
     public VoiceMsg() {
         super();
+        this.msgType = "voice";
+    }
+
+    public VoiceMsg(BasicEvent event) {
+        super(event);
+        this.msgType = "voice";
+    }
+
+    public VoiceMsg(BasicMsg msg) {
+        super(msg);
         this.msgType = "voice";
     }
 

@@ -17,12 +17,12 @@ import io.github.elkan1788.mpsdk4j.vo.VOTest;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-                     Mpsdk4jTest.class,
-                     UtilTest.class,
-                     VOTest.class,
-                     APITest.class,
-                     CoreTest.class,
-                     AESTest.class
+    Mpsdk4jTest.class,
+    UtilTest.class,
+    VOTest.class,
+    APITest.class,
+    CoreTest.class,
+    AESTest.class
 })
 public class RunTest {
 

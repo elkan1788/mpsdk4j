@@ -2,6 +2,8 @@ package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
+import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
+
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
@@ -31,6 +33,16 @@ public class MusicMsg extends BasicMsg {
 
     public MusicMsg() {
         super();
+        this.msgType = "music";
+    }
+
+    public MusicMsg(BasicEvent event) {
+        super(event);
+        this.msgType = "music";
+    }
+
+    public MusicMsg(BasicMsg msg) {
+        super(msg);
         this.msgType = "music";
     }
 

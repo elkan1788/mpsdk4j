@@ -17,6 +17,11 @@ import org.nutz.log.Logs;
 import io.github.elkan1788.mpsdk4j.TestSupport;
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
+import io.github.elkan1788.mpsdk4j.vo.event.TmplFinshJobEvent;
+import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
@@ -191,6 +196,18 @@ public class WechatKernelTest extends TestSupport {
         assertNotNull(respxml);
         assertFalse(respxml.equals("success"));
         log.info(respxml);
+        log.info("====== WechatKernel#handle-voice-voice ======");
+        wk = new WechatKernel(mpAct, new VoiceHandler(), data);
+        respxml = wk.handle(StreamTool.toStream(voicexml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+        log.info("====== WechatKernel#handle-voice-music ======");
+        wk = new WechatKernel(mpAct, new MediaHandler(), data);
+        respxml = wk.handle(StreamTool.toStream(voicexml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
     }
 
     @Test
@@ -206,6 +223,12 @@ public class WechatKernelTest extends TestSupport {
                          + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(videoxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+        log.info("====== WechatKernel#handle-video-video ======");
+        wk = new WechatKernel(mpAct, new MediaHandler(), data);
+        respxml = wk.handle(StreamTool.toStream(videoxml));
         assertNotNull(respxml);
         assertFalse(respxml.equals("success"));
         log.info(respxml);
@@ -398,6 +421,206 @@ public class WechatKernelTest extends TestSupport {
         assertNotNull(respxml);
         assertTrue(respxml.equals("success"));
         log.info(respxml);
+    }
+
+    @Test
+    public void testScanPushEventHandle() {
+        log.info("====== WechatKernel#handle-scanpushevent ======");
+        String spxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                         + "<CreateTime>1418182341</CreateTime>\n"
+                         + "<MsgType><![CDATA[event]]></MsgType>\n"
+                         + "<Event><![CDATA[scancode_push]]></Event>\n"
+                         + "<EventKey><![CDATA[6]]></EventKey>\n"
+                         + "<ScanCodeInfo><ScanType><![CDATA[qrcode]]></ScanType>\n"
+                         + "<ScanResult><![CDATA[1]]></ScanResult>\n"
+                         + "</ScanCodeInfo>\n"
+                         + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(spxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test
+    public void testScanWaitEventHandle() {
+        log.info("====== WechatKernel#handle-scanwaitmsgevent ======");
+        String swxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                       + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                       + "<CreateTime>1418182341</CreateTime>\n"
+                       + "<MsgType><![CDATA[event]]></MsgType>\n"
+                       + "<Event><![CDATA[scancode_waitmsg]]></Event>\n"
+                       + "<EventKey><![CDATA[6]]></EventKey>\n"
+                       + "<ScanCodeInfo><ScanType><![CDATA[qrcode]]></ScanType>\n"
+                       + "<ScanResult><![CDATA[1]]></ScanResult>\n"
+                       + "</ScanCodeInfo>\n"
+                       + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(swxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test
+    public void testPicSysEventHandle() {
+        log.info("====== WechatKernel#handle-picsysevent ======");
+        String psxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                       + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                       + "<CreateTime>1418182341</CreateTime>\n"
+                       + "<MsgType><![CDATA[event]]></MsgType>\n"
+                       + "<Event><![CDATA[pic_sysphoto]]></Event>\n"
+                       + "<EventKey><![CDATA[6]]></EventKey>\n"
+                       + "<SendPicsInfo><Count>1</Count>\n"
+                       + "<PicList><item><PicMd5Sum><![CDATA[1b5f7c23b5bf75682a53e7b6d163e185]]></PicMd5Sum>\n"
+                       + "</item></PicList></SendPicsInfo>\n"
+                       + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(psxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test
+    public void testPicPhotoAlbumEventHandle() {
+        log.info("====== WechatKernel#handle-picphotoalbumevent ======");
+        String ppaxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                        + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                        + "<CreateTime>1418182341</CreateTime>\n"
+                        + "<MsgType><![CDATA[event]]></MsgType>\n"
+                        + "<Event><![CDATA[pic_photo_or_album]]></Event>\n"
+                        + "<EventKey><![CDATA[6]]></EventKey>\n"
+                        + "<SendPicsInfo><Count>1</Count>\n"
+                        + "<PicList><item><PicMd5Sum><![CDATA[1b5f7c23b5bf75682a53e7b6d163e185]]></PicMd5Sum>\n"
+                        + "</item></PicList></SendPicsInfo>\n"
+                        + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(ppaxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test
+    public void testPicWeixinEventHandle() {
+        log.info("====== WechatKernel#handle-picweixinevent ======");
+        String pwxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                       + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                       + "<CreateTime>1418182341</CreateTime>\n"
+                       + "<MsgType><![CDATA[event]]></MsgType>\n"
+                       + "<Event><![CDATA[pic_weixin]]></Event>\n"
+                       + "<EventKey><![CDATA[6]]></EventKey>\n"
+                       + "<SendPicsInfo><Count>1</Count>\n"
+                       + "<PicList><item><PicMd5Sum><![CDATA[1b5f7c23b5bf75682a53e7b6d163e185]]></PicMd5Sum>\n"
+                       + "</item></PicList></SendPicsInfo>\n"
+                       + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(pwxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test
+    public void testSelectLocationEventHandle() {
+        log.info("====== WechatKernel#handle-selectlocationevent ======");
+        String slxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                       + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                       + "<CreateTime>1418182341</CreateTime>\n"
+                       + "<MsgType><![CDATA[event]]></MsgType>\n"
+                       + "<Event><![CDATA[location_select]]></Event>\n"
+                       + "<EventKey><![CDATA[6]]></EventKey>\n"
+                       + "<SendLocationInfo><Location_X><![CDATA[23]]></Location_X>\n"
+                       + "<Location_Y><![CDATA[113]]></Location_Y>\n"
+                       + "<Scale><![CDATA[15]]></Scale>\n"
+                       + "<Label><![CDATA[ 广州市海珠区客村艺苑路 106号]]></Label>\n"
+                       + "<Poiname><![CDATA[]]></Poiname>\n"
+                       + "</SendLocationInfo>\n"
+                       + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(slxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test
+    public void testTemplateFinshJobEventHandle() {
+        log.info("====== WechatKernel#handle-selectlocationevent ======");
+        String tmlfjxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182341</CreateTime>\n"
+                          + "<MsgType><![CDATA[event]]></MsgType>\n"
+                          + "<Event><![CDATA[TEMPLATESENDJOBFINISH]]></Event>\n"
+                          + "<MsgID>200163836</MsgID>\n"
+                          + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(tmlfjxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+        TmplFinshJobEvent tfje = new TmplFinshJobEvent();
+        TmplFinshJobEvent.Status s = TmplFinshJobEvent.Status.success;
+    }
+
+    @Test
+    public void testNewEventHandle() {
+        log.info("====== WechatKernel#handle-viewevent ======");
+        String newxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                        + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                        + "<CreateTime>1418182341</CreateTime>\n"
+                        + "<MsgType><![CDATA[event]]></MsgType>\n"
+                        + "<Event><![CDATA[location_receive]]></Event>\n"
+                        + "<EventKey><![CDATA[6]]></EventKey>\n"
+                        + "<SendLocationInfo><Location_X><![CDATA[23]]></Location_X>\n"
+                        + "<Location_Y><![CDATA[113]]></Location_Y>\n"
+                        + "<Scale><![CDATA[15]]></Scale>\n"
+                        + "<Label><![CDATA[ 广州市海珠区客村艺苑路 106号]]></Label>\n"
+                        + "<Poiname><![CDATA[]]></Poiname>\n"
+                        + "</SendLocationInfo>\n"
+                        + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(newxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+
+    class VoiceHandler extends WechatDefHandler {
+
+        @Override
+        public BasicMsg voice(VoiceMsg vm) {
+            VoiceMsg vim = new VoiceMsg(vm);
+            vim.setMediaId(vm.getMediaId());
+            return vim;
+        }
+
+    }
+
+    class MediaHandler extends WechatDefHandler {
+
+        @Override
+        public BasicMsg voice(VoiceMsg vm) {
+            MusicMsg mm = new MusicMsg(vm);
+            mm.setTitle("致爱 Your Song");
+            mm.setThumbMediaId(vm.getMediaId());
+            mm.setMusicUrl("http://y.qq.com/#type=song&mid=002IVyIU4093Xr&play=0");
+            mm.setHQMusicUrl("http://y.qq.com/#type=song&mid=002IVyIU4093Xr&play=0");
+            return mm;
+        }
+
+        @Override
+        public BasicMsg video(VideoMsg vm) {
+            VideoMsg vdm = new VideoMsg(vm);
+            vdm.setTitle("习主席联合国峰会演讲");
+            vdm.setDescription("习主席联合国峰会演讲");
+            vdm.setMediaId("Hfdjlioieijl#22iojkljlkjlutfd");
+            return super.video(vm);
+        }
+
     }
 
 }

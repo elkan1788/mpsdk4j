@@ -128,7 +128,7 @@ public class MessageHandler extends DefaultHandler2 {
             _vals.put("url", attrVal);
             return;
         }
-        if ("MsgId".equals(qName)) {
+        if ("MsgId".equals(qName) || "MsgID".equals(qName)) {
             _vals.put("msgId", attrVal);
             return;
         }
@@ -164,6 +164,10 @@ public class MessageHandler extends DefaultHandler2 {
             _sb.deleteCharAt(_sb.lastIndexOf(","));
             _sb.append("]");
             _vals.put("picList", _sb.toString());
+            return;
+        }
+        if ("Status".equals(qName)) {
+            _vals.put("status", _sb.toString());
             return;
         }
     }

@@ -334,11 +334,13 @@ public class WechatKernel {
                 msg = handler.eLocationSelect(lse);
                 break;
             // TODO 暂不清楚微信的推送
-            case media_id:
-            case view_limited:
-                BasicEvent mvbe = new BasicEvent(msgHandler.getValues());
-                msg = handler.defEvent(mvbe);
-                break;
+            /*
+             * case media_id:
+             * case view_limited:
+             * BasicEvent mvbe = new BasicEvent(msgHandler.getValues());
+             * msg = handler.defEvent(mvbe);
+             * break;
+             */
             default:
                 BasicEvent be = new BasicEvent(msgHandler.getValues());
                 msg = handler.defEvent(be);
@@ -367,12 +369,16 @@ public class WechatKernel {
         msg.setToUserName(fromUser);
 
         MessageType mt = MessageType.valueOf(msg.getMsgType());
+
         switch (mt) {
             case text:
                 respmsg = XmlMsgBuilder.create().text((TextMsg) msg).build();
                 break;
             case image:
                 respmsg = XmlMsgBuilder.create().image((ImageMsg) msg).build();
+                break;
+            case voice:
+                respmsg = XmlMsgBuilder.create().voice((VoiceMsg) msg).build();
                 break;
             case music:
                 respmsg = XmlMsgBuilder.create().music((MusicMsg) msg).build();
@@ -384,9 +390,9 @@ public class WechatKernel {
                 respmsg = XmlMsgBuilder.create().news((NewsMsg) msg).build();
                 break;
             default:
-                respmsg = XmlMsgBuilder.create().text((TextMsg) msg).build();
                 break;
         }
         return respmsg;
     }
+
 }

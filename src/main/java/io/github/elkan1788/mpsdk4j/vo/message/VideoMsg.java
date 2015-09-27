@@ -2,6 +2,8 @@ package io.github.elkan1788.mpsdk4j.vo.message;
 
 import java.util.Map;
 
+import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
+
 /**
  * 视频消息
  * 
@@ -32,6 +34,16 @@ public class VideoMsg extends BasicMsg {
 
     public VideoMsg() {
         super();
+        this.msgType = "video";
+    }
+
+    public VideoMsg(BasicEvent event) {
+        super(event);
+        this.msgType = "video";
+    }
+
+    public VideoMsg(BasicMsg msg) {
+        super(msg);
         this.msgType = "video";
     }
 
