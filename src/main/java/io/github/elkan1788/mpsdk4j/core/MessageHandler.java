@@ -167,7 +167,23 @@ public class MessageHandler extends DefaultHandler2 {
             return;
         }
         if ("Status".equals(qName)) {
-            _vals.put("status", _sb.toString());
+            _vals.put("status", attrVal);
+            return;
+        }
+        if ("TotalCount".equals(qName)) {
+            _vals.put("totalCount", attrVal);
+            return;
+        }
+        if ("FilterCount".equals(qName)) {
+            _vals.put("filterCount", attrVal);
+            return;
+        }
+        if ("SentCount".equals(qName)) {
+            _vals.put("sentCount", attrVal);
+            return;
+        }
+        if ("ErrorCount".equals(qName)) {
+            _vals.put("errorCount", attrVal);
             return;
         }
     }

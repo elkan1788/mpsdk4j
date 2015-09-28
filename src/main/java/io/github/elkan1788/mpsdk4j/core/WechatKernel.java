@@ -1,18 +1,5 @@
 package io.github.elkan1788.mpsdk4j.core;
 
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.nutz.lang.Lang;
-import org.nutz.lang.Strings;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
-
 import io.github.elkan1788.mpsdk4j.common.EventType;
 import io.github.elkan1788.mpsdk4j.common.MessageType;
 import io.github.elkan1788.mpsdk4j.exception.WechatRunTimeException;
@@ -37,6 +24,21 @@ import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
+import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
+import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 
 /**
  * 微信消息内核
@@ -249,9 +251,12 @@ public class WechatKernel {
                 msg = handler.voice(vom);
                 break;
             case video:
-            case shortvideo:
                 VideoMsg vim = new VideoMsg(msgHandler.getValues());
                 msg = handler.video(vim);
+                break;
+            case shortvideo:
+                VideoMsg shortvim = new VideoMsg(msgHandler.getValues());
+                msg = handler.shortVideo(shortvim);
                 break;
             case location:
                 LocationMsg locm = new LocationMsg(msgHandler.getValues());
@@ -341,6 +346,14 @@ public class WechatKernel {
              * msg = handler.defEvent(mvbe);
              * break;
              */
+            case TEMPLATESENDJOBFINISH:
+                SentTmlJobEvent stje = new SentTmlJobEvent(msgHandler.getValues());
+                handler.eSentTmplJobFinish(stje);
+                break;
+            case MASSSENDJOBFINISH:
+                SentAllJobEvent saje = new SentAllJobEvent(msgHandler.getValues());
+                handler.eSentAllJobFinish(saje);
+                break;
             default:
                 BasicEvent be = new BasicEvent(msgHandler.getValues());
                 msg = handler.defEvent(be);

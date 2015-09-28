@@ -1,9 +1,5 @@
 package io.github.elkan1788.mpsdk4j.core;
 
-import java.util.Arrays;
-
-import org.nutz.lang.Strings;
-
 import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
@@ -22,6 +18,10 @@ import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
 import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
+
+import java.util.Arrays;
+
+import org.nutz.lang.Strings;
 
 /**
  * 微信消息,事件处理器(实际生产中需要重写)
@@ -63,9 +63,16 @@ public class WechatDefHandler implements WechatHandler {
     }
 
     @Override
-    public BasicMsg video(VideoMsg vm) {
-        TextMsg tm = new TextMsg(vm);
-        tm.setContent(Strings.join("\n", vm.getMsgType(), vm.getMediaId(), vm.getThumbMediaId()));
+    public BasicMsg video(VideoMsg vim) {
+        TextMsg tm = new TextMsg(vim);
+        tm.setContent(Strings.join("\n", vim.getMsgType(), vim.getMediaId(), vim.getThumbMediaId()));
+        return tm;
+    }
+
+    @Override
+    public BasicMsg shortVideo(VideoMsg vim) {
+        TextMsg tm = new TextMsg(vim);
+        tm.setContent(Strings.join("\n", vim.getMsgType(), vim.getMediaId(), vim.getThumbMediaId()));
         return tm;
     }
 
@@ -125,10 +132,7 @@ public class WechatDefHandler implements WechatHandler {
     @Override
     public BasicMsg eScanCodePush(ScanCodeEvent sce) {
         TextMsg tm = new TextMsg(sce);
-        tm.setContent(Strings.join("\n",
-                                   sce.getEventKey(),
-                                   sce.getScanType(),
-                                   sce.getScanResult()));
+        tm.setContent(Strings.join("\n", sce.getEventKey(), sce.getScanType(), sce.getScanResult()));
         return tm;
     }
 
@@ -169,9 +173,9 @@ public class WechatDefHandler implements WechatHandler {
     }
 
     @Override
-    public void eTemplateFinish(SentTmlJobEvent stje) {}
+    public void eSentTmplJobFinish(SentTmlJobEvent stje) {}
 
     @Override
-    public void eSendJobFinish(SentAllJobEvent saje) {}
+    public void eSentAllJobFinish(SentAllJobEvent saje) {}
 
 }

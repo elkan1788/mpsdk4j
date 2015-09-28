@@ -3,6 +3,15 @@ package io.github.elkan1788.mpsdk4j.core;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import io.github.elkan1788.mpsdk4j.TestSupport;
+import io.github.elkan1788.mpsdk4j.util.StreamTool;
+import io.github.elkan1788.mpsdk4j.vo.MPAccount;
+import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
+import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
+import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,15 +22,6 @@ import org.nutz.lang.random.R;
 import org.nutz.lang.random.StringGenerator;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.TestSupport;
-import io.github.elkan1788.mpsdk4j.util.StreamTool;
-import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-import io.github.elkan1788.mpsdk4j.vo.event.TmplFinshJobEvent;
-import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
@@ -43,10 +43,18 @@ public class WechatKernelTest extends TestSupport {
         mpAct.setAppSecret(_cr.get("appSecret"));
         mpAct.setToken(_cr.get("token"));
         data = new HashMap<String, String[]>();
-        data.put("signature", new String[]{"ffbcb8aca5c4c7d5da4e41461908470cf07a518a"});
-        data.put("timestamp", new String[]{"1442726144"});
-        data.put("nonce", new String[]{"1439307736"});
-        data.put("echostr", new String[]{"1439307541"});
+        data.put("signature", new String[]{
+            "ffbcb8aca5c4c7d5da4e41461908470cf07a518a"
+        });
+        data.put("timestamp", new String[]{
+            "1442726144"
+        });
+        data.put("nonce", new String[]{
+            "1439307736"
+        });
+        data.put("echostr", new String[]{
+            "1439307541"
+        });
     }
 
     @Test
@@ -63,9 +71,15 @@ public class WechatKernelTest extends TestSupport {
     public void testLongParamsCheck() {
         log.info("====== WechatKernel#check-toolong ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("signature", new String[]{sg.next()});
-        data.put("timestamp", new String[]{sg.next()});
-        data.put("nonce", new String[]{sg.next()});
+        data.put("signature", new String[]{
+            sg.next()
+        });
+        data.put("timestamp", new String[]{
+            sg.next()
+        });
+        data.put("nonce", new String[]{
+            sg.next()
+        });
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -76,7 +90,9 @@ public class WechatKernelTest extends TestSupport {
     public void testLong1ParamsCheck() {
         log.info("====== WechatKernel#check-toolong1 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("signature", new String[]{sg.next()});
+        data.put("signature", new String[]{
+            sg.next()
+        });
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -87,7 +103,9 @@ public class WechatKernelTest extends TestSupport {
     public void testLong2ParamsCheck() {
         log.info("====== WechatKernel#check-toolong2 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("timestamp", new String[]{sg.next()});
+        data.put("timestamp", new String[]{
+            sg.next()
+        });
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -98,7 +116,9 @@ public class WechatKernelTest extends TestSupport {
     public void testLong3ParamsCheck() {
         log.info("====== WechatKernel#check-toolong3 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("nonce", new String[]{sg.next()});
+        data.put("nonce", new String[]{
+            sg.next()
+        });
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -165,13 +185,13 @@ public class WechatKernelTest extends TestSupport {
     public void testImageHandle() {
         log.info("====== WechatKernel#handle-image ======");
         String imgxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                         + "<CreateTime>1418182341</CreateTime>\n"
-                         + " <MsgType><![CDATA[image]]></MsgType>\n"
-                         + "<PicUrl><![CDATA[this is a url]]></PicUrl>\n"
-                         + "<MediaId><![CDATA[media_id]]></MediaId>\n"
-                         + "<MsgId>6091046778677430</MsgId>\n"
-                         + "</xml>";
+                        + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                        + "<CreateTime>1418182341</CreateTime>\n"
+                        + " <MsgType><![CDATA[image]]></MsgType>\n"
+                        + "<PicUrl><![CDATA[this is a url]]></PicUrl>\n"
+                        + "<MediaId><![CDATA[media_id]]></MediaId>\n"
+                        + "<MsgId>6091046778677430</MsgId>\n"
+                        + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(imgxml));
         assertNotNull(respxml);
@@ -183,14 +203,14 @@ public class WechatKernelTest extends TestSupport {
     public void testVoiceHandle() {
         log.info("====== WechatKernel#handle-voice ======");
         String voicexml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                         + "<CreateTime>1418182341</CreateTime>\n"
-                         + "<MsgType><![CDATA[voice]]></MsgType>\n"
-                         + "<MediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></MediaId>\n"
-                         + "<Format><![CDATA[arm]]></Format>\n"
-                         + "<Recognition><![CDATA[腾讯微信团队]]></Recognition>\n"
-                         + "<MsgId>1234567890123456</MsgId>\n"
-                         + "</xml>";
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182341</CreateTime>\n"
+                          + "<MsgType><![CDATA[voice]]></MsgType>\n"
+                          + "<MediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></MediaId>\n"
+                          + "<Format><![CDATA[arm]]></Format>\n"
+                          + "<Recognition><![CDATA[腾讯微信团队]]></Recognition>\n"
+                          + "<MsgId>1234567890123456</MsgId>\n"
+                          + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(voicexml));
         assertNotNull(respxml);
@@ -214,13 +234,13 @@ public class WechatKernelTest extends TestSupport {
     public void testVideoHandle() {
         log.info("====== WechatKernel#handle-video ======");
         String videoxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                         + "<CreateTime>1418182341</CreateTime>\n"
-                         + "<MsgType><![CDATA[video]]></MsgType>\n"
-                         + "<MediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></MediaId>\n"
-                         + "<ThumbMediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></ThumbMediaId>\n"
-                         + "<MsgId>1234567890123456</MsgId>\n"
-                         + "</xml>";
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182341</CreateTime>\n"
+                          + "<MsgType><![CDATA[video]]></MsgType>\n"
+                          + "<MediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></MediaId>\n"
+                          + "<ThumbMediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></ThumbMediaId>\n"
+                          + "<MsgId>1234567890123456</MsgId>\n"
+                          + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(videoxml));
         assertNotNull(respxml);
@@ -238,13 +258,13 @@ public class WechatKernelTest extends TestSupport {
     public void testShortVideoHandle() {
         log.info("====== WechatKernel#handle-shortvideo ======");
         String shortvxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                         + "<CreateTime>1418182341</CreateTime>\n"
-                         + "<MsgType><![CDATA[shortvideo]]></MsgType>\n"
-                         + "<MediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></MediaId>\n"
-                         + "<ThumbMediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></ThumbMediaId>\n"
-                         + "<MsgId>1234567890123456</MsgId>\n"
-                         + "</xml>";
+                           + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                           + "<CreateTime>1418182341</CreateTime>\n"
+                           + "<MsgType><![CDATA[shortvideo]]></MsgType>\n"
+                           + "<MediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></MediaId>\n"
+                           + "<ThumbMediaId><![CDATA[GOoTXFJ_Gll6-OAKS1DVMVYhhk1EVMNk]]></ThumbMediaId>\n"
+                           + "<MsgId>1234567890123456</MsgId>\n"
+                           + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(shortvxml));
         assertNotNull(respxml);
@@ -276,14 +296,14 @@ public class WechatKernelTest extends TestSupport {
     public void testLinkHandle() {
         log.info("====== WechatKernel#handle-location ======");
         String linkxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                      + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                      + "<CreateTime>1418182341</CreateTime>\n"
-                      + "<MsgType><![CDATA[link]]></MsgType>\n"
-                      + "<Title><![CDATA[公众平台官网链接]]></Title>\n"
-                      + "<Description><![CDATA[公众平台官网链接]]></Description>\n"
-                      + "<Url><![CDATA[url]]></Url>\n"
-                      + "<MsgId>1234567890123456</MsgId>\n"
-                      + "</xml>";
+                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                         + "<CreateTime>1418182341</CreateTime>\n"
+                         + "<MsgType><![CDATA[link]]></MsgType>\n"
+                         + "<Title><![CDATA[公众平台官网链接]]></Title>\n"
+                         + "<Description><![CDATA[公众平台官网链接]]></Description>\n"
+                         + "<Url><![CDATA[url]]></Url>\n"
+                         + "<MsgId>1234567890123456</MsgId>\n"
+                         + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(linkxml));
         assertNotNull(respxml);
@@ -295,12 +315,12 @@ public class WechatKernelTest extends TestSupport {
     public void testUnknowHandle() {
         log.info("====== WechatKernel#handle-unknow ======");
         String unknowxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                      + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                      + "<CreateTime>1418182341</CreateTime>\n"
-                      + "<MsgType><![CDATA[default]]></MsgType>\n"
-                      + "<Url><![CDATA[url]]></Url>\n"
-                      + "<MsgId>1234567890123456</MsgId>\n"
-                      + "</xml>";
+                           + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                           + "<CreateTime>1418182341</CreateTime>\n"
+                           + "<MsgType><![CDATA[default]]></MsgType>\n"
+                           + "<Url><![CDATA[url]]></Url>\n"
+                           + "<MsgId>1234567890123456</MsgId>\n"
+                           + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(unknowxml));
         assertNotNull(respxml);
@@ -312,11 +332,11 @@ public class WechatKernelTest extends TestSupport {
     public void testSubEventHandle() {
         log.info("====== WechatKernel#handle-subevent ======");
         String subxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                         + "<CreateTime>1418182341</CreateTime>\n"
-                         + "<MsgType><![CDATA[event]]></MsgType>\n"
-                         + "<Event><![CDATA[subscribe]]></Event>\n"
-                         + "</xml>";
+                        + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                        + "<CreateTime>1418182341</CreateTime>\n"
+                        + "<MsgType><![CDATA[event]]></MsgType>\n"
+                        + "<Event><![CDATA[subscribe]]></Event>\n"
+                        + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(subxml));
         assertNotNull(respxml);
@@ -344,13 +364,13 @@ public class WechatKernelTest extends TestSupport {
     public void testScanEventHandle() {
         log.info("====== WechatKernel#handle-scanevent ======");
         String scanxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                          + "<CreateTime>1418182341</CreateTime>\n"
-                          + "<MsgType><![CDATA[event]]></MsgType>\n"
-                          + "<Event><![CDATA[SCAN]]></Event>\n"
-                          + "<EventKey><![CDATA[SCENE_VALUE]]></EventKey>\n"
-                          + "<Ticket><![CDATA[TICKET]]></Ticket>\n"
-                          + "</xml>";
+                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                         + "<CreateTime>1418182341</CreateTime>\n"
+                         + "<MsgType><![CDATA[event]]></MsgType>\n"
+                         + "<Event><![CDATA[SCAN]]></Event>\n"
+                         + "<EventKey><![CDATA[SCENE_VALUE]]></EventKey>\n"
+                         + "<Ticket><![CDATA[TICKET]]></Ticket>\n"
+                         + "</xml>";
         WechatKernel wk = new WechatKernel();
         wk.setMpAct(mpAct);
         wk.setWechatHandler(new WechatDefHandler());
@@ -365,14 +385,14 @@ public class WechatKernelTest extends TestSupport {
     public void testLocationEventHandle() {
         log.info("====== WechatKernel#handle-locationevent ======");
         String locationxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                          + "<CreateTime>1418182341</CreateTime>\n"
-                          + "<MsgType><![CDATA[event]]></MsgType>\n"
-                          + "<Event><![CDATA[LOCATION]]></Event>\n"
-                          + "<Latitude>23.137466</Latitude>\n"
-                          + "<Longitude>113.352425</Longitude>\n"
-                          + "<Precision>119.385040</Precision>\n"
-                          + "</xml>";
+                             + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                             + "<CreateTime>1418182341</CreateTime>\n"
+                             + "<MsgType><![CDATA[event]]></MsgType>\n"
+                             + "<Event><![CDATA[LOCATION]]></Event>\n"
+                             + "<Latitude>23.137466</Latitude>\n"
+                             + "<Longitude>113.352425</Longitude>\n"
+                             + "<Precision>119.385040</Precision>\n"
+                             + "</xml>";
         WechatKernel wk = new WechatKernel();
         wk.setMpAct(mpAct);
         wk.setWechatHandler(new WechatDefHandler());
@@ -387,12 +407,12 @@ public class WechatKernelTest extends TestSupport {
     public void testClickEventHandle() {
         log.info("====== WechatKernel#handle-clickevent ======");
         String clickxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                             + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                             + "<CreateTime>1418182341</CreateTime>\n"
-                             + "<MsgType><![CDATA[event]]></MsgType>\n"
-                             + "<Event><![CDATA[CLICK]]></Event>\n"
-                             + "<EventKey><![CDATA[EVENTKEY]]></EventKey>\n"
-                             + "</xml>";
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182341</CreateTime>\n"
+                          + "<MsgType><![CDATA[event]]></MsgType>\n"
+                          + "<Event><![CDATA[CLICK]]></Event>\n"
+                          + "<EventKey><![CDATA[EVENTKEY]]></EventKey>\n"
+                          + "</xml>";
         WechatKernel wk = new WechatKernel();
         wk.setMpAct(mpAct);
         wk.setWechatHandler(new WechatDefHandler());
@@ -427,15 +447,15 @@ public class WechatKernelTest extends TestSupport {
     public void testScanPushEventHandle() {
         log.info("====== WechatKernel#handle-scanpushevent ======");
         String spxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
-                         + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
-                         + "<CreateTime>1418182341</CreateTime>\n"
-                         + "<MsgType><![CDATA[event]]></MsgType>\n"
-                         + "<Event><![CDATA[scancode_push]]></Event>\n"
-                         + "<EventKey><![CDATA[6]]></EventKey>\n"
-                         + "<ScanCodeInfo><ScanType><![CDATA[qrcode]]></ScanType>\n"
-                         + "<ScanResult><![CDATA[1]]></ScanResult>\n"
-                         + "</ScanCodeInfo>\n"
-                         + "</xml>";
+                       + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                       + "<CreateTime>1418182341</CreateTime>\n"
+                       + "<MsgType><![CDATA[event]]></MsgType>\n"
+                       + "<Event><![CDATA[scancode_push]]></Event>\n"
+                       + "<EventKey><![CDATA[6]]></EventKey>\n"
+                       + "<ScanCodeInfo><ScanType><![CDATA[qrcode]]></ScanType>\n"
+                       + "<ScanResult><![CDATA[1]]></ScanResult>\n"
+                       + "</ScanCodeInfo>\n"
+                       + "</xml>";
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(spxml));
         assertNotNull(respxml);
@@ -547,22 +567,43 @@ public class WechatKernelTest extends TestSupport {
     }
 
     @Test
-    public void testTemplateFinshJobEventHandle() {
-        log.info("====== WechatKernel#handle-selectlocationevent ======");
+    public void testSentTemplateFinshJobEventHandle() {
+        log.info("====== WechatKernel#handle-senttemplateevent ======");
         String tmlfjxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
                           + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
                           + "<CreateTime>1418182341</CreateTime>\n"
                           + "<MsgType><![CDATA[event]]></MsgType>\n"
                           + "<Event><![CDATA[TEMPLATESENDJOBFINISH]]></Event>\n"
                           + "<MsgID>200163836</MsgID>\n"
+                          + "<Status><![CDATA[sendsuccess]]></Status>\n"
                           + "</xml>";
-        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        WechatKernel wk = new WechatKernel(mpAct, new PushEventHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(tmlfjxml));
         assertNotNull(respxml);
-        assertFalse(respxml.equals("success"));
+        assertTrue(respxml.equals("success"));
         log.info(respxml);
-        TmplFinshJobEvent tfje = new TmplFinshJobEvent();
-        TmplFinshJobEvent.Status s = TmplFinshJobEvent.Status.success;
+    }
+
+    @Test
+    public void testSentAllFinshJobEventHandle() {
+        log.info("====== WechatKernel#handle-sentallevent ======");
+        String tmlfjxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                          + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                          + "<CreateTime>1418182341</CreateTime>\n"
+                          + "<MsgType><![CDATA[event]]></MsgType>\n"
+                          + "<Event><![CDATA[MASSSENDJOBFINISH]]></Event>\n"
+                          + "<MsgID>200163836</MsgID>\n"
+                          + "<Status><![CDATA[sendsuccess]]></Status>\n"
+                          + "<TotalCount>100</TotalCount>\n"
+                          + "<FilterCount>80</FilterCount>\n"
+                          + "<SentCount>75</SentCount>\n"
+                          + "<ErrorCount>5</ErrorCount>\n"
+                          + "</xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new PushEventHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(tmlfjxml));
+        assertNotNull(respxml);
+        assertTrue(respxml.equals("success"));
+        log.info(respxml);
     }
 
     @Test
@@ -588,6 +629,60 @@ public class WechatKernelTest extends TestSupport {
         log.info(respxml);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testErrorXmlHandle() {
+        log.info("====== WechatKernel#handle-viewevent ======");
+        String newxml = "<xml><ToUserName><![CDATA[gh_15d5865s2c]]></ToUserName>\n"
+                        + "<FromUserName><![CDATA[oa_H3239023j32324243]]></FromUserName>\n"
+                        + "<CreateTime>1418182341</CreateTime>\n"
+                        + "<MsgType><![CDATA[text]]></MsgType>\n"
+                        + "<Content><![CDATA[location_receive]]></Content>\n"
+                        + "/xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(newxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testDecryptMsgFailure() {
+        log.info("====== WechatKernel#encryptmsg ======");
+        data.clear();
+        data.put("nonce", new String[]{"xxxxxx"});
+        data.put("timestamp", new String[]{"1409304348"});
+        data.put("msg_signature", new String[]{"9f8883ff0676a51299747fc2d4b2e6a4be9207cb"});
+        data.put("encrypt_type", new String[]{"aes"});
+        mpAct.setAESKey("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG");
+        mpAct.setAppId("wxb11529c136998cb6");
+        mpAct.setToken("pamtest");
+        String encryptxml = "<xml><Encrypt><![CDATA[8tliIQIIrfnrQe3t/TMenAG7LBnLHiK584YWLHuYxw/AW+PlKe9yNl5/9Gj+M3wgoTzdz+YT9ZiouUS4/gY2sCthFagSugVNP59G8CHwGPk+WP13LvFr/Xr3mYACI/qB9SsLA0z08i1FwXga85Xh/kBZO7yUXLQIcpnZEiCjuQDngfS+hjtp9nCTz2W2CGqV0jk/6oIUD1TB6aAQLyh05/12WF82swc3ANQdM1SEhFr/9gQriTYh/4Pt0CUlPR9ZJgDC8ci4C33kpDQhqSC79u/UzHusW9zigjVsb4eDm9BrPNPAnXRYc/0MyBlGYtdtsnda+QdvAeR2UZwcec3Ro5QUvdE9BSNeAC+Rg9G+bV0/Yug3CT4ge9gkjZp1cqYDUnE3f3aSoZ0OOpNL0dhg21G1rGeOuDkT49PjRw2D9NUIIPZrHqQeCsQpQ3t2vrIUwfbUyqU3T0MpdqiceZWRwWTm7HH7DK9XbHI6svpU3cw49rwLoe3KUq/T2V/LjFENAqCX708ZgDS1f4fvlZg+Yc7BmMGZrpHr7WYTUNUa4u3uoUNj9fJur23BlIlmCW6/ve/wJK6qKYh+KI4sZluGc1pqERPmx/23OFS8ip0JSt4jrJb5QEd445BoAQvoY6Ii]]></Encrypt><MsgSignature><![CDATA[cb88d9fc51272bfbc6f0be9ff96874293a435728]]></MsgSignature><TimeStamp>1409304348</TimeStamp><Nonce><![CDATA[xxxxxx]]></Nonce></xml>";
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(encryptxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
+    
+    @Test
+    public void testDecryptMsg() {
+        log.info("====== WechatKernel#encryptmsg ======");
+        data.clear();
+        data.put("nonce", new String[]{"xxxxxx"});
+        data.put("timestamp", new String[]{"1409304348"});
+        data.put("msg_signature", new String[]{"92aa0aeee3943305c0127627dad968bd73e32428"});
+        data.put("encrypt_type", new String[]{"aes"});
+        MPAccount mpact = new MPAccount();
+        mpact.setAESKey("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG");
+        mpact.setAppId("wxb11529c136998cb6");
+        mpact.setToken("pamtest");
+        String encryptxml = "<xml><Encrypt><![CDATA[pGaTAHG6ATJgrx2E+qL6koE2BDyy8F7DM80suSNFWvGtOUYUhPPlX+8pkQ7K3bwy/5EQfsJFysPYpUz5Hv5IFkBQIgWclg3Y0I8VxSTl8mxriTf4a4hO6iqLRLcq+DoicuxtgiMSVs/k4zpVZnLjcooiWjf1xRj4nxl2Bnq8mL54P0nljMZkjhtofnFqJdfCDA9cZyIHLzF4zN1uxDHSXALaEkgEMPzUdCHAxU6UvnSUuZ0qBFn2b9b9N7NgZGsd+L6AxJb6f8ouzb4N07XryO9O9omboNO1ZvEWru9x1Em78YYBtXhepn3q00HsQWlSq++IteRh+0laLl0RO8aNXG4jvPdaCSXysJFVN0eqzfimQzzLaxdY4PMQ+4pt9mOxdUfbvZG3zrug3rDkqNQrU4mnc/BXrdU4+E/7wfUMYlVzPwcfxvDyFbBywCKofeOUxohNS2BSipkpfCJ07/gis/6iwrchJflgwGR8r3/Y17SIzeAAeUdau/tTYTgQIiPa6gY/A68O4KowHzpcsGLpJYhDu4XsEnK+sxNOFqTHV16UAkeWHumURHJ7Wnw2D7hz/vhqMLGqZ/VH2qbDKaQJ43fNR93rGEGRdwRW6xuw0l1Oy9WoVDNxJqJEiEo+AgYJEzDPuY4i3pz8ewUGEZH9FFiw7JH0td5qlHONVHid2yZqN2QHijzdch4Fhfg5yTvjO1zxKR+wy9oigsv0VEfllQ==]]></Encrypt><MsgSignature><![CDATA[92aa0aeee3943305c0127627dad968bd73e32428]]></MsgSignature><TimeStamp>1409304348</TimeStamp><Nonce><![CDATA[xxxxxx]]></Nonce></xml>";
+        WechatKernel wk = new WechatKernel(mpact, new WechatDefHandler(), data);
+        String respxml = wk.handle(StreamTool.toStream(encryptxml));
+        assertNotNull(respxml);
+        assertFalse(respxml.equals("success"));
+        log.info(respxml);
+    }
 
     class VoiceHandler extends WechatDefHandler {
 
@@ -619,6 +714,20 @@ public class WechatKernelTest extends TestSupport {
             vdm.setDescription("习主席联合国峰会演讲");
             vdm.setMediaId("Hfdjlioieijl#22iojkljlkjlutfd");
             return super.video(vm);
+        }
+
+    }
+
+    class PushEventHandler extends WechatDefHandler {
+
+        @Override
+        public void eSentTmplJobFinish(SentTmlJobEvent stje) {
+            log.info(stje);
+        }
+
+        @Override
+        public void eSentAllJobFinish(SentAllJobEvent saje) {
+            log.info(saje);
         }
 
     }

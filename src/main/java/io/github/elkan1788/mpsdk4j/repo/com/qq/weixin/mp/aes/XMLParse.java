@@ -60,6 +60,7 @@ class XMLParse {
                     if (qName.equalsIgnoreCase("xml")) {
                         result[0] = 0;
                         map.put("result", result);
+                        return;
                     }
                 }
 

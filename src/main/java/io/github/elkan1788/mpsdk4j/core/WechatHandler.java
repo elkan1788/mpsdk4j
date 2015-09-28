@@ -80,6 +80,15 @@ public interface WechatHandler {
     BasicMsg video(VideoMsg vim);
 
     /**
+     * 处理短视频消息
+     *
+     * @param vim
+     *            短视频消息
+     * @return 回复消息
+     */
+    BasicMsg shortVideo(VideoMsg vim);
+
+    /**
      * 处理地理位置消息
      * 
      * @param lm
@@ -208,7 +217,7 @@ public interface WechatHandler {
      * @param stje
      *            发送模板消息结果事件
      */
-    void eTemplateFinish(SentTmlJobEvent stje);
+    void eSentTmplJobFinish(SentTmlJobEvent stje);
 
     /**
      * 处理群发消息事件消息
@@ -216,6 +225,6 @@ public interface WechatHandler {
      * @param saje
      *            群发消息结果事件
      */
-    void eSendJobFinish(SentAllJobEvent saje);
+    void eSentAllJobFinish(SentAllJobEvent saje);
 
 }

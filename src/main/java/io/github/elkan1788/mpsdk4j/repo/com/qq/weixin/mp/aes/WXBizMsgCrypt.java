@@ -59,11 +59,11 @@ public class WXBizMsgCrypt {
 
     // 生成4个字节的网络字节序
     private byte[] getNetworkBytesOrder(int sourceNumber) {
-        byte[] orderBytes = new byte[ 4];
-        orderBytes[ 3] = (byte) (sourceNumber & 0xFF);
-        orderBytes[ 2] = (byte) (sourceNumber >> 8 & 0xFF);
-        orderBytes[ 1] = (byte) (sourceNumber >> 16 & 0xFF);
-        orderBytes[ 0] = (byte) (sourceNumber >> 24 & 0xFF);
+        byte[] orderBytes = new byte[4];
+        orderBytes[3] = (byte) (sourceNumber & 0xFF);
+        orderBytes[2] = (byte) (sourceNumber >> 8 & 0xFF);
+        orderBytes[1] = (byte) (sourceNumber >> 16 & 0xFF);
+        orderBytes[0] = (byte) (sourceNumber >> 24 & 0xFF);
         return orderBytes;
     }
 
@@ -72,7 +72,7 @@ public class WXBizMsgCrypt {
         int sourceNumber = 0;
         for (int i = 0; i < 4; i++) {
             sourceNumber <<= 8;
-            sourceNumber |= orderBytes[ i] & 0xff;
+            sourceNumber |= orderBytes[i] & 0xff;
         }
         return sourceNumber;
     }
@@ -261,7 +261,7 @@ public class WXBizMsgCrypt {
         Object[] encrypt = XMLParse.extract(postData);
 
         // 验证安全签名
-        String signature = SHA1.calculate(token, timeStamp, nonce, String.valueOf(encrypt[ 1]));
+        String signature = SHA1.calculate(token, timeStamp, nonce, String.valueOf(encrypt[1]));
 
         // 和URL中的签名比较是否相等
         if (!signature.equals(msgSignature)) {
@@ -269,7 +269,7 @@ public class WXBizMsgCrypt {
         }
 
         // 解密
-        String result = decrypt(String.valueOf(encrypt[ 1]));
+        String result = decrypt(String.valueOf(encrypt[1]));
         return result;
     }
 
