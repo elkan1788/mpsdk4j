@@ -1,7 +1,10 @@
 package io.github.elkan1788.mpsdk4j.api;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
@@ -16,7 +19,6 @@ public class TemplateAPITest extends APITestSupport {
 
     private static final Log log = Logs.get();
 
-    @SuppressWarnings("unused")
     private TemplateAPI ta;
 
     @Before
@@ -26,14 +28,20 @@ public class TemplateAPITest extends APITestSupport {
         ta = WechatAPIImpl.create(mpAct);
     }
 
-    @Test
+    @Ignore
     public void testSetIndustry() {
-
+        log.info("====== TemplateAPITest#setIndustry ======");
+        boolean flag = ta.setIndustry(1, 2);
+        assertTrue(flag);
+        log.info(flag);
     }
 
-    @Test
+    @Ignore
     public void testGetTemplateId() {
-
+        log.info("====== TemplateAPITest#getTemplateId ======");
+        String tmplid = ta.getTemplateId("5A90LqXLMHUVd0d1PFv-TezTxYWf2PBDV1APvAMeb1E");
+        assertNotNull(tmplid);
+        log.info(tmplid);
     }
 
 }

@@ -1,17 +1,19 @@
 package io.github.elkan1788.mpsdk4j.util;
 
+import io.github.elkan1788.mpsdk4j.TestSupport;
+import io.github.elkan1788.mpsdk4j.vo.ApiResult;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.nutz.json.Json;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
-
-import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 
 /**
  * HttpTool 测试
@@ -20,13 +22,22 @@ import io.github.elkan1788.mpsdk4j.vo.ApiResult;
  * @since 2.0
  */
 @SuppressWarnings("unchecked")
-public class HttpToolTest {
+public class HttpToolTest extends TestSupport {
 
-    private String openId = "";
-    private String appId = "";
-    private String appSecret = "";
-    private String accessToken = "";
-    private String mediaId = "";
+    private String openId;
+    private String appId;
+    private String appSecret;
+    private String accessToken;
+    private String mediaId;
+
+    @Before
+    public void init() {
+        this.openId = _cr.get("openId");
+        this.appId = _cr.get("appId");
+        this.appSecret = _cr.get("appSecret");
+        this.accessToken = _cr.get("accessToken");
+        this.mediaId = _cr.get("mediaId");
+    }
 
     // 注意access_token接口调用次数,建议跑一次就关闭
     @Ignore
@@ -71,6 +82,7 @@ public class HttpToolTest {
         System.out.println(mediaId);
     }
 
+    // @Ignore
     @Test
     public void testDownload() {
         String url = String.format("https://api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s",

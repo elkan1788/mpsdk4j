@@ -20,19 +20,20 @@ public class MessageAPITest extends APITestSupport {
 
     private MessageAPI ma;
 
-    private String openId = "";
+    private String openId;
 
     @Before
     public void init() {
         log.info("====== MessageAPITest ======");
         super.init();
+        this.openId = _cr.get("openId");
         ma = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testSendTemplateMsg() {
         log.info("====== MessageAPI#sendTemplateMsg ======");
-        String tmlId = "";
+        String tmlId = _cr.get("tmplId");
         Template tml = new Template("title", "测试");
         String url = "https://www.google.com";
         long msgid = ma.sendTemplateMsg(openId, tmlId, "#119EF3", url, tml);

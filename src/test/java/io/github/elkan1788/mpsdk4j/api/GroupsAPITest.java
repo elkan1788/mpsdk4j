@@ -27,9 +27,6 @@ public class GroupsAPITest extends APITestSupport {
     private static final Log log = Logs.get();
 
     private GroupsAPI ga;
-    private String openId = "";
-    private List<String> openIds;
-    private int groupId = 100;
 
     @Override
     @Before
@@ -37,9 +34,6 @@ public class GroupsAPITest extends APITestSupport {
         log.info("====== GroupsAPITest ======");
         super.init();
         ga = WechatAPIImpl.create(mpAct);
-        openIds = new ArrayList<String>();
-        openIds.add("");
-        openIds.add("");
     }
 
     @Test
@@ -88,6 +82,9 @@ public class GroupsAPITest extends APITestSupport {
     @Test
     public void testBatchMove2Group() {
         log.info("====== GroupsAPI#batchMove2Group ======");
+        List<String> openIds = new ArrayList<String>();
+        openIds.add(openId);
+        openIds.add(openId2);
         boolean flag = ga.batchMove2Group(openIds, groupId);
         assertTrue(flag);
         log.info(flag);

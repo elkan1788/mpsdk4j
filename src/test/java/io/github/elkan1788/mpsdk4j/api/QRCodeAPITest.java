@@ -24,13 +24,14 @@ public class QRCodeAPITest extends APITestSupport {
 
     private QRCodeAPI qa;
     private int expireSeconds = 604800;
-    private String ticket = "";
+    private String ticket;
 
     @Override
     @Before
     public void init() {
         log.info("====== QRCodeAPITest ======");
         super.init();
+        this.ticket = _cr.get("ticket");
         qa = WechatAPIImpl.create(mpAct);
     }
 

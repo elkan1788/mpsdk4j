@@ -30,8 +30,6 @@ public class UserAPITest extends APITestSupport {
 
     private UserAPI ua;
 
-    private String openId = "";
-
     @Before
     public void init() {
         log.info("====== UserAPITest ====== ");
@@ -68,7 +66,7 @@ public class UserAPITest extends APITestSupport {
         log.info("====== UserAPI#getFollowers ====== ");
         List<Follower2> getfs = new ArrayList<Follower2>();
         getfs.add(new Follower2(openId));
-        getfs.add(new Follower2(""));
+        getfs.add(new Follower2(_cr.get("openId2")));
 
         List<Follower> fs = ua.getFollowers(getfs);
         assertNotNull(fs);

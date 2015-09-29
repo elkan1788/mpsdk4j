@@ -492,7 +492,7 @@ public class WechatAPIImpl implements WechatAPI {
                 return true;
             }
 
-            log.errorf("Update mp[%s] user[%d] remark[%s] failed. There try %d items.",
+            log.errorf("Update mp[%s] user[%s] remark[%s] failed. There try %d items.",
                        mpAct.getMpId(),
                        openId,
                        remark,
