@@ -1,6 +1,9 @@
 package io.github.elkan1788.mpsdk4j.vo;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 /**
@@ -22,59 +25,59 @@ public class ApiResultTest {
     @Test
     public void testGetJson() {
         ApiResult ar = ApiResult.create(sucJson);
-        Assert.assertEquals(sucJson, ar.getJson());
+        assertEquals(sucJson, ar.getJson());
     }
 
     @Test
     public void testGetErrCode() {
         ApiResult ar = ApiResult.create(errJson);
-        Assert.assertEquals(-1, ar.getErrCode().intValue());
+        assertEquals(-1, ar.getErrCode().intValue());
     }
 
     @Test
     public void testGetErrMsg() {
         ApiResult ar = ApiResult.create(errJson);
-        Assert.assertEquals("System busy.", ar.getErrMsg());
+        assertEquals("System busy.", ar.getErrMsg());
     }
 
     @Test
     public void testGetErrCNMsg() {
         ApiResult ar = ApiResult.create(sucJson);
-        Assert.assertEquals("请求成功.", ar.getErrCNMsg());
+        assertEquals("请求成功.", ar.getErrCNMsg());
     }
 
     @Test
     public void testIsSuccess() {
         ApiResult ar = ApiResult.create(errJson);
-        Assert.assertTrue(!ar.isSuccess());
+        assertTrue(!ar.isSuccess());
     }
 
     @Test
     public void testIsAccessTokenInvalid() {
         ApiResult ar = ApiResult.create(atErrJson1);
-        Assert.assertFalse(ar.isSuccess());
+        assertFalse(ar.isSuccess());
         ar = ApiResult.create(atErrJson2);
-        Assert.assertFalse(ar.isSuccess());
+        assertFalse(ar.isSuccess());
         ar = ApiResult.create(atErrJson3);
-        Assert.assertFalse(ar.isSuccess());
+        assertFalse(ar.isSuccess());
         ar = ApiResult.create(atErrJson4);
-        Assert.assertFalse(ar.isSuccess());
+        assertFalse(ar.isSuccess());
     }
 
     @Test
     public void testUnknowError() {
         ApiResult ar = ApiResult.create(unKnowErrJson);
-        Assert.assertEquals(unKnowErrJson, ar.getJson());
-        Assert.assertEquals("未知错误!", ar.getErrCNMsg());
+        assertEquals(unKnowErrJson, ar.getJson());
+        assertEquals("未知错误!", ar.getErrCNMsg());
     }
 
     @Test
     public void testSucWithoutErrCode() {
         String json = "{'access_token':'ACCESS_TOKEN','expires_in':7200}";
         ApiResult ar = ApiResult.create(json);
-        Assert.assertEquals(json, ar.getJson());
-        Assert.assertEquals("Unknow Error!", ar.getErrMsg());
-        Assert.assertTrue(ar.isSuccess());
+        assertEquals(json, ar.getJson());
+        assertEquals("Unknow Error!", ar.getErrMsg());
+        assertTrue(ar.isSuccess());
     }
 
 }

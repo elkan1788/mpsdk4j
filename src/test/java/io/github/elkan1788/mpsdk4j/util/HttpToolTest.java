@@ -1,5 +1,7 @@
 package io.github.elkan1788.mpsdk4j.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import io.github.elkan1788.mpsdk4j.TestSupport;
 import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 
@@ -7,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -47,11 +48,11 @@ public class HttpToolTest extends TestSupport {
                                    appId,
                                    appSecret);
         String content = HttpTool.get(url);
-        Assert.assertNotNull(content);
+        assertNotNull(content);
         Map<String, String> data = (Map<String, String>) Json.fromJson(content);
         accessToken = data.get("access_token");
-        Assert.assertNotNull(accessToken);
-        Assert.assertNotNull(data.get("expires_in"));
+        assertNotNull(accessToken);
+        assertNotNull(data.get("expires_in"));
     }
 
     @Test
@@ -63,8 +64,8 @@ public class HttpToolTest extends TestSupport {
                       + openId
                       + "\",\"msgtype\":\"text\",\"text\":{\"content\":\"Hello World!\r\n世界，你好！\"}}";
         String content = HttpTool.post(url, body);
-        Assert.assertNotNull(content);
-        Assert.assertEquals("{\"errcode\":0,\"errmsg\":\"ok\"}", content);
+        assertNotNull(content);
+        assertEquals("{\"errcode\":0,\"errmsg\":\"ok\"}", content);
 
     }
 
@@ -75,9 +76,9 @@ public class HttpToolTest extends TestSupport {
                                    "image");
         File file = new File(this.getClass().getResource("/mpsdk4j-logo.png").getFile());
         String content = HttpTool.upload(url, file);
-        Assert.assertNotNull(content);
+        assertNotNull(content);
         Map<String, String> nm = (Map<String, String>) Json.fromJson(content);
-        Assert.assertNotNull(nm.get("created_at"));
+        assertNotNull(nm.get("created_at"));
         mediaId = nm.get("media_id");
         System.out.println(mediaId);
     }

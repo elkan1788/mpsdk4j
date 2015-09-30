@@ -1,10 +1,14 @@
 package io.github.elkan1788.mpsdk4j.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Collection;
 import java.util.List;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,19 +37,19 @@ public class ConfigReaderTest {
     @After
     public void testClear() {
         cr.clear();
-        Assert.assertNull(cr.get("0"));
+        assertNull(cr.get("0"));
     }
 
     @Test
     public void testAll() {
         List<String> keys = cr.keys();
         Collection<String> values = cr.values();
-        Assert.assertEquals(keys.size(), values.size());
+        assertEquals(keys.size(), values.size());
     }
 
     @Test
     public void testGet() {
-        Assert.assertNotNull(cr.get("0"));
+        assertNotNull(cr.get("0"));
     }
 
     @Test(expected = NullPointerException.class)
@@ -60,17 +64,17 @@ public class ConfigReaderTest {
 
     @Test
     public void testGetInt() {
-        Assert.assertEquals(cr.getInt("int"), INTEGER);
+        assertEquals(cr.getInt("int"), INTEGER);
     }
 
     @Test
     public void testGetLong() {
-        Assert.assertEquals(cr.getLong("long"), LONG);
+        assertEquals(cr.getLong("long"), LONG);
     }
 
     @Test
     public void testGetBoolean() {
-        Assert.assertTrue(cr.getBoolean("bool"));
+        assertTrue(cr.getBoolean("bool"));
     }
 
 }

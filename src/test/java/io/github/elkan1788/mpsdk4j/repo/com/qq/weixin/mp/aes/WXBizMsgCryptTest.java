@@ -1,14 +1,13 @@
 package io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes;
 
 import static org.junit.Assert.assertNotNull;
+import io.github.elkan1788.mpsdk4j.util.StreamTool;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-
-import io.github.elkan1788.mpsdk4j.util.StreamTool;
 
 /**
  * WXBizMsgCrypt 测试
@@ -38,7 +37,6 @@ public class WXBizMsgCryptTest {
             pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
         }
         catch (AesException e) {
-            e.printStackTrace();
             throw Lang.wrapThrow(e);
         }
     }
@@ -52,7 +50,6 @@ public class WXBizMsgCryptTest {
             log.info(encryptmsg.replaceAll("\\n", ""));
         }
         catch (AesException e) {
-            e.printStackTrace();
             throw Lang.wrapThrow(e);
         }
     }
