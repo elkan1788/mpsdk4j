@@ -24,7 +24,7 @@ public class SendPicsInfo {
     }
 
     public SendPicsInfo(int count, List<PicItem> picList) {
-        super();
+        this();
         this.count = count;
         this.picList = picList;
     }

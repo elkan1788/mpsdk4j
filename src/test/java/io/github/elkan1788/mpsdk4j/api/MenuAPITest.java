@@ -2,8 +2,6 @@ package io.github.elkan1788.mpsdk4j.api;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import io.github.elkan1788.mpsdk4j.common.EventType;
-import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +12,9 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+
+import io.github.elkan1788.mpsdk4j.common.EventType;
+import io.github.elkan1788.mpsdk4j.vo.api.Menu;
 
 /**
  * CustomMenuAPI 测试
@@ -39,10 +40,16 @@ public class MenuAPITest extends APITestSupport {
     @Test
     public void testDelMenu() {
         log.info("====== MenuAPI#delMenu ======");
+        List<Menu> menus = cma.getMenu();
+        assertNotNull(menus);
+        for (Menu m : menus) {
+            log.info(m);
+        }
+
         boolean flag = cma.delMenu();
         assertTrue(flag);
 
-        List<Menu> menus = cma.getMenu();
+        menus = cma.getMenu();
         assertTrue(menus == null);
     }
 
@@ -65,11 +72,5 @@ public class MenuAPITest extends APITestSupport {
 
         boolean flag = cma.createMenu(csdn, oschina, map);
         assertTrue(flag);
-
-        List<Menu> menus = cma.getMenu();
-        assertNotNull(menus);
-        for (Menu m : menus) {
-            log.info(m);
-        }
     }
 }

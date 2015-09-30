@@ -22,11 +22,10 @@ public class SendPhotosEvent extends MenuEvent {
 
     }
 
-    @SuppressWarnings("unchecked")
     public SendPhotosEvent(Map<String, String> values) {
         super(values);
-        this.sendPicsInfo = new SendPicsInfo(Integer.parseInt(values.get("count")),
-                                             Json.fromJson(List.class, values.get("picList")));
+        List<PicItem> items = Json.fromJsonAsList(PicItem.class, values.get("picList"));
+        this.sendPicsInfo = new SendPicsInfo(Integer.parseInt(values.get("count")), items);
     }
 
     public SendPicsInfo getSendPicsInfo() {

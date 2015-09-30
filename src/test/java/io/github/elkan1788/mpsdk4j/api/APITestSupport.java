@@ -1,20 +1,20 @@
 package io.github.elkan1788.mpsdk4j.api;
 
+import org.junit.Before;
+
 import io.github.elkan1788.mpsdk4j.TestSupport;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-
-import org.junit.Before;
 
 public class APITestSupport extends TestSupport {
 
     protected MPAccount mpAct;
-    protected String openId;
-    protected String openId2;
-    protected int groupId;
-    protected String accessToken;
-    protected String mediaId;
-    protected String ticket;
-    protected String tmplId;
+    protected static String openId;
+    protected static String openId2;
+    protected static int groupId;
+    protected static String accessToken;
+    protected static String mediaId;
+    protected static String ticket;
+    protected static String tmplId;
 
     @Before
     public void init() {
@@ -23,13 +23,13 @@ public class APITestSupport extends TestSupport {
         mpAct.setAppId(_cr.get("appId"));
         mpAct.setAppSecret(_cr.get("appSecret"));
 
-        this.openId = _cr.get("openId");
-        this.openId2 = _cr.get("openId2");
-        this.groupId = _cr.getInt("groupId");
-        this.accessToken = _cr.get("accessToken");
-        this.mediaId = _cr.get("mediaId");
-        this.ticket = _cr.get("ticket");
-        this.tmplId = _cr.get("tmplId");
+        openId = _cr.get("openId");
+        openId2 = _cr.get("openId2");
+        groupId = _cr.getInt("groupId");
+        accessToken = _cr.get("accessToken");
+        mediaId = _cr.get("mediaId");
+        ticket = _cr.get("ticket");
+        tmplId = _cr.get("tmplId");
     }
 
 }
