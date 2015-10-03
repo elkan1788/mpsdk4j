@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 
 import io.github.elkan1788.mpsdk4j.api.APITest;
 import io.github.elkan1788.mpsdk4j.core.CoreTest;
+import io.github.elkan1788.mpsdk4j.mvc.MVCTest;
 import io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.AESTest;
 import io.github.elkan1788.mpsdk4j.util.UtilTest;
 import io.github.elkan1788.mpsdk4j.vo.VOTest;
@@ -22,7 +23,8 @@ import io.github.elkan1788.mpsdk4j.vo.VOTest;
     VOTest.class,
     APITest.class,
     CoreTest.class,
-    AESTest.class
+    AESTest.class,
+    MVCTest.class
 })
 public class RunTest {
 

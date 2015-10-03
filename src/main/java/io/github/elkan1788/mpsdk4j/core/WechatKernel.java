@@ -154,7 +154,12 @@ public class WechatKernel {
                            Lang.equals(validsign, sign),
                            validsign);
             }
-            return get("echostr");
+
+            if(sign.equals(validsign)){
+                return get("echostr");
+            }
+
+            return "error";
         }
         catch (AesException e) {
             throw Lang.wrapThrow(new WechatRunTimeException("校验服务器认证出现异常", e));

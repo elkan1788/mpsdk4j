@@ -1,15 +1,13 @@
 package io.github.elkan1788.mpsdk4j.mvc;
 
-import io.github.elkan1788.mpsdk4j.core.WechatDefHandler;
-import io.github.elkan1788.mpsdk4j.core.WechatKernel;
-import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.github.elkan1788.mpsdk4j.core.WechatKernel;
 
 /**
  * Servlet环境接入
@@ -32,11 +30,7 @@ public abstract class HttpServletSupport extends HttpServlet {
      * </ol>
      */
     @Override
-    public void init() throws ServletException {
-        MPAccount mpAct = new MPAccount();
-        _wk.setMpAct(mpAct);
-        _wk.setWechatHandler(new WechatDefHandler());
-    }
+    public void init() throws ServletException {}
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
