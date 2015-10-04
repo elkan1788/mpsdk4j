@@ -44,18 +44,10 @@ public class WechatKernelTest extends TestSupport {
         mpAct.setAppSecret(_cr.get("appSecret"));
         mpAct.setToken(_cr.get("token"));
         data = new HashMap<String, String[]>();
-        data.put("signature", new String[]{
-            "ffbcb8aca5c4c7d5da4e41461908470cf07a518a"
-        });
-        data.put("timestamp", new String[]{
-            "1442726144"
-        });
-        data.put("nonce", new String[]{
-            "1439307736"
-        });
-        data.put("echostr", new String[]{
-            "1439307541"
-        });
+        data.put("signature", new String[]{"af06ae6995cb1979e465d3b8015509ad61bb7204"});
+        data.put("timestamp", new String[]{"1442726144"});
+        data.put("nonce", new String[]{"1439307736"});
+        data.put("echostr", new String[]{"1439307541"});
     }
 
     @Test
@@ -72,15 +64,9 @@ public class WechatKernelTest extends TestSupport {
     public void testLongParamsCheck() {
         log.info("====== WechatKernel#check-toolong ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("signature", new String[]{
-            sg.next()
-        });
-        data.put("timestamp", new String[]{
-            sg.next()
-        });
-        data.put("nonce", new String[]{
-            sg.next()
-        });
+        data.put("signature", new String[]{sg.next()});
+        data.put("timestamp", new String[]{sg.next()});
+        data.put("nonce", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -91,9 +77,7 @@ public class WechatKernelTest extends TestSupport {
     public void testLong1ParamsCheck() {
         log.info("====== WechatKernel#check-toolong1 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("signature", new String[]{
-            sg.next()
-        });
+        data.put("signature", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -104,9 +88,7 @@ public class WechatKernelTest extends TestSupport {
     public void testLong2ParamsCheck() {
         log.info("====== WechatKernel#check-toolong2 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("timestamp", new String[]{
-            sg.next()
-        });
+        data.put("timestamp", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -117,9 +99,7 @@ public class WechatKernelTest extends TestSupport {
     public void testLong3ParamsCheck() {
         log.info("====== WechatKernel#check-toolong3 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("nonce", new String[]{
-            sg.next()
-        });
+        data.put("nonce", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -162,7 +142,7 @@ public class WechatKernelTest extends TestSupport {
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
-        assertTrue(echo.equals(data.get("echostr")[ 0]));
+        assertTrue(echo.equals(data.get("echostr")[0]));
     }
 
     @Test
