@@ -4,8 +4,8 @@ script: mvn clean package -Dmaven.test.skip=true
 jdk:
   - openjdk6
   - openjdk7
+  - oraclejdk6
   - oraclejdk7
-  - oraclejdk8
 # whitelist
 branches:
   only:
