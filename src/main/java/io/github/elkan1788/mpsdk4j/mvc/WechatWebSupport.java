@@ -1,13 +1,11 @@
 package io.github.elkan1788.mpsdk4j.mvc;
 
-import io.github.elkan1788.mpsdk4j.core.WechatDefHandler;
-import io.github.elkan1788.mpsdk4j.core.WechatKernel;
-import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.github.elkan1788.mpsdk4j.core.WechatKernel;
 
 /**
  * 各种WEB容器环境接入
@@ -27,11 +25,7 @@ public abstract class WechatWebSupport {
      * <li>微信消息处理器</li>
      * </ol>
      */
-    public void init() {
-        MPAccount mpAct = new MPAccount();
-        _wk.setMpAct(mpAct);
-        _wk.setWechatHandler(new WechatDefHandler());
-    }
+    public void init() {}
 
     /**
      * 与微信服务器互动

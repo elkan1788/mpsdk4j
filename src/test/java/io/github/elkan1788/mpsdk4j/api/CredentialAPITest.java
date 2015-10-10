@@ -36,6 +36,7 @@ public class CredentialAPITest extends APITestSupport {
     public void testGetAccessToken() {
         log.info("====== CredentialAPI#getAccessToken ======");
         assertNotNull(ca.getAccessToken());
+        accessToken = ca.getAccessToken();
         log.info(ca.getAccessToken());
     }
 

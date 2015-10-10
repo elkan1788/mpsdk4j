@@ -2,8 +2,6 @@ package io.github.elkan1788.mpsdk4j.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import io.github.elkan1788.mpsdk4j.TestSupport;
-import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +13,10 @@ import org.junit.Test;
 import org.nutz.json.Json;
 import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
+
+import io.github.elkan1788.mpsdk4j.TestSupport;
+import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 
 /**
  * HttpTool 测试
@@ -44,15 +46,17 @@ public class HttpToolTest extends TestSupport {
     @Ignore
     // @Before
     public void testGet() {
-        String url = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s",
-                                   appId,
-                                   appSecret);
-        String content = HttpTool.get(url);
-        assertNotNull(content);
-        Map<String, String> data = (Map<String, String>) Json.fromJson(content);
-        accessToken = data.get("access_token");
+        if (Strings.isBlank(accessToken)) {
+            String url = String.format("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s",
+                                       appId,
+                                       appSecret);
+            String content = HttpTool.get(url);
+            assertNotNull(content);
+            Map<String, String> data = (Map<String, String>) Json.fromJson(content);
+            accessToken = data.get("access_token");
+            assertNotNull(data.get("expires_in"));
+        }
         assertNotNull(accessToken);
-        assertNotNull(data.get("expires_in"));
     }
 
     @Test

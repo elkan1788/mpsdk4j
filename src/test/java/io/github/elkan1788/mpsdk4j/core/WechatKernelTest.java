@@ -3,15 +3,6 @@ package io.github.elkan1788.mpsdk4j.core;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import io.github.elkan1788.mpsdk4j.TestSupport;
-import io.github.elkan1788.mpsdk4j.util.StreamTool;
-import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
-import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
-import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +13,16 @@ import org.nutz.lang.random.R;
 import org.nutz.lang.random.StringGenerator;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+
+import io.github.elkan1788.mpsdk4j.TestSupport;
+import io.github.elkan1788.mpsdk4j.util.StreamTool;
+import io.github.elkan1788.mpsdk4j.vo.MPAccount;
+import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
+import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
+import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
 
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
@@ -43,18 +44,10 @@ public class WechatKernelTest extends TestSupport {
         mpAct.setAppSecret(_cr.get("appSecret"));
         mpAct.setToken(_cr.get("token"));
         data = new HashMap<String, String[]>();
-        data.put("signature", new String[]{
-            "ffbcb8aca5c4c7d5da4e41461908470cf07a518a"
-        });
-        data.put("timestamp", new String[]{
-            "1442726144"
-        });
-        data.put("nonce", new String[]{
-            "1439307736"
-        });
-        data.put("echostr", new String[]{
-            "1439307541"
-        });
+        data.put("signature", new String[]{"af06ae6995cb1979e465d3b8015509ad61bb7204"});
+        data.put("timestamp", new String[]{"1442726144"});
+        data.put("nonce", new String[]{"1439307736"});
+        data.put("echostr", new String[]{"1439307541"});
     }
 
     @Test
@@ -71,15 +64,9 @@ public class WechatKernelTest extends TestSupport {
     public void testLongParamsCheck() {
         log.info("====== WechatKernel#check-toolong ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("signature", new String[]{
-            sg.next()
-        });
-        data.put("timestamp", new String[]{
-            sg.next()
-        });
-        data.put("nonce", new String[]{
-            sg.next()
-        });
+        data.put("signature", new String[]{sg.next()});
+        data.put("timestamp", new String[]{sg.next()});
+        data.put("nonce", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -90,9 +77,7 @@ public class WechatKernelTest extends TestSupport {
     public void testLong1ParamsCheck() {
         log.info("====== WechatKernel#check-toolong1 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("signature", new String[]{
-            sg.next()
-        });
+        data.put("signature", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -103,9 +88,7 @@ public class WechatKernelTest extends TestSupport {
     public void testLong2ParamsCheck() {
         log.info("====== WechatKernel#check-toolong2 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("timestamp", new String[]{
-            sg.next()
-        });
+        data.put("timestamp", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -116,9 +99,7 @@ public class WechatKernelTest extends TestSupport {
     public void testLong3ParamsCheck() {
         log.info("====== WechatKernel#check-toolong3 ======");
         StringGenerator sg = R.sg(129, 200);
-        data.put("nonce", new String[]{
-            sg.next()
-        });
+        data.put("nonce", new String[]{sg.next()});
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
@@ -161,7 +142,7 @@ public class WechatKernelTest extends TestSupport {
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String echo = wk.check();
         assertNotNull(echo);
-        assertTrue(echo.equals(data.get("echostr")[ 0]));
+        assertTrue(echo.equals(data.get("echostr")[0]));
     }
 
     @Test
@@ -356,7 +337,7 @@ public class WechatKernelTest extends TestSupport {
         WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(unsubxml));
         assertNotNull(respxml);
-        assertFalse(respxml.equals("success"));
+        assertTrue(respxml.equals("success"));
         log.info(respxml);
     }
 
@@ -577,8 +558,13 @@ public class WechatKernelTest extends TestSupport {
                           + "<MsgID>200163836</MsgID>\n"
                           + "<Status><![CDATA[sendsuccess]]></Status>\n"
                           + "</xml>";
-        WechatKernel wk = new WechatKernel(mpAct, new PushEventHandler(), data);
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(tmlfjxml));
+        assertNotNull(respxml);
+        assertTrue(respxml.equals("success"));
+        log.info(respxml);
+        wk = new WechatKernel(mpAct, new PushEventHandler(), data);
+        respxml = wk.handle(StreamTool.toStream(tmlfjxml));
         assertNotNull(respxml);
         assertTrue(respxml.equals("success"));
         log.info(respxml);
@@ -599,8 +585,13 @@ public class WechatKernelTest extends TestSupport {
                           + "<SentCount>75</SentCount>\n"
                           + "<ErrorCount>5</ErrorCount>\n"
                           + "</xml>";
-        WechatKernel wk = new WechatKernel(mpAct, new PushEventHandler(), data);
+        WechatKernel wk = new WechatKernel(mpAct, new WechatDefHandler(), data);
         String respxml = wk.handle(StreamTool.toStream(tmlfjxml));
+        assertNotNull(respxml);
+        assertTrue(respxml.equals("success"));
+        log.info(respxml);
+        wk = new WechatKernel(mpAct, new PushEventHandler(), data);
+        respxml = wk.handle(StreamTool.toStream(tmlfjxml));
         assertNotNull(respxml);
         assertTrue(respxml.equals("success"));
         log.info(respxml);

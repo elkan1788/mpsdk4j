@@ -1,5 +1,18 @@
 package io.github.elkan1788.mpsdk4j.core;
 
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.nutz.lang.Lang;
+import org.nutz.lang.Strings;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+
 import io.github.elkan1788.mpsdk4j.common.EventType;
 import io.github.elkan1788.mpsdk4j.common.MessageType;
 import io.github.elkan1788.mpsdk4j.exception.WechatRunTimeException;
@@ -26,19 +39,6 @@ import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
 import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
-
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.nutz.lang.Lang;
-import org.nutz.lang.Strings;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
 
 /**
  * 微信消息内核
@@ -154,7 +154,12 @@ public class WechatKernel {
                            Lang.equals(validsign, sign),
                            validsign);
             }
-            return get("echostr");
+
+            if(sign.equals(validsign)){
+                return get("echostr");
+            }
+
+            return "error";
         }
         catch (AesException e) {
             throw Lang.wrapThrow(new WechatRunTimeException("校验服务器认证出现异常", e));
@@ -296,7 +301,7 @@ public class WechatKernel {
                 break;
             case unsubscribe:
                 BasicEvent unsube = new BasicEvent(msgHandler.getValues());
-                msg = handler.eSub(unsube);
+                handler.eUnSub(unsube);
                 break;
             case SCAN:
                 ScanEvent se = new ScanEvent(msgHandler.getValues());

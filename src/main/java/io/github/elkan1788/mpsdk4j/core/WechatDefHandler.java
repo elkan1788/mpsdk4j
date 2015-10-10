@@ -1,5 +1,9 @@
 package io.github.elkan1788.mpsdk4j.core;
 
+import java.util.Arrays;
+
+import org.nutz.lang.Strings;
+
 import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
 import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
@@ -18,10 +22,6 @@ import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
 import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
-
-import java.util.Arrays;
-
-import org.nutz.lang.Strings;
 
 /**
  * 微信消息,事件处理器(实际生产中需要重写)
@@ -146,7 +146,12 @@ public class WechatDefHandler implements WechatHandler {
         TextMsg tm = new TextMsg(spe);
         tm.setContent(Strings.join("\n",
                                    spe.getEventKey(),
-                                   String.valueOf(spe.getSendPicsInfo().getCount())));
+                                   String.valueOf(spe.getSendPicsInfo().getCount()),
+                                   String.valueOf(spe.getSendPicsInfo().getPicList()),
+                                   String.valueOf(spe.getSendPicsInfo()
+                                                     .getPicList()
+                                                     .get(0)
+                                                     .getPicMd5Sum())));
         return tm;
     }
 
