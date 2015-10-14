@@ -5,13 +5,13 @@
 
 	<groupId>io.github.elkan1788</groupId>
 	<artifactId>mpsdk4j</artifactId>
-	<version>2.a.9</version>
+	<version>2.b.1</version>
 	<packaging>jar</packaging>
 
 	<name>mpsdk4j</name>
 	<description>
-        A simple SDK for wechat api develop in Java program.
-    </description>
+		A simple SDK for wechat api develop in Java program.
+  </description>
 
 	<developers>
 		<developer>
@@ -21,8 +21,11 @@
 			<organization>CHINA</organization>
 			<roles>
 				<role>
-                    Author
-                </role>
+        	Author
+        </role>
+				<role>
+        	Committer
+        </role>
 			</roles>
 		</developer>
 		<developer>
@@ -32,8 +35,8 @@
 			<organization>CHINA</organization>
 			<roles>
 				<role>
-                    Committer
-                </role>
+        	Committer
+        </role>
 			</roles>
 		</developer>
 		<developer>
@@ -43,8 +46,8 @@
 			<organization>CHINA</organization>
 			<roles>
 				<role>
-                    Committer
-                </role>
+        	Committer
+        </role>
 			</roles>
 		</developer>
 	</developers>
@@ -62,7 +65,7 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- Jmockit -->
 		<dependency>
 			<groupId>org.jmockit</groupId>
