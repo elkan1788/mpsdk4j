@@ -41,7 +41,6 @@
 
 >**d.支持力度**：API功能分类与微信公众平台保持一致,分类信息详见下表(后续会不断更新升级),微信基本消息的交互,高级接口(Token,自定义菜单,模板消息,群发消息等等).
 
-<br/>
 | API名称 | 描述 |
 | ------ | ------ |
 | CredentialAPI | 微信服务器IP列表,access_token,jssdk_ticket,短链接生成 |
@@ -222,11 +221,11 @@ public class WechatCoreModule extends WechatWebSupport {
 * OSChina仓库:  <https://git.oschina.net/lisenhui/mpsdk4j-demo>
 
 <a name="Issue"></a>
-##### 5.Issue
+## 5.Issue
 BUG提交：<https://git.oschina.net/lisenhui/mpsdk4j/issues>
 
 <a name="联系"></a>
-##### 6.联系
+## 6.联系
 特别希望看到该项目对您哪怕一点点的帮助。你有任何的想法和建议，除以上Issue提交外，也随时欢迎与我沟通，联系方式：
 
 *  Email: elkan1788@gmail.com
@@ -236,6 +235,7 @@ BUG提交：<https://git.oschina.net/lisenhui/mpsdk4j/issues>
 
 <a name="其它"></a>
 ## 7.其它: JCE 使用说明
+
 | 文件名称 | JDK版本 |
 | ------ | ------ |
 | jce_policy-6.zip | 1.6 |
