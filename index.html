@@ -1,48 +1,47 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="mpsdk4j : JAVA微信公平台开发SDK，没有复杂的功能，一切源于微信API，愿你会喜欢使用。">
 
-  <title>mpsdk4j</title>
-  <meta name="description" content="JAVA微信公平台开发SDK，没有复杂的功能，一切源于微信API，愿你会喜欢使用。">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>mpsdk4j</title>
+  </head>
 
-</head>
+  <body>
 
-<body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/elkan1788/mpsdk4j">View on GitHub</a>
 
-  <div class="wrapper">
-    <header>
-      <h1 class="title">mpsdk4j</h1>
-    </header>
-    <div id="container">
-      <p class="tagline">JAVA微信公平台开发SDK，没有复杂的功能，一切源于微信API，愿你会喜欢使用。</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/elkan1788/mpsdk4j/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/elkan1788/mpsdk4j/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/elkan1788/mpsdk4j" class="code">View mpsdk4j on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
-          <p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-logo.png-aliassmall" alt='"MPSDK4J"' title="MPSDK4J"></p>
+          <h1 id="project_title">mpsdk4j</h1>
+          <h2 id="project_tagline">JAVA微信公平台开发SDK，没有复杂的功能，一切源于微信API，愿你会喜欢使用。</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/elkan1788/mpsdk4j/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/elkan1788/mpsdk4j/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="mpsdk4j-v2" class="anchor" href="#mpsdk4j-v2" aria-hidden="true"><span class="octicon octicon-link"></span></a>MPSDK4J v2</h1>
+
+<p><a href="https://travis-ci.org/elkan1788/mpsdk4j"><img src="https://travis-ci.org/elkan1788/mpsdk4j.svg?branch=master" alt="Build Status"></a>
+<a href="https://maven-badges.herokuapp.com/maven-central/io.github.elkan1788/mpsdk4j"><img src="https://maven-badges.herokuapp.com/maven-central/io.github.elkan1788/mpsdk4j/badge.svg" alt="Maven Central"></a>
+<a href="https://www.apache.org/licenses/LICENSE-2.0.html"><img src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg" alt="License"></a></p>
+
+<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-logo.png-aliassmall" alt='"MPSDK4J"' title="MPSDK4J"></p>
 
 <h2>
-<a id="mpsdk4j" class="anchor" href="#mpsdk4j" aria-hidden="true"><span class="octicon octicon-link"></span></a>MPSDK4J</h2>
-
-<h3>
-<a id="目录" class="anchor" href="#%E7%9B%AE%E5%BD%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>目录</h3>
+<a id="目录" class="anchor" href="#%E7%9B%AE%E5%BD%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>目录</h2>
 
 <ul>
 <li> <a href="#%E5%BC%95%E8%A8%80">1.引言</a>
@@ -51,23 +50,26 @@
 
 <ul>
 <li><a href="#%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1">2.1.结构设计</a></li>
-<li><a href="#%E4%BA%A4%E4%BA%92%E6%97%B6%E5%BA%8F">2.2.交互时序</a></li>
+<li><a href="#%E6%97%B6%E5%BA%8F%E5%9B%BE">2.2.交互时序</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E8%A6%86%E7%9B%96">2.3.测试覆盖</a></li>
 </ul>
 </li>
 <li> <a href="#%E9%A1%B9%E7%9B%AE">3.项目</a>
 
 <ul>
 <li><a href="#%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81">3.1.最新源码</a></li>
-<li><a href="#%E5%8C%85%E7%BB%93%E6%9E%84">3.2.包体结构</a></li>
-<li><a href="#Maven%E5%BA%93%E5%BC%95%E7%94%A8">3.3.Maven库引用</a></li>
+<li><a href="#Maven%E5%BA%93%E5%BC%95%E7%94%A8">3.2.Maven库引用</a></li>
 </ul>
 </li>
 <li> <a href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81">4.示例代码</a>
 
 <ul>
-<li><a href="#HttpServlet%E7%8E%AF%E5%A2%83">4.1.HttpServlet环境</a></li>
-<li><a href="#Struts2%E7%8E%AF%E5%A2%83">4.2.Struts2环境</a></li>
-<li><a href="#SpringMVC%E7%8E%AF%E5%A2%83">4.3SpringMVC环境</a></li>
+<li>
+<a href="#HttpServlet%E7%8E%AF%E5%A2%83">4.1.HttpServlet环境</a><br>
+</li>
+<li><a href="#SpringMVC%E7%8E%AF%E5%A2%83">4.2.SpringMVC环境</a></li>
+<li><a href="#Nutz%E7%8E%AF%E5%A2%83">4.3.Nutz环境</a></li>
+<li><a href="#%E7%A4%BA%E4%BE%8B">4.4.示例代码</a></li>
 </ul>
 </li>
 <li> <a href="#Issue">5.Issue</a>
@@ -80,255 +82,342 @@
 
 <p><a name="%E5%BC%95%E8%A8%80"></a></p>
 
-<h4>
-<a id="1引言" class="anchor" href="#1%E5%BC%95%E8%A8%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.引言</h4>
+<h2>
+<a id="1引言" class="anchor" href="#1%E5%BC%95%E8%A8%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.引言</h2>
 
-<p>双11是一个令不少人狂欢的日子，今天你买了么？或许在那XXX亿的曲线中能找到你的影子哟，呵~，不过这与俺无关了，只是借用这个双11来纪念一下而已。从事微信公众平台开发也有一段时间了，算是积累了不少经验吧，趁这些天空闲的时间，把这些经验重构一遍拿出来分享一下。特此声明本人并非技术大牛（纯粹的技术渣），只是用最简单的流程与编码实现微信公众平台交互SDK，有什么不满意的话，可以尽情的吐槽。目前已经实现微信API所有的功能且同步至官方最新发布（如最新的AES消息加密），后续还会不断的扩展（会做一个多微信号管理平台），欢迎关注加入，谢谢。</p>
+<p>"十一"黄金周假期已悄然逝去,<em>MPSDK4J</em>在不知不觉中也经历过一个年头啦,非常感谢这段时间里网友们的支持.有了小伙伴们的支持<em>MPSDK4J</em>成长更加的迅速,当前版本也确实存在问题诸多的问题.如: 交互中单,多例问题,多公众号混淆问题,微信公众号API更新等等问题.所以趁最近空闲时间把<em>MPSDK4J</em>重构,需要注意<strong>此次升级是全新的改造不往下兼容</strong>.新版本的<em>MPSDK4J</em>结构上更加清晰,使用同样的简单,依然不忘追求速度与简单的初心.</p>
 
 <p><a name="%E4%BB%8B%E7%BB%8D"></a></p>
 
-<h4>
-<a id="2介绍" class="anchor" href="#2%E4%BB%8B%E7%BB%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.介绍</h4>
+<h2>
+<a id="2介绍" class="anchor" href="#2%E4%BB%8B%E7%BB%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.介绍</h2>
 
-<p><strong>MPSDK4J</strong>，非常直观的阐述了此项目的意义所在。没错，它就是JAVA语言环境下的微信公众平台开发SDK。其中MP代表的是微信公众平台的域名前缀，SDK表示开发工具包，4同音英文“for”，J代表了JAVA。虽然现网络上已经有不少JAVA版本的SDK现身，但是<strong><em>[MPSDK4J]</em></strong> 的出现也并非只是造轮子的重复工作。它遵循单一设计模式规则，所有的设计与功能都是源于微信公众平台API，一切都是为了追求简单与速度。</p>
+<p><em>MPSDK4J</em>,非常直观的阐述了此项目的意义所在.没错,它就是JAVA语言环境下的微信公众平台开发SDK.其中MP代表的是微信公众平台的域名前缀,SDK表示开发工具包,4同音英文"for",J代表了JAVA.虽然现网络上已经有不少JAVA版本的SDK现身,但是[<em>MPSDK4J</em>]的出现也并非只是造轮子的重复工作.它遵循单一设计模式规则,所有的设计与功能都是源于微信公众平台API,一切都是为了追求简单与速度.</p>
 
 <blockquote>
-<p><strong>a.设计简单</strong>：整体设计非常的简单，仅有7个包39个类对象（其中VO对象占据一半之多，详见结构设计图），核心功能部分就4类（WxBase，WxApi，WxOpenApi，WxHandler）；</p>
+<p><strong>a.设计简单</strong>：整体设计非常的简单,仅有9个大包11个接口,3个枚举,55类,1个配置文件(其中API交互实体对象占据一半之多),核心功能部分就4类(WechatKeneral,MessageHandler,WechatHandler,WechatAPI);</p>
 
-<p><strong>b.解析速度</strong>：基本SAX驱动式XML处理,结合JDK7的新特性，能够快速的解析收到用户发送的微信消息，放弃JAVA反射功能直接编码生成VO对象更加快速；</p>
+<p><strong>b.解析速度</strong>：基本SAX驱动式XML处理,能够快速的解析收到用户发送的微信消息,放弃JAVA反射功能,采用直接编码生成VO对象,加快解释速度;</p>
 
-<p><strong>c.敏捷开发</strong>：微信交互信息全都统一封装VO对象，所有VO的属性都是微信公众平台API原生状态。开发者无须再关心它来源是XML还JSON格式，其中消息的收发只需掌握2个VO（ReceiveMsg，OutPutMsg）即可；</p>
+<p><strong>c.敏捷开发</strong>：微信交互信息全都统一封装VO对象,所有VO的属性都是微信公众平台API原生状态.但开发者无须再关心它来源是XML还JSON格式,只需掌握其中消息的收发对应VO对象即可;</p>
 
-<p><strong>d.支持力度</strong>：API功能分为三个部分（后续会不断更新升级），微信基本消息的交互，高级接口（Token，自定义菜单，模板消息，群发消息等等）及开放平台功能接口的调用。</p>
+<p><strong>d.支持力度</strong>：API功能分类与微信公众平台保持一致,分类信息详见下表(后续会不断更新升级),微信基本消息的交互,高级接口(Token,自定义菜单,模板消息,群发消息等等).</p>
 </blockquote>
+
+<table>
+<thead>
+<tr>
+<th>API名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CredentialAPI</td>
+<td>微信服务器IP列表,access_token,jssdk_ticket,短链接生成</td>
+</tr>
+<tr>
+<td>GroupsAPI</td>
+<td>用户分组接口: 创建,查询,移动用户等</td>
+</tr>
+<tr>
+<td>MediaAPI</td>
+<td>多媒体文件接口: 上传多媒体素材(临时/永久),下载,删除</td>
+</tr>
+<tr>
+<td>MenuAPI</td>
+<td>自定义菜单接口: 查询,创建,删除</td>
+</tr>
+<tr>
+<td>MessageAPI</td>
+<td>高级消息接口: 发送模板消息,客服消息,群发消息</td>
+</tr>
+<tr>
+<td>QRCodeAPI</td>
+<td>二维码接口: 创建,获取</td>
+</tr>
+<tr>
+<td>UserAPI</td>
+<td>用户管理接口: 用户信息,订阅列表等</td>
+</tr>
+<tr>
+<td>WechatAPIImpl</td>
+<td>上述接口统一实现</td>
+</tr>
+</tbody>
+</table>
 
 <p><a name="%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"></a></p>
 
-<h5>
-<a id="21结构设计" class="anchor" href="#21%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.1结构设计</h5>
+<h3>
+<a id="21整体结构设计" class="anchor" href="#21%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.1.整体结构设计</h3>
 
-<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-class-design.png-alias" alt='"MPSDK4J设计图"' title="MPSDK4J设计图"></p>
+<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-2.png-alias" alt='"MPSDK4J-V2"' title="MPSDK4J-V2"></p>
 
-<p><a name="%E4%BA%A4%E4%BA%92%E6%97%B6%E5%BA%8F"></a></p>
+<p><a name="%E6%97%B6%E5%BA%8F%E5%9B%BE"></a></p>
 
-<h5>
-<a id="22交互时序" class="anchor" href="#22%E4%BA%A4%E4%BA%92%E6%97%B6%E5%BA%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.2交互时序</h5>
+<h3>
+<a id="22交互时序图" class="anchor" href="#22%E4%BA%A4%E4%BA%92%E6%97%B6%E5%BA%8F%E5%9B%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.2.交互时序图</h3>
 
-<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-sequence.png-alias" alt='"MPSDK4J交互时序图"' title="MPSDK4J交互时序图"></p>
+<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-v2-seq.png-alias" alt='"MPSDK4J-seq"' title="MPSDK4J-seq"></p>
+
+<p><a name="%E6%B5%8B%E8%AF%95%E8%A6%86%E7%9B%96"></a></p>
+
+<h3>
+<a id="23测试覆盖" class="anchor" href="#23%E6%B5%8B%E8%AF%95%E8%A6%86%E7%9B%96" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.3.测试覆盖</h3>
+
+<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-v2-test-coverage.png-alias" alt='"MPSDK4J-test"' title="MPSDK4J-test"></p>
 
 <p><a name="%E9%A1%B9%E7%9B%AE"></a></p>
 
-<h4>
-<a id="3项目" class="anchor" href="#3%E9%A1%B9%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.项目</h4>
+<h2>
+<a id="3项目" class="anchor" href="#3%E9%A1%B9%E7%9B%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.项目</h2>
 
 <p><a name="%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81"></a></p>
 
-<h5>
-<a id="31最新源码" class="anchor" href="#31%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.1最新源码</h5>
+<h3>
+<a id="31最新源码" class="anchor" href="#31%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.1最新源码</h3>
 
 <ul>
 <li>OSChina项目主页: <a href="https://git.oschina.net/lisenhui/mpsdk4j">https://git.oschina.net/lisenhui/mpsdk4j</a>
+</li>
+<li>Github项目主页: <a href="https://github.com/elkan1788/mpsdk4j">https://github.com/elkan1788/mpsdk4j</a>
 </li>
 <li>开源协议：<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache Licenses 2.0</a>
 </li>
 </ul>
 
-<p><a name="%E5%8C%85%E7%BB%93%E6%9E%84"></a></p>
-
-<h5>
-<a id="33包体结构" class="anchor" href="#33%E5%8C%85%E4%BD%93%E7%BB%93%E6%9E%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.3包体结构</h5>
-
-<p><img src="http://j2ee.u.qiniudn.com/mpsdk4j-struct.png-alias" alt='"MPSDK4J包体结构图"' title="MPSDK4J包体结构图"></p>
-
 <p><a name="Maven%E5%BA%93%E5%BC%95%E7%94%A8"></a></p>
 
-<h5>
-<a id="33maven库引用" class="anchor" href="#33maven%E5%BA%93%E5%BC%95%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.3Maven库引用</h5>
+<h3>
+<a id="32maven库引用" class="anchor" href="#32maven%E5%BA%93%E5%BC%95%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.2Maven库引用</h3>
 
-<p>另外你也可以通过OSChina的Maven库获取依赖</p>
-
-<ul>
-<li> 1.加入OSC仓库，也可参考官方说明<a href="http://maven.oschina.net/help.html">OSChina Maven Help</a>
-</li>
-</ul>
-
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">repositories</span>&gt;
-    &lt;<span class="pl-ent">repository</span>&gt;
-        &lt;<span class="pl-ent">id</span>&gt;nexus&lt;/<span class="pl-ent">id</span>&gt;
-        &lt;<span class="pl-ent">url</span>&gt;http://maven.oschina.net/content/groups/public/&lt;/<span class="pl-ent">url</span>&gt;
-        &lt;<span class="pl-ent">releases</span>&gt;
-          &lt;<span class="pl-ent">enabled</span>&gt;true&lt;/<span class="pl-ent">enabled</span>&gt;
-        &lt;/<span class="pl-ent">releases</span>&gt;
-        &lt;<span class="pl-ent">snapshots</span>&gt;
-          &lt;<span class="pl-ent">enabled</span>&gt;false&lt;/<span class="pl-ent">enabled</span>&gt;
-        &lt;/<span class="pl-ent">snapshots</span>&gt;
-    &lt;/<span class="pl-ent">repository</span>&gt;
-    &lt;<span class="pl-ent">repository</span>&gt;
-        &lt;<span class="pl-ent">id</span>&gt;nexus-third&lt;/<span class="pl-ent">id</span>&gt;
-        &lt;<span class="pl-ent">url</span>&gt;http://maven.oschina.net/content/repositories/thirdparty/&lt;/<span class="pl-ent">url</span>&gt;
-        &lt;<span class="pl-ent">releases</span>&gt;
-          &lt;<span class="pl-ent">enabled</span>&gt;true&lt;/<span class="pl-ent">enabled</span>&gt;
-        &lt;/<span class="pl-ent">releases</span>&gt;
-        &lt;<span class="pl-ent">snapshots</span>&gt;
-          &lt;<span class="pl-ent">enabled</span>&gt;true&lt;/<span class="pl-ent">enabled</span>&gt;
-        &lt;/<span class="pl-ent">snapshots</span>&gt;
-    &lt;/<span class="pl-ent">repository</span>&gt;
-&lt;/<span class="pl-ent">repositories</span>&gt;</pre></div>
-
-<ul>
-<li>2.添加依赖坐标</li>
-</ul>
-
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
-    &lt;<span class="pl-ent">groupId</span>&gt;org.elkan1788.osc&lt;/<span class="pl-ent">groupId</span>&gt;
+<div class="highlight highlight-text-xml"><pre>
+&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;io.github.elkan1788&lt;/<span class="pl-ent">groupId</span>&gt;
     &lt;<span class="pl-ent">artifactId</span>&gt;mpsdk4j&lt;/<span class="pl-ent">artifactId</span>&gt;
-    &lt;<span class="pl-ent">version</span>&gt;1.a.20&lt;/<span class="pl-ent">version</span>&gt;
-&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+    &lt;<span class="pl-ent">version</span>&gt;2.b.1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;
+</pre></div>
 
-<p>或者自己编译jar包。</p>
+<p>或者自己编译jar包.</p>
 
-<pre><code>mvn clean package -Dmaven.test.skip=true
+<pre><code>
+mvn clean package
+
 </code></pre>
 
 <p><a name="%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"></a></p>
 
-<h4>
-<a id="4示例代码" class="anchor" href="#4%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.示例代码</h4>
+<h2>
+<a id="4示例代码" class="anchor" href="#4%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.示例代码</h2>
 
-<p>MPSDK4J在Web环境中暂时提供了以下三种支持，欢迎提交其它环境扩展。在实际的使用过程中只需要继承相应环境的Wx***Support父类，重写init初始化方法修改其中的公众号信息及微信消息处理器，添加环境的入口（Servlet环境无需此步骤），调用wxInteract方法，最后发布上线即可。
-<a name="HttpServlet%E7%8E%AF%E5%A2%83"></a></p>
+<p><em>MPSDK4J</em>在<code>Web</code>环境中暂时提供了以下环境支持,欢迎提交其它环境扩展.在实际的使用过程中只需要继承相应环境的<code>WechatWebSupport</code>父类,重写<code>init</code>初始化方法修改其中的公众号信息及微信消息处理器(实现<code>WechatHandler</code>接口或是继承<code>WechatDefHandler</code>基类),添加环境的入口（<code>Servlet</code>环境无需此步骤）,调用<code>interact</code>方法,最后发布上线即可.</p>
 
-<h5>
-<a id="41httpservlet环境" class="anchor" href="#41httpservlet%E7%8E%AF%E5%A2%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.1.HttpServlet环境：</h5>
+<p><a name="HttpServlet%E7%8E%AF%E5%A2%83"></a></p>
 
-<div class="highlight highlight-java"><pre>@WebServlet(name <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>weixinServlet<span class="pl-pds">"</span></span>, urlPatterns <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>/weixin/mp/core.ser<span class="pl-pds">"</span></span>)
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">WeiXinServlet</span> <span class="pl-s">extends</span> <span class="pl-e">WxServletSupport</span> {
+<h3>
+<a id="41httpservlet环境" class="anchor" href="#41httpservlet%E7%8E%AF%E5%A2%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.1.HttpServlet环境：</h3>
 
-    <span class="pl-st">@Override</span>
-    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">init</span>() <span class="pl-s">throws</span> <span class="pl-stj">ServletException</span> {
-        <span class="pl-v">super</span><span class="pl-k">.</span>init();
-        <span class="pl-stj">MPAct</span> mpAct <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">MPAct</span>();
-        <span class="pl-c">// 修改为实际的公众号信息,可以在开发者栏目中查看</span>
-        mpAct<span class="pl-k">.</span>setAppId(<span class="pl-s1"><span class="pl-pds">"</span>wx****<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setAppSecert(<span class="pl-s1"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setToken(<span class="pl-s1"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setAESKey(<span class="pl-s1"><span class="pl-pds">"</span>******<span class="pl-pds">"</span></span>);
-        <span class="pl-v">this</span><span class="pl-k">.</span>setMpAct(mpAct);
-        <span class="pl-c">// 可实现自己的WxHandler</span>
-        <span class="pl-v">this</span><span class="pl-k">.</span>setWxHandler(<span class="pl-k">new</span> <span class="pl-stj">WxDefaultHandler</span>());
+<div class="highlight highlight-source-java"><pre>
+@WebServlet(name <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>wechatCoreServlet<span class="pl-pds">"</span></span>, urlPatterns <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>/servlet/wechatcore.ser<span class="pl-pds">"</span></span>)
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">WechatCoreServlet</span> <span class="pl-k">extends</span> <span class="pl-e">HttpServletSupport</span> {
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-k">long</span> serialVersionUID <span class="pl-k">=</span> <span class="pl-c1">4370883777170946295L</span>;
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Logger</span> log <span class="pl-k">=</span> <span class="pl-smi">LoggerFactory</span><span class="pl-k">.</span>getLogger(<span class="pl-smi">WechatCoreServlet</span><span class="pl-k">.</span>class);
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">ConfigReader</span> _cr <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">ConfigReader</span>(<span class="pl-s"><span class="pl-pds">"</span>/mp.properties<span class="pl-pds">"</span></span>);
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">init</span>() <span class="pl-k">throws</span> <span class="pl-smi">ServletException</span> {
+        log<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"</span>====== Servlet环境 =======<span class="pl-pds">"</span></span>);
+        <span class="pl-smi">MPAccount</span> mpact <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">MPAccount</span>();
+         <span class="pl-c">// 修改为实际的公众号信息,可以在开发者栏目中查看</span>
+        mpAct<span class="pl-k">.</span>setAppId(<span class="pl-s"><span class="pl-pds">"</span>wx****<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setAppSecert(<span class="pl-s"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setToken(<span class="pl-s"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setAESKey(<span class="pl-s"><span class="pl-pds">"</span>******<span class="pl-pds">"</span></span>);
+        _wk<span class="pl-k">.</span>setMpAct(mpact);        
+        _wk<span class="pl-k">.</span>setWechatHandler(<span class="pl-k">new</span> <span class="pl-smi">WechatDefHandler</span>());
     }
-}</pre></div>
+
+}
+</pre></div>
 
 <p><a name="SpringMVC%E7%8E%AF%E5%A2%83"></a></p>
 
-<h5>
-<a id="42springmvc环境" class="anchor" href="#42springmvc%E7%8E%AF%E5%A2%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.2.SpringMVC环境：</h5>
+<h3>
+<a id="42springmvc环境" class="anchor" href="#42springmvc%E7%8E%AF%E5%A2%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.2.SpringMVC环境：</h3>
 
-<div class="highlight highlight-java"><pre>@<span class="pl-stj">Controller</span>
-@RequestMapping(<span class="pl-s1"><span class="pl-pds">"</span>/weixin/mp<span class="pl-pds">"</span></span>)
-<span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">WeiXinController</span> <span class="pl-s">extends</span> <span class="pl-e">WxSpringSupport</span> {
+<div class="highlight highlight-source-java"><pre>
+<span class="pl-c">/**</span>
+<span class="pl-c"> * SpringMVC环境接入</span>
+<span class="pl-c"> * </span>
+<span class="pl-c"> * @author 凡梦星尘(elkan1788@gmail.com)</span>
+<span class="pl-c"> * @since 2.0</span>
+<span class="pl-c"> */</span>
+@RequestMapping(<span class="pl-s"><span class="pl-pds">"</span>/springmvc<span class="pl-pds">"</span></span>)
+@<span class="pl-smi">Controller</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">WechatCoreController</span> <span class="pl-k">extends</span> <span class="pl-e">WechatWebSupport</span> {
 
-    <span class="pl-st">@Override</span>
-    <span class="pl-s">protected</span> <span class="pl-st">void</span> <span class="pl-en">init</span>() {
-        <span class="pl-stj">MPAct</span> mpAct <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">MPAct</span>();
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Logger</span> log <span class="pl-k">=</span> <span class="pl-smi">LoggerFactory</span><span class="pl-k">.</span>getLogger(<span class="pl-smi">WechatCoreController</span><span class="pl-k">.</span>class);
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">ConfigReader</span> _cr <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">ConfigReader</span>(<span class="pl-s"><span class="pl-pds">"</span>/mp.properties<span class="pl-pds">"</span></span>);
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">init</span>() {
+        log<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"</span>====== SpringMVC环境 =======<span class="pl-pds">"</span></span>);
+        <span class="pl-smi">MPAccount</span> mpact <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">MPAccount</span>();
         <span class="pl-c">// 修改为实际的公众号信息,可以在开发者栏目中查看</span>
-        mpAct<span class="pl-k">.</span>setAppId(<span class="pl-s1"><span class="pl-pds">"</span>wx****<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setAppSecert(<span class="pl-s1"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setToken(<span class="pl-s1"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setAESKey(<span class="pl-s1"><span class="pl-pds">"</span>******<span class="pl-pds">"</span></span>);
-        <span class="pl-v">this</span><span class="pl-k">.</span>setMpAct(mpAct);
-        <span class="pl-c">// 可实现自己的WxHandler</span>
-        <span class="pl-v">this</span><span class="pl-k">.</span>setWxHandler(<span class="pl-k">new</span> <span class="pl-stj">WxDefaultHandler</span>());
+        mpAct<span class="pl-k">.</span>setAppId(<span class="pl-s"><span class="pl-pds">"</span>wx****<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setAppSecert(<span class="pl-s"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setToken(<span class="pl-s"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setAESKey(<span class="pl-s"><span class="pl-pds">"</span>******<span class="pl-pds">"</span></span>);
+        _wk<span class="pl-k">.</span>setMpAct(mpact);
+        _wk<span class="pl-k">.</span>setWechatHandler(<span class="pl-k">new</span> <span class="pl-smi">WechatDefHandler</span>());
     }
 
-    <span class="pl-st">@RequestMapping</span>(<span class="pl-c1">value</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>/core<span class="pl-pds">"</span></span>,<span class="pl-c1">produces</span> <span class="pl-k">=</span> {<span class="pl-s1"><span class="pl-pds">"</span>text/plain;charset=UTF-8<span class="pl-pds">"</span></span>})
-    <span class="pl-st">@ResponseBody</span>
-    <span class="pl-s">public</span> <span class="pl-stj">String</span> <span class="pl-en">wxCore</span>(<span class="pl-stj">HttpServletRequest</span> <span class="pl-v">req</span>) {
-        <span class="pl-stj">String</span> reply <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span><span class="pl-pds">"</span></span>;
+    <span class="pl-k">@RequestMapping</span>(<span class="pl-s"><span class="pl-pds">"</span>/wechatcore<span class="pl-pds">"</span></span>)
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">wechatCore</span>(<span class="pl-smi">HttpServletRequest</span> <span class="pl-v">req</span>, <span class="pl-smi">HttpServletResponse</span> <span class="pl-v">resp</span>) <span class="pl-k">throws</span> <span class="pl-smi">Exception</span> {
+        <span class="pl-v">this</span><span class="pl-k">.</span>interact(req, resp);
+    }
+
+}
+</pre></div>
+
+<p><a name="Nutz%E7%8E%AF%E5%A2%83"></a></p>
+
+<h3>
+<a id="43nutz环境" class="anchor" href="#43nutz%E7%8E%AF%E5%A2%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.3.Nutz环境：</h3>
+
+<div class="highlight highlight-source-java"><pre>
+<span class="pl-c">/**</span>
+<span class="pl-c"> * Nutz环境接入</span>
+<span class="pl-c"> * </span>
+<span class="pl-c"> * @author 凡梦星尘(elkan1788@gmail.com)</span>
+<span class="pl-c"> * @since 2.0</span>
+<span class="pl-c"> */</span>
+@At(<span class="pl-s"><span class="pl-pds">"</span>/nutz<span class="pl-pds">"</span></span>)
+@<span class="pl-smi">IocBean</span>
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">WechatCoreModule</span> <span class="pl-k">extends</span> <span class="pl-e">WechatWebSupport</span> {
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">Log</span> log <span class="pl-k">=</span> <span class="pl-smi">Logs</span><span class="pl-k">.</span>get();
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-k">final</span> <span class="pl-smi">ConfigReader</span> _cr <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">ConfigReader</span>(<span class="pl-s"><span class="pl-pds">"</span>/mp.properties<span class="pl-pds">"</span></span>);
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">init</span>() {
+        log<span class="pl-k">.</span>info(<span class="pl-s"><span class="pl-pds">"</span>====== Nutz环境 =======<span class="pl-pds">"</span></span>);
+       <span class="pl-c">// 修改为实际的公众号信息,可以在开发者栏目中查看</span>
+        mpAct<span class="pl-k">.</span>setAppId(<span class="pl-s"><span class="pl-pds">"</span>wx****<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setAppSecert(<span class="pl-s"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setToken(<span class="pl-s"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
+        mpAct<span class="pl-k">.</span>setAESKey(<span class="pl-s"><span class="pl-pds">"</span>******<span class="pl-pds">"</span></span>);
+        _wk<span class="pl-k">.</span>setMpAct(mpact);
+        _wk<span class="pl-k">.</span>setWechatHandler(<span class="pl-k">new</span> <span class="pl-smi">WechatDefHandler</span>());
+    }
+
+    <span class="pl-k">@At</span>(<span class="pl-s"><span class="pl-pds">"</span>/wechatcore<span class="pl-pds">"</span></span>)
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">wechatCore</span>(<span class="pl-smi">HttpServletRequest</span> <span class="pl-v">req</span>, <span class="pl-smi">HttpServletResponse</span> <span class="pl-v">resp</span>) {
         <span class="pl-k">try</span> {
-            reply <span class="pl-k">=</span> wxInteract(req);
-        } <span class="pl-k">catch</span> (<span class="pl-stj">IOException</span> e) {
-            log<span class="pl-k">.</span>error(e<span class="pl-k">.</span>getLocalizedMessage(), e);
+            <span class="pl-v">this</span><span class="pl-k">.</span>interact(req, resp);
         }
-        <span class="pl-k">return</span> reply;
+        <span class="pl-k">catch</span> (<span class="pl-smi">IOException</span> e) {
+            <span class="pl-k">throw</span> <span class="pl-smi">Lang</span><span class="pl-k">.</span>wrapThrow(e);
+        }
     }
-}</pre></div>
+}
+</pre></div>
 
-<p><a name="Struts2%E7%8E%AF%E5%A2%83"></a></p>
+<p><a name="%E7%A4%BA%E4%BE%8B"></a></p>
 
-<h5>
-<a id="43struts2环境" class="anchor" href="#43struts2%E7%8E%AF%E5%A2%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.3.Struts2环境:</h5>
+<h3>
+<a id="44示例项目源码" class="anchor" href="#44%E7%A4%BA%E4%BE%8B%E9%A1%B9%E7%9B%AE%E6%BA%90%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>4.4.示例项目源码</h3>
 
-<div class="highlight highlight-java"><pre><span class="pl-s">public</span> <span class="pl-s">class</span> <span class="pl-en">WeiXinAction</span> <span class="pl-s">extends</span> <span class="pl-e">WxStruts2Support</span> {
-
-    <span class="pl-st">@Override</span>
-    <span class="pl-s">protected</span> <span class="pl-st">void</span> <span class="pl-en">init</span>() {
-        <span class="pl-v">super</span><span class="pl-k">.</span>init();
-        <span class="pl-stj">MPAct</span> mpAct <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">MPAct</span>();
-        <span class="pl-c">// 修改为实际的公众号信息,可以在开发者栏目中查看</span>
-        mpAct<span class="pl-k">.</span>setAppId(<span class="pl-s1"><span class="pl-pds">"</span>wx****<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setAppSecert(<span class="pl-s1"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setToken(<span class="pl-s1"><span class="pl-pds">"</span>***<span class="pl-pds">"</span></span>);
-        mpAct<span class="pl-k">.</span>setAESKey(<span class="pl-s1"><span class="pl-pds">"</span>******<span class="pl-pds">"</span></span>);
-        <span class="pl-v">this</span><span class="pl-k">.</span>setMpAct(mpAct);
-        <span class="pl-c">// 可实现自己的WxHandler</span>
-        <span class="pl-v">this</span><span class="pl-k">.</span>setWxHandler(<span class="pl-k">new</span> <span class="pl-stj">WxDefaultHandler</span>());
-    }
-
-    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">wxCore</span>() <span class="pl-s">throws</span> <span class="pl-stj">IOException</span> {
-        wxInteract();
-    }
-}</pre></div>
+<ul>
+<li>OSChina仓库:  <a href="https://git.oschina.net/lisenhui/mpsdk4j-demo">https://git.oschina.net/lisenhui/mpsdk4j-demo</a>
+</li>
+</ul>
 
 <p><a name="Issue"></a></p>
 
-<h5>
-<a id="5issue" class="anchor" href="#5issue" aria-hidden="true"><span class="octicon octicon-link"></span></a>5.Issue</h5>
+<h2>
+<a id="5issue" class="anchor" href="#5issue" aria-hidden="true"><span class="octicon octicon-link"></span></a>5.Issue</h2>
 
 <p>BUG提交：<a href="https://git.oschina.net/lisenhui/mpsdk4j/issues">https://git.oschina.net/lisenhui/mpsdk4j/issues</a></p>
 
 <p><a name="%E8%81%94%E7%B3%BB"></a></p>
 
-<h5>
-<a id="6联系" class="anchor" href="#6%E8%81%94%E7%B3%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.联系</h5>
+<h2>
+<a id="6联系" class="anchor" href="#6%E8%81%94%E7%B3%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>6.联系</h2>
 
 <p>特别希望看到该项目对您哪怕一点点的帮助。你有任何的想法和建议，除以上Issue提交外，也随时欢迎与我沟通，联系方式：</p>
 
 <ul>
 <li> Email: <a href="mailto:elkan1788@gmail.com">elkan1788@gmail.com</a>
 </li>
-<li> QQ: 2292706174</li>
-<li> 微信：</li>
+<li> QQ群：486192816</li>
 </ul>
+
+<p><img src="http://j2ee.u.qiniudn.com/MPSDK4J-qq.png-noalias" alt='"MPSDK4J-qq"' title="MPSDK4J-qq"></p>
 
 <p><a name="%E5%85%B6%E5%AE%83"></a></p>
 
-<h5>
-<a id="7其它" class="anchor" href="#7%E5%85%B6%E5%AE%83" aria-hidden="true"><span class="octicon octicon-link"></span></a>7.其它</h5>
+<h2>
+<a id="7其它-jce-使用说明" class="anchor" href="#7%E5%85%B6%E5%AE%83-jce-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" aria-hidden="true"><span class="octicon octicon-link"></span></a>7.其它: JCE 使用说明</h2>
 
-<p>目前正在尝试微信开放平台探究，已初步实现授权管理功能，后续会不断完善成一个管理平台，期待你的加入。</p>
+<table>
+<thead>
+<tr>
+<th>文件名称</th>
+<th>JDK版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jce_policy-6.zip</td>
+<td>1.6</td>
+</tr>
+<tr>
+<td>UnlimitedJCEPolicyJDK7.zip</td>
+<td>1.7</td>
+</tr>
+<tr>
+<td>jce_policy-8.zip</td>
+<td>1.8</td>
+</tr>
+</tbody>
+</table>
 
-<p><img src="http://j2ee.u.qiniudn.com/weixn-open-demo.png-alias" alt='"MPSDK4J公众号开发服务"' title="MPSDK4J公众号开发服务"></p>
-        </article>
-      </div>
+<p>选择相应的<code>J2EE</code>版本下载后解压,可以看到<code>local_policy.jar</code>和<code>US_export_policy.jar</code>以及<code>readme.txt</code></p>
+
+<ul>
+<li>如果安装了<code>JRE</code>,将两个<code>jar</code>文件放到<code>%JRE_HOME%\lib\security</code>目录下覆盖原来的文件;</li>
+<li>如果安装了<code>JDK</code>,将两个<code>jar</code>文件放到<code>%JDK_HOME%\jre\lib\security</code>目录下覆盖原来文件.</li>
+</ul>
+      </section>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/elkan1788" class="avatar"><img src="https://avatars1.githubusercontent.com/u/1217096?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/elkan1788">elkan1788</a> maintains <a href="https://github.com/elkan1788/mpsdk4j">mpsdk4j</a></p>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">mpsdk4j maintained by <a href="https://github.com/elkan1788">elkan1788</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-61491374-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
 
 
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/elkan1788/mpsdk4j/tarball/master" class="tar">tar</a><a href="https://github.com/elkan1788/mpsdk4j/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
-
-  
-</body>
+  </body>
 </html>
