@@ -12,6 +12,18 @@
 	<description>
 		A simple SDK for wechat api develop in Java program.
   </description>
+  
+	<url>http://elkan1788.github.io/mpskd4j</url>
+	<issueManagement>
+		<system>Github Issue</system>
+		<url>https://github.com/elkan1788/mpsdk4j/issues</url>
+	</issueManagement>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 
 	<developers>
 		<developer>
