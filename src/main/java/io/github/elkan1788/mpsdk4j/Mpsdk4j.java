@@ -29,11 +29,11 @@ public final class Mpsdk4j {
     }
 
     private static int minorVersion() {
-        return 9;
+        return 1;
     }
 
     private static String releaseLevel() {
         // a: 内部测试品质, b: 公测品质, r: 最终发布版
-        return "a";
+        return "b";
     }
 }

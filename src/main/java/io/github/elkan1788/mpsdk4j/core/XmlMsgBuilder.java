@@ -192,7 +192,7 @@ public class XmlMsgBuilder {
     public String build() {
         msgBuf.append("</xml>");
         if (log.isDebugEnabled()) {
-            log.debugf("Xml message content: %s", msgBuf);
+            log.debugf("Xml message content: \n%s", msgBuf);
         }
         return new String(msgBuf);
     }

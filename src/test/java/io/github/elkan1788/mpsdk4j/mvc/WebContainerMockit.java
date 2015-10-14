@@ -32,7 +32,7 @@ public class WebContainerMockit {
                 // 模拟服务器检验参数
                 req.getParameterMap();
                 Map<String, String[]> data = new HashMap<String, String[]>();
-                data.put("signature", new String[]{"268328e6eafc00b10c7d1e9527789ac8b7909902"});
+                data.put("signature", new String[]{"8f89b331558f93dd1931f0c01a1dc121e1ef744a"});
                 data.put("timestamp", new String[]{"1435267"});
                 data.put("nonce", new String[]{"ZnFI4vNoiAqbmPyQ-bkOktOt9x"});
                 data.put("echostr", new String[]{"123456"});

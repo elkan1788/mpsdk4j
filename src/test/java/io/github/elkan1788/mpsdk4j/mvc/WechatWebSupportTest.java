@@ -29,14 +29,14 @@ public class WechatWebSupportTest extends WebContainerMockit {
     @Override
     @Before
     public void init() {
-        log.info("====== HttpServletSupportTest ======");
+        log.info("====== WechatWebSupportTest ======");
         super.init();
     }
 
     @Test
     public void testCheck() throws IOException {
 
-        log.info("====== HttpServletSupportTest-get ======");
+        log.info("====== WechatWebSupportTest-get ======");
         new Expectations() {
             {
                 req.getMethod();
@@ -51,7 +51,7 @@ public class WechatWebSupportTest extends WebContainerMockit {
     @Test
     public void testInteract() throws IOException {
 
-        log.info("====== HttpServletSupportTest-post ======");
+        log.info("====== WechatWebSupportTest-post ======");
         new Expectations() {
             {
                 // 模拟微信互动数据

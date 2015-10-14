@@ -48,14 +48,14 @@ public class MessageHandler extends DefaultHandler2 {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (log.isInfoEnabled()) {
+        if (log.isDebugEnabled()) {
             if (!Strings.equals("xml", qName)
                 && !Strings.equals("ScanCodeInfo", qName)
                 && !Strings.equals("SendLocationInfo", qName)
                 && !Strings.equals("SendPicsInfo", qName)
                 && !Strings.equals("PicList", qName)
                 && !Strings.equals("item", qName)) {
-                log.infof("Current node vaule: [%s-%s]", qName, attrVal);
+                log.debugf("Current node vaule: [%s-%s]", qName, attrVal);
             }
         }
 
