@@ -18,22 +18,22 @@ public interface UserAPI {
     /**
      * 设置备注名地址
      */
-    static String user_remark = "/user/info/updateremark?access_token=";
+    String user_remark = "/user/info/updateremark?access_token=";
 
     /**
      * 用户列表地址
      */
-    static String user_list = "/user/get?access_token=%s&next_openid=%s";
+    String user_list = "/user/get?access_token=%s&next_openid=%s";
 
     /**
      * 用户基本信息地址
      */
-    static String user_info = "/user/info?access_token=%s&openid=%s&lang=%s";
+    String user_info = "/user/info?access_token=%s&openid=%s&lang=%s";
 
     /**
      * 批量用户基本信息地址
      */
-    static String batch_user_info = "/user/info/batchget?access_token=";
+    String batch_user_info = "/user/info/batchget?access_token=";
 
     /**
      * 设置用户备注名

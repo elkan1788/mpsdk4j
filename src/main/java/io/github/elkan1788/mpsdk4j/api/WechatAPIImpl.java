@@ -47,9 +47,9 @@ public class WechatAPIImpl implements WechatAPI {
 
     static int RETRY_COUNT = 3;
 
-    static MemoryCache<AccessToken> _atmc;
+    protected static MemoryCache<AccessToken> _atmc;
 
-    static MemoryCache<JSTicket> _jstmc;
+    protected static MemoryCache<JSTicket> _jstmc;
 
     private MPAccount mpAct;
 
@@ -65,6 +65,14 @@ public class WechatAPIImpl implements WechatAPI {
         }
     }
 
+    public static MemoryCache<AccessToken> getAccessTokenCache() {
+        return _atmc;
+    }
+
+    public static MemoryCache<JSTicket> getJsTicketCache() {
+        return _jstmc;
+    }
+
     /**
      * WechatAPI 实现方法
      * 
@@ -72,22 +80,22 @@ public class WechatAPIImpl implements WechatAPI {
      *            微信公众号信息{@link MPAccount}
      * @return 对应的API
      */
-    public static WechatAPI create(MPAccount mpAct) {
+    public static WechatAPIImpl create(MPAccount mpAct) {
         return new WechatAPIImpl(mpAct);
     }
 
-    private String mergeUrl(String url, Object... values) {
+    private String mergeCgiBinUrl(String url, Object... values) {
         if (!Lang.isEmpty(values)) {
-            return wechatapi + String.format(url, values);
+            return cgi_bin + String.format(url, values);
         }
-        return wechatapi + url;
+        return cgi_bin + url;
     }
 
     /**
      * 强制刷新微信服务凭证
      */
     private synchronized void refreshAccessToken() {
-        String url = mergeUrl(get_at, mpAct.getAppId(), mpAct.getAppSecret());
+        String url = mergeCgiBinUrl(get_at, mpAct.getAppId(), mpAct.getAppSecret());
         AccessToken at = null;
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -109,7 +117,7 @@ public class WechatAPIImpl implements WechatAPI {
     }
 
     private synchronized void refreshJSTicket() {
-        String url = mergeUrl(js_ticket + getAccessToken());
+        String url = mergeCgiBinUrl(js_ticket + getAccessToken());
         JSTicket jst = null;
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -144,7 +152,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public List<String> getServerIps() {
-        String url = mergeUrl(cb_ips + getAccessToken());
+        String url = mergeCgiBinUrl(cb_ips + getAccessToken());
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
@@ -160,7 +168,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public String getShortUrl(String longUrl) {
-        String url = mergeUrl(short_url + getAccessToken());
+        String url = mergeCgiBinUrl(short_url + getAccessToken());
         String data = "{\"action\":\"long2short\",\"long_url\":\"" + longUrl + "\"}";
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -169,7 +177,7 @@ public class WechatAPIImpl implements WechatAPI {
                 return String.valueOf(ar.get("short_url"));
             }
 
-            log.errorf("Create mp[%p] short url failed. There try %d items.", mpAct.getMpId(), i);
+            log.errorf("Create mp[%s] short url failed. There try %d items.", mpAct.getMpId(), i);
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
@@ -187,7 +195,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public List<Menu> getMenu() {
-        String url = mergeUrl(query_menu + getAccessToken());
+        String url = mergeCgiBinUrl(query_menu + getAccessToken());
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
@@ -211,7 +219,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean createMenu(Menu... menu) {
-        String url = mergeUrl(create_menu + getAccessToken());
+        String url = mergeCgiBinUrl(create_menu + getAccessToken());
         Map<String, Object> body = new HashMap<String, Object>();
         body.put("button", menu);
         String data = Json.toJson(body, JsonFormat.compact());
@@ -233,7 +241,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean delMenu() {
-        String url = mergeUrl(del_menu + getAccessToken());
+        String url = mergeCgiBinUrl(del_menu + getAccessToken());
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
@@ -251,7 +259,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public Media upMedia(String type, File media) {
-        String url = mergeUrl(upload_media, getAccessToken(), type);
+        String url = mergeCgiBinUrl(upload_media, getAccessToken(), type);
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.upload(url, media));
@@ -267,7 +275,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public File dlMedia(String mediaId) {
-        String url = mergeUrl(get_media, getAccessToken(), mediaId);
+        String url = mergeCgiBinUrl(get_media, getAccessToken(), mediaId);
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             Object tmp = HttpTool.download(url);
@@ -284,7 +292,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public int createGroup(String name) {
-        String url = mergeUrl(create_groups + getAccessToken());
+        String url = mergeCgiBinUrl(create_groups + getAccessToken());
         String data = "{\"group\":{\"name\":\"" + name + "\"}}";
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -305,7 +313,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public List<Groups> getGroups() {
-        String url = mergeUrl(get_groups + getAccessToken());
+        String url = mergeCgiBinUrl(get_groups + getAccessToken());
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
@@ -321,7 +329,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public int getGroup(String openId) {
-        String url = mergeUrl(get_member_group + getAccessToken());
+        String url = mergeCgiBinUrl(get_member_group + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\"}";
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -341,7 +349,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean renGroups(int id, String name) {
-        String url = mergeUrl(update_group + getAccessToken());
+        String url = mergeCgiBinUrl(update_group + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + ",\"name\":\"" + name + "\"}}";
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -362,7 +370,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean move2Group(String openId, int groupId) {
-        String url = mergeUrl(update_member_group + getAccessToken());
+        String url = mergeCgiBinUrl(update_member_group + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\",\"to_groupid\":" + groupId + "}";
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -383,7 +391,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean batchMove2Group(Collection<String> openIds, int groupId) {
-        String url = mergeUrl(update_members_group + getAccessToken());
+        String url = mergeCgiBinUrl(update_members_group + getAccessToken());
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("openid_list", Json.toJson(openIds));
         data.put("to_groupid", groupId);
@@ -405,7 +413,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean delGroup(int id) {
-        String url = mergeUrl(delete_groups + getAccessToken());
+        String url = mergeCgiBinUrl(delete_groups + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + "}}";
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -425,7 +433,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public QRTicket createQR(Object sceneId, int expireSeconds) {
-        String url = mergeUrl(create_qrcode + getAccessToken());
+        String url = mergeCgiBinUrl(create_qrcode + getAccessToken());
         ApiResult ar = null;
         NutMap data = new NutMap();
         NutMap scene;
@@ -464,7 +472,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public File getQR(String ticket) {
-        String url = mergeUrl(show_qrcode + ticket);
+        String url = mergeCgiBinUrl(show_qrcode + ticket);
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             Object tmp = HttpTool.get(url);
@@ -483,7 +491,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean updateRemark(String openId, String remark) {
-        String url = mergeUrl(user_remark + getAccessToken());
+        String url = mergeCgiBinUrl(user_remark + getAccessToken());
         ApiResult ar = null;
         String data = "{\"openid\":\"" + openId + "\",\"remark\":\"" + remark + "\"}";
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -504,7 +512,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public FollowList getFollowerList(String nextOpenId) {
-        String url = mergeUrl(user_list, getAccessToken(), Strings.sNull(nextOpenId, ""));
+        String url = mergeCgiBinUrl(user_list, getAccessToken(), Strings.sNull(nextOpenId, ""));
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
@@ -523,7 +531,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public Follower getFollower(String openId, String lang) {
-        String url = mergeUrl(user_info, getAccessToken(), openId, Strings.sNull(lang, "zh_CN"));
+        String url = mergeCgiBinUrl(user_info, getAccessToken(), openId, Strings.sNull(lang, "zh_CN"));
         ApiResult ar = null;
         for (int i = 0; i < RETRY_COUNT; i++) {
             ar = ApiResult.create(HttpTool.get(url));
@@ -542,7 +550,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public List<Follower> getFollowers(Collection<Follower2> users) {
-        String url = mergeUrl(batch_user_info + getAccessToken());
+        String url = mergeCgiBinUrl(batch_user_info + getAccessToken());
         ApiResult ar = null;
         String data = Json.toJson(Lang.map("user_list", users), JsonFormat.compact());
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -561,7 +569,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean setIndustry(int id1, int id2) {
-        String url = mergeUrl(set_industry + getAccessToken());
+        String url = mergeCgiBinUrl(set_industry + getAccessToken());
         ApiResult ar = null;
         String data = "{\"industry_id1\":\"" + id1 + "\",\"industry_id2\":\"" + id2 + "\"}";
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -580,7 +588,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public String getTemplateId(String tmlShortId) {
-        String url = mergeUrl(add_template + getAccessToken());
+        String url = mergeCgiBinUrl(add_template + getAccessToken());
         ApiResult ar = null;
         String data = "{\"template_id_short\":\"" + tmlShortId + "\"}";
         for (int i = 0; i < RETRY_COUNT; i++) {
@@ -601,7 +609,7 @@ public class WechatAPIImpl implements WechatAPI {
                                 String topColor,
                                 String url,
                                 Template... tmls) {
-        String apiurl = mergeUrl(send_template + getAccessToken());
+        String apiurl = mergeCgiBinUrl(send_template + getAccessToken());
         ApiResult ar = null;
         String data = JsonMsgBuilder.create().template(openId, tmlId, topColor, url, tmls).build();
         for (int i = 0; i < RETRY_COUNT; i++) {

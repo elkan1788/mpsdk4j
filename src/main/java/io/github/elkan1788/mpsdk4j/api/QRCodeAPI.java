@@ -15,12 +15,12 @@ public interface QRCodeAPI {
     /**
      * 创建二维码ticket地址
      */
-    static String create_qrcode = "/qrcode/create?access_token=";
+    String create_qrcode = "/qrcode/create?access_token=";
 
     /**
      * 下载二维码地址
      */
-    static String show_qrcode = "/showqrcode?ticket=";
+    String show_qrcode = "/showqrcode?ticket=";
 
     /**
      * 创建二维码ticket

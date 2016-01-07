@@ -13,21 +13,22 @@ public interface CredentialAPI {
     /**
      * 获取access_token地址
      */
-    static String get_at = "/token?grant_type=client_credential&appid=%s&secret=%s";
+    String get_at = "/token?grant_type=client_credential&appid=%s&secret=%s";
+
     /**
      * 获取微信服务器IP地址
      */
-    static String cb_ips = "/getcallbackip?access_token=";
+    String cb_ips = "/getcallbackip?access_token=";
 
     /**
      * 长链接转短链接地址
      */
-    static String short_url = "/shorturl?access_token=";
+    String short_url = "/shorturl?access_token=";
 
     /**
      * JSSDK临时凭证地址
      */
-    static String js_ticket = "/ticket/getticket?type=jsapi&access_token=";
+    String js_ticket = "/ticket/getticket?type=jsapi&access_token=";
 
     /**
      * 获取微信服务凭证

@@ -13,10 +13,10 @@ import io.github.elkan1788.mpsdk4j.vo.api.Media;
 public interface MediaAPI {
 
     // 上传多媒体
-    static String upload_media = "/media/upload?access_token=%s&type=%s";
+    String upload_media = "/media/upload?access_token=%s&type=%s";
 
     // 下载多媒体
-    static String get_media = "/media/get?access_token=%s&media_id=%s";
+    String get_media = "/media/get?access_token=%s&media_id=%s";
 
     /**
      * 上传多媒体文件

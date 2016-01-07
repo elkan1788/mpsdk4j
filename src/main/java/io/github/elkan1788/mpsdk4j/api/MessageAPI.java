@@ -12,10 +12,11 @@ import io.github.elkan1788.mpsdk4j.vo.api.Template;
  * @since 2.0
  */
 public interface MessageAPI {
+    
     /**
      * 发模板消息地址
      */
-    static String send_template = "/message/template/send?access_token=";
+    String send_template = "/message/template/send?access_token=";
 
     /**
      * 发送模板消息
