@@ -35,11 +35,11 @@ public class JSTicket {
     }
 
     public void setExpiresIn(long expiresIn) {
-        this.expiresIn = (expiresIn - 30) * 1000;
+        this.expiresIn = System.currentTimeMillis() + (expiresIn - 60) * 1000;
     }
 
     public boolean isAvailable() {
-        if (!Lang.isEmpty(ticket) || this.expiresIn >= System.currentTimeMillis()) {
+        if (!Lang.isEmpty(ticket) && this.expiresIn >= System.currentTimeMillis()) {
             return true;
         }
         return false;
