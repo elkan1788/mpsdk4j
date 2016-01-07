@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.nutz.lang.random.R;
@@ -14,7 +15,6 @@ import org.nutz.lang.random.StringGenerator;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
-import io.github.elkan1788.mpsdk4j.TestSupport;
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
@@ -28,7 +28,7 @@ import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class WechatKernelTest extends TestSupport {
+public class WechatKernelTest extends RunTestSupport {
 
     private static final Log log = Logs.get();
 
@@ -38,11 +38,6 @@ public class WechatKernelTest extends TestSupport {
     @Before
     public void init() {
         log.info("====== WechatKernelTest ======");
-        mpAct = new MPAccount();
-        mpAct.setMpId(_cr.get("mpId"));
-        mpAct.setAppId(_cr.get("appId"));
-        mpAct.setAppSecret(_cr.get("appSecret"));
-        mpAct.setToken(_cr.get("token"));
         data = new HashMap<String, String[]>();
         data.put("signature", new String[]{"af06ae6995cb1979e465d3b8015509ad61bb7204"});
         data.put("timestamp", new String[]{"1442726144"});

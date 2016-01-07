@@ -15,7 +15,6 @@ import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 
-import io.github.elkan1788.mpsdk4j.TestSupport;
 import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 
 /**
@@ -25,7 +24,7 @@ import io.github.elkan1788.mpsdk4j.vo.ApiResult;
  * @since 2.0
  */
 @SuppressWarnings("unchecked")
-public class HttpToolTest extends TestSupport {
+public class HttpToolTest {
 
     private String openId;
     private String appId;
@@ -35,11 +34,11 @@ public class HttpToolTest extends TestSupport {
 
     @Before
     public void init() {
-        this.openId = _cr.get("openId");
+        /*this.openId = _cr.get("openId");
         this.appId = _cr.get("appId");
         this.appSecret = _cr.get("appSecret");
         this.accessToken = _cr.get("accessToken");
-        this.mediaId = _cr.get("mediaId");
+        this.mediaId = _cr.get("mediaId");*/
     }
 
     // 注意access_token接口调用次数,建议跑一次就关闭

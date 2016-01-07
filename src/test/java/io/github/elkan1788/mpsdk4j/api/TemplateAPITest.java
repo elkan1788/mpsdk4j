@@ -12,12 +12,11 @@ import org.nutz.log.Logs;
  * @since 2.0
  */
 // TODO 此为新接口待测试
-public class TemplateAPITest extends APITestSupport {
+public class TemplateAPITest {
 
     private static final Log log = Logs.get();
 
-    @SuppressWarnings("unused")
-    private TemplateAPI ta;
+   /* private TemplateAPI ta;
 
     @Override
     @Before
@@ -41,6 +40,6 @@ public class TemplateAPITest extends APITestSupport {
         // String tmplid = ta.getTemplateId("5A90LqXLMHUVd0d1PFv-TezTxYWf2PBDV1APvAMeb1E");
         // assertNotNull(tmplid);
         // log.info(tmplid);
-    }
+    }*/
 
 }

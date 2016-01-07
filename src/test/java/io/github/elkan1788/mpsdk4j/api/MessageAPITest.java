@@ -14,11 +14,11 @@ import org.nutz.log.Logs;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class MessageAPITest extends APITestSupport {
+public class MessageAPITest {
 
     private static final Log log = Logs.get();
 
-    private MessageAPI ma;
+   /* private MessageAPI ma;
 
     private String openId;
 
@@ -39,6 +39,6 @@ public class MessageAPITest extends APITestSupport {
         long msgid = ma.sendTemplateMsg(openId, tmlId, "#119EF3", url, tml);
         assertTrue(msgid > 0);
         log.info(msgid);
-    }
+    }*/
 
 }

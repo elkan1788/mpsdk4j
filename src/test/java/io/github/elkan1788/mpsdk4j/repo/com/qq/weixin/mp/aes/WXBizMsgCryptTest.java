@@ -3,11 +3,11 @@ package io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes;
 import static org.junit.Assert.assertNotNull;
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 /**
  * WXBizMsgCrypt 测试
@@ -30,7 +30,7 @@ public class WXBizMsgCryptTest {
 
     private WXBizMsgCrypt pc;
 
-    @Before
+    @BeforeClass
     public void init() {
         log.info("====== WXBizMsgCryptTest ======");
         try {

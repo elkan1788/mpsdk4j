@@ -18,14 +18,14 @@ import org.nutz.log.Logs;
  * @since 2.0
  */
 // TODO 此API貌似有问题,以后再好好检测
-public class QRCodeAPITest extends APITestSupport {
+public class QRCodeAPITest {
 
     private static final Log log = Logs.get();
 
     private QRCodeAPI qa;
     private int expireSeconds = 604800;
     private String ticket;
-
+/*
     @Override
     @Before
     public void init() {
@@ -52,6 +52,6 @@ public class QRCodeAPITest extends APITestSupport {
         File qrImg = qa.getQR(ticket);
         assertNotNull(qrImg);
         log.infof("temp path: %s", qrImg.getAbsolutePath());
-    }
+    }*/
 
 }
