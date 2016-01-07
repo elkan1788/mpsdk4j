@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import io.github.elkan1788.mpsdk4j.vo.event.*;
+import io.github.elkan1788.mpsdk4j.vo.message.*;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
@@ -21,22 +23,6 @@ import io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.SHA1;
 import io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.ScanEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
-import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.LinkMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 import io.github.elkan1788.mpsdk4j.vo.push.SentAllJobEvent;
 import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
 
@@ -88,7 +74,7 @@ public class WechatKernel {
         this.params = params;
         if (log.isDebugEnabled()) {
             Set<Entry<String, String[]>> es = params.entrySet();
-            log.debug("wechat server request params.");
+            log.debug("微信服务器请求参数列表.");
             for (Entry<String, String[]> e : es) {
                 log.debugf("%s-%s", e.getKey(), e.getValue()[ 0]);
             }
@@ -143,14 +129,14 @@ public class WechatKernel {
             || ts.length() > 128
             || nonce == null
             || nonce.length() > 128) {
-            log.warnf("The sign params are null or too long. Please check them.");
+            log.warnf("接入微信服务器认证的加密参数为空或是长度大于128.");
             return "error";
         }
 
         try {
             String validsign = SHA1.calculate(mpAct.getToken(), ts, nonce);
             if (log.isDebugEnabled()) {
-                log.debugf("Valid wechat server sign %b. sign: %s",
+                log.debugf("接入微信服务器认证: %b. 加密字符串: %s",
                            Lang.equals(validsign, sign),
                            validsign);
             }
@@ -239,7 +225,7 @@ public class WechatKernel {
             mt = MessageType.valueOf(msgHandler.getValues().get("msgType"));
         }
         catch (Exception e) {
-            log.error("There are have found new meessage type in wechat.");
+            log.error("处理微信普通消息时发现新的消息类型,请查阅官方更新文档.");
             mt = MessageType.def;
         }
         switch (mt) {
@@ -291,7 +277,7 @@ public class WechatKernel {
             et = EventType.valueOf(msgHandler.getValues().get("event"));
         }
         catch (Exception e) {
-            log.error("There are have found new event type from wechat.");
+            log.error("处理微信事件消息时发现新的事件类型,请查阅官方更新文档.");
             et = EventType.def;
         }
         switch (et) {
@@ -359,6 +345,18 @@ public class WechatKernel {
                 SentAllJobEvent saje = new SentAllJobEvent(msgHandler.getValues());
                 handler.eSentAllJobFinish(saje);
                 break;
+            case kf_create_session:
+                CustomServiceEvent sce_create = new CustomServiceEvent(msgHandler.getValues());
+                handler.eCreateKfSession(sce_create);
+                break;
+            case kf_close_session:
+                CustomServiceEvent sce_close = new CustomServiceEvent(msgHandler.getValues());
+                handler.eCloseKfSession(sce_close);
+                break;
+            case kf_switch_session:
+                CustomServiceEvent sce_switch = new CustomServiceEvent(msgHandler.getValues());
+                handler.eSwitchKfSession(sce_switch);
+                break;
             default:
                 BasicEvent be = new BasicEvent(msgHandler.getValues());
                 msg = handler.defEvent(be);
@@ -406,6 +404,9 @@ public class WechatKernel {
                 break;
             case news:
                 respmsg = XmlMsgBuilder.create().news((NewsMsg) msg).build();
+                break;
+            case transfer_customer_service:
+                respmsg = XmlMsgBuilder.create().transferCustomerService((CustomerServiceMsg) msg).build();
                 break;
             default:
                 break;

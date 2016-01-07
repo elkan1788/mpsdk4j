@@ -186,6 +186,18 @@ public class MessageHandler extends DefaultHandler2 {
             _vals.put("errorCount", attrVal);
             return;
         }
+        if("KfAccount".equals(qName)){
+            _vals.put("kfAccount", attrVal);
+            return;
+        }
+        if("FromKfAccount".equals(qName)) {
+            _vals.put("fromKfAccount", attrVal);
+            return;
+        }
+        if("ToKfAccount".equals(qName)) {
+            _vals.put("toKfAccount", attrVal);
+            return;
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.CustomerServiceMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
@@ -156,6 +157,16 @@ public class XmlMsgBuilder {
         arts_buf.append("</Articles>\n");
         msgBuf.append("<ArticleCount>").append(msg.getCount()).append("</ArticleCount>\n");
         msgBuf.append(arts_buf);
+        return this;
+    }
+
+    /**
+     * 转发客服消息
+     *
+     * @param msg   客服消息
+     */
+    public XmlMsgBuilder transferCustomerService(CustomerServiceMsg msg) {
+        msgPrefix(msg);
         return this;
     }
 
