@@ -5,19 +5,11 @@ import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
 import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.JSTicketMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.MemoryCache;
+import io.github.elkan1788.mpsdk4j.session.WebOauth2TokenMemoryCache;
 import io.github.elkan1788.mpsdk4j.util.HttpTool;
 import io.github.elkan1788.mpsdk4j.vo.ApiResult;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
-import io.github.elkan1788.mpsdk4j.vo.api.AccessToken;
-import io.github.elkan1788.mpsdk4j.vo.api.FollowList;
-import io.github.elkan1788.mpsdk4j.vo.api.Follower;
-import io.github.elkan1788.mpsdk4j.vo.api.Follower2;
-import io.github.elkan1788.mpsdk4j.vo.api.Groups;
-import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
-import io.github.elkan1788.mpsdk4j.vo.api.Media;
-import io.github.elkan1788.mpsdk4j.vo.api.Menu;
-import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
-import io.github.elkan1788.mpsdk4j.vo.api.Template;
+import io.github.elkan1788.mpsdk4j.vo.api.*;
 
 import java.io.File;
 import java.util.Collection;
@@ -51,6 +43,8 @@ public class WechatAPIImpl implements WechatAPI {
 
     protected static MemoryCache<JSTicket> _jstmc;
 
+    protected static MemoryCache<WebOauth2Result> _oath2;
+
     private MPAccount mpAct;
 
     public WechatAPIImpl(MPAccount mpAct) {
@@ -61,6 +55,9 @@ public class WechatAPIImpl implements WechatAPI {
             }
             if (_jstmc == null) {
                 _jstmc = new JSTicketMemoryCache();
+            }
+            if(_oath2 == null) {
+                _oath2 = new WebOauth2TokenMemoryCache();
             }
         }
     }
@@ -84,11 +81,18 @@ public class WechatAPIImpl implements WechatAPI {
         return new WechatAPIImpl(mpAct);
     }
 
+    private String mergeAPIUrl(String url, Object... values) {
+        if (!Lang.isEmpty(values)) {
+            return wechatAPI + String.format(url, values);
+        }
+        return wechatAPI + url;
+    }
+
     private String mergeCgiBinUrl(String url, Object... values) {
         if (!Lang.isEmpty(values)) {
-            return cgi_bin + String.format(url, values);
+            return cgiBin + String.format(url, values);
         }
-        return cgi_bin + url;
+        return cgiBin + url;
     }
 
     /**
@@ -607,13 +611,13 @@ public class WechatAPIImpl implements WechatAPI {
     public long sendTemplateMsg(String openId,
                                 String tmlId,
                                 String topColor,
-                                String url,
+                                String targetUrl,
                                 Template... tmls) {
-        String apiurl = mergeCgiBinUrl(send_template + getAccessToken());
+        String url = mergeCgiBinUrl(send_template + getAccessToken());
         ApiResult ar = null;
-        String data = JsonMsgBuilder.create().template(openId, tmlId, topColor, url, tmls).build();
+        String data = JsonMsgBuilder.create().template(openId, tmlId, topColor, targetUrl, tmls).build();
         for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(apiurl, data));
+            ar = ApiResult.create(HttpTool.post(url, data));
             if (ar.isSuccess()) {
                 return Long.valueOf(ar.get("msgid").toString());
             }
@@ -626,4 +630,89 @@ public class WechatAPIImpl implements WechatAPI {
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
     }
 
+    @Override
+    public WebOauth2Result getWebOauth2Result(String authCode) {
+        String url = mergeAPIUrl(oauth2, mpAct.getAppId(), mpAct.getAppSecret(), authCode);
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                WebOauth2Result result = Json.fromJson(WebOauth2Result.class, ar.getJson());
+                _oath2.set(result.getOpenId(), result);
+                return result;
+            }
+
+            log.errorf("第%d次获取公众号[%s]网页授权信息失败.",
+                    i,
+                    mpAct.getMpId());
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    protected WebOauth2Result refreshWebOauth2Result(String refreshToken) {
+        String url = mergeAPIUrl(refreshToken, mpAct.getAppId(), refreshToken);
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                WebOauth2Result result = Json.fromJson(WebOauth2Result.class, ar.getJson());
+                _oath2.set(result.getOpenId(), result);
+                return result;
+            }
+
+            log.errorf("第%d次刷新公众号[%s]网页授权信息失败.",
+                    i,
+                    mpAct.getMpId());
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public Follower getWebOauth2User(String openId, String lang) {
+
+        WebOauth2Result result = _oath2.get(openId);
+        if (result == null){
+            Lang.wrapThrow(new WechatApiException("用户未授权"));
+        } else if (!result.isAvailable()){
+            result = refreshWebOauth2Result(result.getRefreshToken());
+        }
+
+        String url = mergeAPIUrl(oauth2User, result.getAccessToken(), lang);
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                return Json.fromJson(Follower.class, ar.getJson());
+            }
+
+            log.errorf("第%d次获取公众号[%s]用户[%s]信息失败.",
+                    i,
+                    mpAct.getMpId(),
+                    openId);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
+
+    @Override
+    public boolean checkWebOauth2Token(String accessToken, String openId) {
+        String url = mergeAPIUrl(checkToken, accessToken, openId);
+        ApiResult ar = null;
+        for (int i = 0; i < RETRY_COUNT; i++) {
+            ar = ApiResult.create(HttpTool.get(url));
+            if (ar.isSuccess()) {
+                return true;
+            }
+
+            log.errorf("第%d次检查公众号[%s]用户[%s]网页凭证[%s]信息失败.",
+                    i,
+                    mpAct.getMpId(),
+                    accessToken,
+                    openId);
+        }
+
+        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+    }
 }
