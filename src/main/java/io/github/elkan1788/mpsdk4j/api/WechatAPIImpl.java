@@ -7,16 +7,9 @@ import io.github.elkan1788.mpsdk4j.session.JSTicketMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.MemoryCache;
 import io.github.elkan1788.mpsdk4j.session.WebOauth2TokenMemoryCache;
 import io.github.elkan1788.mpsdk4j.util.HttpTool;
-import io.github.elkan1788.mpsdk4j.vo.ApiResult;
+import io.github.elkan1788.mpsdk4j.vo.APIResult;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 import io.github.elkan1788.mpsdk4j.vo.api.*;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.nutz.castor.Castors;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
@@ -25,6 +18,12 @@ import org.nutz.lang.Strings;
 import org.nutz.lang.util.NutMap;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 微信公众平台所有接口实现
@@ -37,13 +36,20 @@ public class WechatAPIImpl implements WechatAPI {
 
     private static final Log log = Logs.get();
 
-    static int RETRY_COUNT = 3;
+    private static int RETRY_COUNT = 3;
 
-    protected static MemoryCache<AccessToken> _atmc;
+    // 设置HTTP请求方式
+    private static int HTTP_GET = 1;
+    private static int HTTP_POST = 2;
+    private static int HTTP_UPLOAD = 3;
+    private static int HTTP_DOWNLOAD = 4;
+    private static String NONE_BODY = null;
 
-    protected static MemoryCache<JSTicket> _jstmc;
+    private static MemoryCache<AccessToken> _atmc;
 
-    protected static MemoryCache<WebOauth2Result> _oath2;
+    private static MemoryCache<JSTicket> _jstmc;
+
+    private static MemoryCache<WebOauth2Result> _oath2;
 
     private MPAccount mpAct;
 
@@ -95,53 +101,85 @@ public class WechatAPIImpl implements WechatAPI {
         return cgiBin + url;
     }
 
+
+
     /**
-     * 强制刷新微信服务凭证
+     * 微信API响应输出
+     * @param url   地址
+     * @param methodType    请求方式 1:HTTP_GET, 2:HTTP_POST
+     * @param body          POST数据内容
+     * @param errorMsg      错误信息
+     * @param params        错误信息参数
+     * @return              {@link APIResult}
      */
-    private synchronized void refreshAccessToken() {
-        String url = mergeCgiBinUrl(get_at, mpAct.getAppId(), mpAct.getAppSecret());
-        AccessToken at = null;
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                at = Json.fromJson(AccessToken.class, ar.getJson());
-                _atmc.set(mpAct.getMpId(), at);
+    protected APIResult wechatServerResponse(String url, int methodType, Object body, String errorMsg, Object... params) {
+        APIResult ar = APIResult.create("{\"errCode\":0,\"errMsg\":\"OK\"}");
+        for (int i=0; i < RETRY_COUNT; i++) {
+            switch (methodType) {
+                case 1:
+                    ar = APIResult.create(HttpTool.get(url));
+                    break;
+                case 2:
+                    ar = APIResult.create(HttpTool.post(url, (String)body));
+                    break;
+                case 3:
+                    ar = APIResult.create(HttpTool.upload(url, (File) body));
+                    break;
+                case 4:
+                    Object tmp = HttpTool.download(url);
+                    if(tmp instanceof File) {
+                        ar.getContent().put("file", tmp);
+                    } else {
+                        ar = APIResult.create((String) tmp);
+                    }
+                    break;
+                default:
+                    break;
             }
 
-            if (at != null && at.isAvailable()) {
-                return;
+            if (ar != null && ar.isSuccess()) {
+                return ar;
             }
 
-            log.errorf("Get mp[%s]access_token failed. There try %d items.", mpAct.getMpId(), i + 1);
-
+            log.errorf("第%d尝试与微信服务器建立%s通讯.", (i+1), (methodType == HTTP_GET ? "HTTP GET" : "HTTP POST"));
+            if (params == null){
+                log.errorf(errorMsg, mpAct.getMpId());
+            } else {
+                Object[] args = new Object[params.length+1];
+                args[0] = mpAct.getMpId();
+                System.arraycopy(params, 0, args, 1, params.length);
+                log.errorf(errorMsg, args);
+                if (ar != null && Lang.isEmpty(ar.getErrCNMsg())) {
+                    log.errorf(ar.getErrCNMsg());
+                }
+            }
         }
 
         throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
     }
 
+    /**
+     * 强制刷新微信服务凭证
+     */
+    private synchronized void refreshAccessToken() {
+        String url = mergeCgiBinUrl(get_at, mpAct.getAppId(), mpAct.getAppSecret());
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "获取公众号[%s]的access token失败.");
+        _atmc.set(mpAct.getMpId(), Json.fromJson(AccessToken.class, ar.getJson()));
+    }
+
+    /**
+     * 强制刷新微信JS票据
+     */
     private synchronized void refreshJSTicket() {
         String url = mergeCgiBinUrl(js_ticket + getAccessToken());
-        JSTicket jst = null;
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                jst = Json.fromJson(JSTicket.class, ar.getJson());
-                _jstmc.set(mpAct.getMpId(), jst);
-            }
-
-            if (jst != null && jst.isAvailable()) {
-                return;
-            }
-
-            log.errorf("Get mp[%s] JSSDK ticket failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i + 1);
-
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "获取公众号[%s]的JSSDK Ticket失败.");
+        _jstmc.set(mpAct.getMpId(), Json.fromJson(JSTicket.class, ar.getJson()));
     }
 
     @Override
@@ -157,34 +195,23 @@ public class WechatAPIImpl implements WechatAPI {
     @Override
     public List<String> getServerIps() {
         String url = mergeCgiBinUrl(cb_ips + getAccessToken());
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                return Json.fromJsonAsList(String.class, Json.toJson(ar.get("ip_list")));
-            }
-
-            log.errorf("Get mp[%s] server ips failed. There try %d items.", mpAct.getMpId(), i + 1);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "获取公众号[%s]服务器IP列表失败.");
+        return Json.fromJsonAsList(String.class, Json.toJson(ar.get("ip_list")));
     }
 
     @Override
     public String getShortUrl(String longUrl) {
         String url = mergeCgiBinUrl(short_url + getAccessToken());
         String data = "{\"action\":\"long2short\",\"long_url\":\"" + longUrl + "\"}";
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return String.valueOf(ar.get("short_url"));
-            }
-
-            log.errorf("Create mp[%s] short url failed. There try %d items.", mpAct.getMpId(), i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "获取公众号[%s]生成[%s]短链接失败.",
+                longUrl);
+        return String.valueOf(ar.get("short_url"));
     }
 
     @Override
@@ -200,25 +227,17 @@ public class WechatAPIImpl implements WechatAPI {
     @Override
     public List<Menu> getMenu() {
         String url = mergeCgiBinUrl(query_menu + getAccessToken());
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                Map<String, Object> button = Json.fromJson(Map.class, Json.toJson(ar.get("menu")));
-                return Json.fromJsonAsList(Menu.class, Json.toJson(button.get("button")));
-            }
-
-            // 菜单为空
-            if (ar.getErrCode().intValue() == 46003) {
-                return null;
-            }
-
-            log.errorf("Get mp[%s] custom menu failed. There try %d items.",
-                       mpAct.getAppId(),
-                       i + 1);
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                NONE_BODY,
+                "获取公众号[%s]的自定义菜单失败.");
+        // 菜单为空
+        if (ar.getErrCode() != null && ar.getErrCode().intValue() == 46003) {
+            return null;
         }
 
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        Map<String, Object> button = Json.fromJson(Map.class, Json.toJson(ar.get("menu")));
+        return Json.fromJsonAsList(Menu.class, Json.toJson(button.get("button")));
     }
 
     @Override
@@ -227,170 +246,104 @@ public class WechatAPIImpl implements WechatAPI {
         Map<String, Object> body = new HashMap<String, Object>();
         body.put("button", menu);
         String data = Json.toJson(body, JsonFormat.compact());
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Create mp[%s] custom menu failed. There try %d items.",
-                       mpAct.getAppId(),
-                       i + 1);
-
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "生成公众号[%s]的自定义菜单失败.");
+        return ar.isSuccess();
     }
 
     @Override
     public boolean delMenu() {
         String url = mergeCgiBinUrl(del_menu + getAccessToken());
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Delete mp[%s] custom menu failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i + 1);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "删除公众号[%s]自定义菜单失败.");
+        return ar.isSuccess();
     }
 
     @Override
     public Media upMedia(String type, File media) {
         String url = mergeCgiBinUrl(upload_media, getAccessToken(), type);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.upload(url, media));
-            if (ar.isSuccess()) {
-                return Json.fromJson(Media.class, ar.getJson());
-            }
-
-            log.errorf("Upload mp[%s] media failed. There try %d items.", mpAct.getMpId(), i + 1);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_UPLOAD,
+                media,
+                "上传公众号[%s]的多媒体文件[%s]失败.",
+                media.getName());
+        return Json.fromJson(Media.class, ar.getJson());
     }
 
     @Override
     public File dlMedia(String mediaId) {
         String url = mergeCgiBinUrl(get_media, getAccessToken(), mediaId);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            Object tmp = HttpTool.download(url);
-            if (tmp instanceof File) {
-                return (File) tmp;
-            }
-
-            ar = ApiResult.create((String) tmp);
-            log.errorf("Download mp[%s] media failed. There try %d items.", mpAct.getMpId(), i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_DOWNLOAD,
+                NONE_BODY,
+                "下载公众号[%s]的多媒体文件[%s]失败.",
+                mediaId);
+        return (File) ar.get("file");
     }
 
     @Override
     public int createGroup(String name) {
         String url = mergeCgiBinUrl(create_groups + getAccessToken());
         String data = "{\"group\":{\"name\":\"" + name + "\"}}";
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                Groups g = Json.fromJson(Groups.class, Json.toJson(ar.get("group")));
-                return g.getId();
-            }
-
-            log.errorf("Create mp[%s] group name[%s] failed. There try %d items.",
-                       mpAct.getMpId(),
-                       name,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "创建公众号[%s]的新分组[%s]失败.",
+                name);
+        Groups g = Json.fromJson(Groups.class, Json.toJson(ar.get("group")));
+        return g.getId();
     }
 
     @Override
     public List<Groups> getGroups() {
         String url = mergeCgiBinUrl(get_groups + getAccessToken());
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                return Json.fromJsonAsList(Groups.class, Json.toJson(ar.get("groups")));
-            }
-
-            log.errorf("Get mp[%s] groups failed. There try %d items.", mpAct.getMpId(), i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "获取公众号[%s]的所有分组信息失败.");
+        return Json.fromJsonAsList(Groups.class, Json.toJson(ar.get("groups")));
     }
 
     @Override
     public int getGroup(String openId) {
         String url = mergeCgiBinUrl(get_member_group + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\"}";
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return Integer.parseInt(String.valueOf(ar.get("groupid")));
-            }
-
-            log.errorf("Get mp[%s] openId[%s] groups failed. There try %d items.",
-                       mpAct.getMpId(),
-                       openId,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "获取公众号[%s]用户[%s]所在分组ID失败.",
+                openId);
+        return Integer.parseInt(String.valueOf(ar.get("groupid")));
     }
 
     @Override
     public boolean renGroups(int id, String name) {
         String url = mergeCgiBinUrl(update_group + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + ",\"name\":\"" + name + "\"}}";
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Rename mp[%s] groups[%d-%s] failed. There try %d items.",
-                       mpAct.getMpId(),
-                       id,
-                       name,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "重新命名公众号[%s]分组[%d-%s]的名称失败.",
+                id,
+                name);
+        return ar.isSuccess();
     }
 
     @Override
     public boolean move2Group(String openId, int groupId) {
         String url = mergeCgiBinUrl(update_member_group + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\",\"to_groupid\":" + groupId + "}";
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Move mp[%s] openId[%s] to groups[%d] failed. There try %d items.",
-                       mpAct.getMpId(),
-                       openId,
-                       groupId,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "移动公众号[%s]用户[%s]到新分组[%d]失败.",
+                openId,
+                groupId);
+        return ar.isSuccess();
     }
 
     @Override
@@ -399,46 +352,30 @@ public class WechatAPIImpl implements WechatAPI {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("openid_list", Json.toJson(openIds));
         data.put("to_groupid", groupId);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, Json.toJson(data, JsonFormat.compact())));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Move mp[%s] openIds to groups[%d] failed. There try %d items.",
-                       mpAct.getMpId(),
-                       groupId,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                Json.toJson(data, JsonFormat.compact()),
+                "批量移动公众号[%s]的%d个用户到新分组[%d]失败.",
+                openIds.size(),
+                groupId);
+        return ar.isSuccess();
     }
 
     @Override
     public boolean delGroup(int id) {
         String url = mergeCgiBinUrl(delete_groups + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + "}}";
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Delete mp[%s] groups[%d] failed. There try %d items.",
-                       mpAct.getMpId(),
-                       id,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "删除公众号[%s]的分组[%d]信息失败.",
+                id);
+        return ar.isSuccess();
     }
 
     @Override
     public QRTicket createQR(Object sceneId, int expireSeconds) {
         String url = mergeCgiBinUrl(create_qrcode + getAccessToken());
-        ApiResult ar = null;
         NutMap data = new NutMap();
         NutMap scene;
         // 临时二维码
@@ -459,152 +396,99 @@ public class WechatAPIImpl implements WechatAPI {
             scene = Lang.map("scene_str", sceneId.toString());
         }
         data.put("action_info", Lang.map("scene", scene));
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, Json.toJson(data, JsonFormat.compact())));
-            if (ar.isSuccess()) {
-                return Json.fromJson(QRTicket.class, Json.toJson(ar.getContent()));
-            }
-
-            log.infof("Create mp[%s] scene[%s] qrcode failed. There try %d items.",
-                      mpAct.getMpId(),
-                      data.get("action_name"),
-                      i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                Json.toJson(data, JsonFormat.compact()),
+                "创建公众号[%s]的[%s]场景二维码失败.");
+        return Json.fromJson(QRTicket.class, Json.toJson(ar.getContent()));
     }
 
     @Override
     public File getQR(String ticket) {
         String url = mergeCgiBinUrl(show_qrcode + ticket);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            Object tmp = HttpTool.get(url);
-            if (tmp instanceof File) {
-                return (File) tmp;
-            }
-
-            ar = ApiResult.create((String) tmp);
-            log.errorf("Download mp[%s] qrcode image failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_DOWNLOAD,
+                NONE_BODY,
+                "下载公众号[%s]的二维码[%s]失败.",
+                ticket);
+        return (File) ar.get("file");
     }
 
     @Override
     public boolean updateRemark(String openId, String remark) {
         String url = mergeCgiBinUrl(user_remark + getAccessToken());
-        ApiResult ar = null;
         String data = "{\"openid\":\"" + openId + "\",\"remark\":\"" + remark + "\"}";
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Update mp[%s] user[%s] remark[%s] failed. There try %d items.",
-                       mpAct.getMpId(),
-                       openId,
-                       remark,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "更新公众号[%s]用户[%s]备注[%s]信息失败.",
+                openId,
+                remark);
+        return ar.isSuccess();
     }
 
     @Override
     public FollowList getFollowerList(String nextOpenId) {
         String url = mergeCgiBinUrl(user_list, getAccessToken(), Strings.sNull(nextOpenId, ""));
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                FollowList fl = Json.fromJson(FollowList.class, ar.getJson());
-                Map<String, Object> openid = (Map<String, Object>) ar.get("data");
-                fl.setOpenIds(Json.fromJson(List.class, Json.toJson(openid.get("openid"))));
-                return fl;
-            }
-
-            log.infof("Get mp[%s] follow list failed. There try %d items.", mpAct.getMpId(), i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "拉取公众号[%s]的关注用户列表信息失败.",
+                Lang.isEmpty(nextOpenId) ? "" : "[以用户"+nextOpenId+"开始]");
+        FollowList fl = Json.fromJson(FollowList.class, ar.getJson());
+        Map<String, Object> openid = (Map<String, Object>) ar.get("data");
+        fl.setOpenIds(Json.fromJson(List.class, Json.toJson(openid.get("openid"))));
+        return fl;
     }
 
     @Override
     public Follower getFollower(String openId, String lang) {
-        String url = mergeCgiBinUrl(user_info, getAccessToken(), openId, Strings.sNull(lang, "zh_CN"));
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                return Json.fromJson(Follower.class, ar.getJson());
-            }
-
-            log.errorf("Get mp[%s] follower[%s] information failed. There try %d items.",
-                       mpAct.getMpId(),
-                       openId,
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        lang = Strings.sBlank(lang, "zh_CN");
+        String url = mergeCgiBinUrl(user_info, getAccessToken(), openId, lang);
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "获取公众号[%s]关注用户[%s-%s]信息失败.",
+                openId,
+                lang);
+        return Json.fromJson(Follower.class, ar.getJson());
     }
 
     @Override
     public List<Follower> getFollowers(Collection<Follower2> users) {
         String url = mergeCgiBinUrl(batch_user_info + getAccessToken());
-        ApiResult ar = null;
         String data = Json.toJson(Lang.map("user_list", users), JsonFormat.compact());
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return Json.fromJsonAsList(Follower.class, Json.toJson(ar.get("user_info_list")));
-            }
-
-            log.errorf("Get mp[%s] followers information failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "批量获取公众号[%s]的%d个用户信息失败.",
+                users.size());
+        return Json.fromJsonAsList(Follower.class, Json.toJson(ar.get("user_info_list")));
     }
 
     @Override
     public boolean setIndustry(int id1, int id2) {
         String url = mergeCgiBinUrl(set_industry + getAccessToken());
-        ApiResult ar = null;
         String data = "{\"industry_id1\":\"" + id1 + "\",\"industry_id2\":\"" + id2 + "\"}";
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("Set mp[%s] template industry failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "设置公众号[%s]的模板新属性[%d-%d]信息失败.",
+                id1,
+                id2);
+        return ar.isSuccess();
     }
 
     @Override
     public String getTemplateId(String tmlShortId) {
         String url = mergeCgiBinUrl(add_template + getAccessToken());
-        ApiResult ar = null;
         String data = "{\"template_id_short\":\"" + tmlShortId + "\"}";
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return String.valueOf(ar.get("template_id"));
-            }
-
-            log.errorf("Get mp[%s] template id failed. There try %d items.", mpAct.getMpId(), i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "获取公众号[%s]的模板ID[%s]失败.",
+                tmlShortId);
+        return String.valueOf(ar.get("template_id"));
     }
 
     @Override
@@ -614,105 +498,70 @@ public class WechatAPIImpl implements WechatAPI {
                                 String targetUrl,
                                 Template... tmls) {
         String url = mergeCgiBinUrl(send_template + getAccessToken());
-        ApiResult ar = null;
         String data = JsonMsgBuilder.create().template(openId, tmlId, topColor, targetUrl, tmls).build();
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.post(url, data));
-            if (ar.isSuccess()) {
-                return Long.valueOf(ar.get("msgid").toString());
-            }
-
-            log.errorf("Send mp[%s] template message failed. There try %d items.",
-                       mpAct.getMpId(),
-                       i);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "给公众号[%s]发送模板[%s]消息失败.",
+                openId,
+                tmlId);
+        return Long.valueOf(ar.get("msgid").toString());
     }
 
     @Override
     public WebOauth2Result getWebOauth2Result(String authCode) {
         String url = mergeAPIUrl(oauth2, mpAct.getAppId(), mpAct.getAppSecret(), authCode);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                WebOauth2Result result = Json.fromJson(WebOauth2Result.class, ar.getJson());
-                _oath2.set(result.getOpenId(), result);
-                return result;
-            }
-
-            log.errorf("第%d次获取公众号[%s]网页授权信息失败.",
-                    i,
-                    mpAct.getMpId());
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                "换取公众号[%s]授权码[%s]凭证信息失败.",
+                authCode);
+        WebOauth2Result result = Json.fromJson(WebOauth2Result.class, ar.getJson());
+        _oath2.set(result.getOpenId(), result);
+        return result;
     }
 
     protected WebOauth2Result refreshWebOauth2Result(String refreshToken) {
         String url = mergeAPIUrl(refreshToken, mpAct.getAppId(), refreshToken);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                WebOauth2Result result = Json.fromJson(WebOauth2Result.class, ar.getJson());
-                _oath2.set(result.getOpenId(), result);
-                return result;
-            }
-
-            log.errorf("第%d次刷新公众号[%s]网页授权信息失败.",
-                    i,
-                    mpAct.getMpId());
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "刷新公众号[%s]的网页授权[%s]凭证信息失败.",
+                refreshToken);
+        WebOauth2Result result = Json.fromJson(WebOauth2Result.class, ar.getJson());
+        _oath2.set(result.getOpenId(), result);
+        return result;
     }
 
     @Override
     public Follower getWebOauth2User(String openId, String lang) {
-
+        lang = Strings.sBlank(lang, "zh_CN");
         WebOauth2Result result = _oath2.get(openId);
         if (result == null){
-            Lang.wrapThrow(new WechatApiException("用户未授权"));
+           throw Lang.wrapThrow(new WechatApiException("用户未授权"));
         } else if (!result.isAvailable()){
             result = refreshWebOauth2Result(result.getRefreshToken());
         }
 
         String url = mergeAPIUrl(oauth2User, result.getAccessToken(), lang);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                return Json.fromJson(Follower.class, ar.getJson());
-            }
-
-            log.errorf("第%d次获取公众号[%s]用户[%s]信息失败.",
-                    i,
-                    mpAct.getMpId(),
-                    openId);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "以网页授权方式获取公众号[%s]的用户[%s-%s]信息失败.",
+                openId,
+                lang);
+        return Json.fromJson(Follower.class, ar.getJson());
     }
 
     @Override
     public boolean checkWebOauth2Token(String accessToken, String openId) {
         String url = mergeAPIUrl(checkToken, accessToken, openId);
-        ApiResult ar = null;
-        for (int i = 0; i < RETRY_COUNT; i++) {
-            ar = ApiResult.create(HttpTool.get(url));
-            if (ar.isSuccess()) {
-                return true;
-            }
-
-            log.errorf("第%d次检查公众号[%s]用户[%s]网页凭证[%s]信息失败.",
-                    i,
-                    mpAct.getMpId(),
-                    accessToken,
-                    openId);
-        }
-
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        APIResult ar = wechatServerResponse(url,
+                HTTP_GET,
+                NONE_BODY,
+                "验证公众号[%s]用户[%s]授权凭证[%s]信息失败.",
+                mpAct.getMpId(),
+                openId,
+                accessToken);
+        return ar.isSuccess();
     }
 }
