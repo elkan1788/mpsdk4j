@@ -149,7 +149,7 @@ public class WechatAPIImpl implements WechatAPI {
                 args[0] = mpAct.getMpId();
                 System.arraycopy(params, 0, args, 1, params.length);
                 log.errorf(errorMsg, args);
-                if (ar != null && Lang.isEmpty(ar.getErrCNMsg())) {
+                if (ar != null && !Lang.isEmpty(ar.getErrCNMsg())) {
                     log.errorf(ar.getErrCNMsg());
                 }
             }
@@ -521,7 +521,7 @@ public class WechatAPIImpl implements WechatAPI {
     }
 
     protected WebOauth2Result refreshWebOauth2Result(String refreshToken) {
-        String url = mergeAPIUrl(refreshToken, mpAct.getAppId(), refreshToken);
+        String url = mergeAPIUrl(refreshTokenUrl, mpAct.getAppId(), refreshToken);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
