@@ -1,6 +1,7 @@
 package io.github.elkan1788.mpsdk4j.vo.api;
 
 import org.nutz.json.JsonField;
+import org.nutz.lang.Lang;
 
 /**
  * 网页授权结果
@@ -50,7 +51,8 @@ public class WebOauth2Result {
     }
 
     public void setExpiresIn(long expiresIn) {
-        this.expiresIn = expiresIn;
+        // 考虑到服务器时间同步,故将刷新时间提前60秒.
+        this.expiresIn = System.currentTimeMillis() + (expiresIn - 60) * 1000;
     }
 
     public String getRefreshToken() {
@@ -75,5 +77,27 @@ public class WebOauth2Result {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    public boolean isAvailable() {
+        if (!Lang.isEmpty(accessToken) && this.expiresIn >= System.currentTimeMillis()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "WebOauth2Result [accessToken="
+               + accessToken
+               + ", expiresIn="
+               + expiresIn
+               + ", refreshToken="
+               + refreshToken
+               + ", openId="
+               + openId
+               + ", scope="
+               + scope
+               + "]";
     }
 }
