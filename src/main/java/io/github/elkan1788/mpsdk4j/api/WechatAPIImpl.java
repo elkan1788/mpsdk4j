@@ -228,7 +228,7 @@ public class WechatAPIImpl implements WechatAPI {
     public List<Menu> getMenu() {
         String url = mergeCgiBinUrl(query_menu + getAccessToken());
         APIResult ar = wechatServerResponse(url,
-                HTTP_POST,
+                HTTP_GET,
                 NONE_BODY,
                 "获取公众号[%s]的自定义菜单失败.");
         // 菜单为空
