@@ -32,4 +32,28 @@
             <class name="io.github.elkan1788.mpsdk4j.api.MenuAPITest"/>
         </classes>
     </test>
+
+    <test name="MessageAPITest" enabled="true">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.MessageAPITest"/>
+        </classes>
+    </test>
+
+    <test name="QRCodeAPITest" enabled="true">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.QRCodeAPITest"/>
+        </classes>
+    </test>
+
+    <test name="TemplateAPITest" enabled="true">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.TemplateAPITest"/>
+        </classes>
+    </test>
+
+    <test name="UserAPITest" enabled="true">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.UserAPITest"/>
+        </classes>
+    </test>
 </suite>

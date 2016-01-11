@@ -1,17 +1,17 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import io.github.elkan1788.mpsdk4j.RunTestSupport;
-import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
-import mockit.Tested;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.util.List;
+
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
+import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
 
 /**
  * CredentialApi 测试

@@ -68,13 +68,14 @@ public class MenuAPITest extends RunTestSupport {
 
         boolean flag = wechatAPI.createMenu(customerMenus);
         assertTrue(flag);
+
     }
 
     @Test
     public void testGetMenu() {
         log.info("====== MenuAPI#getMenu ======");
 
-        String mockup_menus = "{ \"menu\": {  \"button\": "+ Json.toJson(customerMenus, JsonFormat.compact())+" }}";
+        String mockup_menus = "{\"menu\":{\"button\":"+Json.toJson(customerMenus,JsonFormat.compact())+"}}";
         MockUpHttpGet(mockup_menus);
 
         List<Menu> menus = wechatAPI.getMenu();

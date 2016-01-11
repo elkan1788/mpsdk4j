@@ -1,5 +1,13 @@
 package io.github.elkan1788.mpsdk4j;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.nutz.json.Json;
+import org.testng.annotations.BeforeClass;
+
 import io.github.elkan1788.mpsdk4j.api.WechatAPI;
 import io.github.elkan1788.mpsdk4j.api.WechatAPIImpl;
 import io.github.elkan1788.mpsdk4j.util.HttpTool;
@@ -10,14 +18,6 @@ import io.github.elkan1788.mpsdk4j.vo.message.Article;
 import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
 import mockit.Mock;
 import mockit.MockUp;
-import mockit.NonStrictExpectations;
-import org.nutz.json.Json;
-import org.testng.annotations.BeforeClass;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * 所有测试的基类

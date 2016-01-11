@@ -1,13 +1,14 @@
 package io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes;
 
-import static org.junit.Assert.assertNotNull;
-import io.github.elkan1788.mpsdk4j.util.StreamTool;
-
 import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
+
+import io.github.elkan1788.mpsdk4j.util.StreamTool;
 
 /**
  * WXBizMsgCrypt 测试

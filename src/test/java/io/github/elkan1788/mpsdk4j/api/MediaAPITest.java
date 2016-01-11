@@ -1,19 +1,18 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import io.github.elkan1788.mpsdk4j.RunTestSupport;
-import io.github.elkan1788.mpsdk4j.common.MediaType;
-import io.github.elkan1788.mpsdk4j.vo.api.Media;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
+import java.io.File;
 
-import mockit.Tested;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.File;
-
-import static org.testng.Assert.*;
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
+import io.github.elkan1788.mpsdk4j.common.MediaType;
+import io.github.elkan1788.mpsdk4j.vo.api.Media;
 
 /**
  * @author 凡梦星尘(elkan1788@gmail.com)
