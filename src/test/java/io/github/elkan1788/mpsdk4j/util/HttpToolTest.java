@@ -15,7 +15,7 @@ import org.nutz.lang.Files;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 
-import io.github.elkan1788.mpsdk4j.vo.ApiResult;
+import io.github.elkan1788.mpsdk4j.vo.APIResult;
 
 /**
  * HttpTool 测试
@@ -98,7 +98,7 @@ public class HttpToolTest {
                 Files.copyFile((File) tmp, new File("D:/tmp/mpsdk4j-logo.png"));
             }
             else {
-                ApiResult ar = ApiResult.create((String) tmp);
+                APIResult ar = APIResult.create((String) tmp);
                 System.out.println(ar);
             }
         }
