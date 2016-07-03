@@ -31,9 +31,9 @@ public class HttpTool {
     private static final String FILE_NAME_FLAG = "filename=";
 
     public static String get(String url) {
-        if (log.isDebugEnabled()) {
-            log.debugf("Request url: %s, default timeout: %d", url, CONNECT_TIME_OUT);
-        }
+//        if (log.isDebugEnabled()) {
+            log.infof("Request url: %s, default timeout: %d", url, CONNECT_TIME_OUT);
+//        }
 
         try {
             Response resp = Http.get(url, CONNECT_TIME_OUT);

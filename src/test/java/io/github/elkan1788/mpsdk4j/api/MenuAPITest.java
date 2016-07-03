@@ -1,8 +1,6 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;

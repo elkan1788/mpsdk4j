@@ -26,7 +26,7 @@ public class ConfigReader {
 
     private static final Log log = Logs.get();
 
-    private Map<String, String> confs = new LinkedHashMap<String, String>();
+    private Map<String, String> conf = new LinkedHashMap<String, String>();
 
     public ConfigReader(String path) {
         this.load(path);
@@ -41,7 +41,7 @@ public class ConfigReader {
         Properties p = new Properties();
         try {
             is = this.getClass().getResourceAsStream(path);
-            br = new BufferedReader(new InputStreamReader(is));
+            br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
             p.load(br);
         }
         catch (Exception e) {
@@ -58,11 +58,11 @@ public class ConfigReader {
                        "unchecked", "rawtypes"
     })
     protected void putAll(Map p) {
-        confs.putAll(p);
+        conf.putAll(p);
     }
 
     public synchronized void clear() {
-        confs.clear();
+        conf.clear();
     }
 
     protected void valid(String key) {
@@ -72,20 +72,20 @@ public class ConfigReader {
     }
 
     public void put(String key, String value) {
-        confs.put(key, value);
+        conf.put(key, value);
     }
 
     public List<String> keys() {
-        return new ArrayList<String>(confs.keySet());
+        return new ArrayList<String>(conf.keySet());
     }
 
     public Collection<String> values() {
-        return confs.values();
+        return conf.values();
     }
 
     public String get(String key) {
         valid(key);
-        return confs.get(key);
+        return conf.get(key);
     }
 
     public int getInt(String key) {
@@ -101,5 +101,9 @@ public class ConfigReader {
     public boolean getBoolean(String key) {
         valid(key);
         return Boolean.valueOf(get(key));
+    }
+
+    public Map<String, String> getAll() {
+        return conf;
     }
 }

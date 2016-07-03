@@ -5,15 +5,13 @@ import java.io.InputStream;
 
 import javax.servlet.ServletInputStream;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 import io.github.elkan1788.mpsdk4j.util.StreamTool;
 import mockit.Expectations;
-import mockit.integration.junit4.JMockit;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 /**
  * WechatWebSupport 测试
@@ -21,13 +19,13 @@ import mockit.integration.junit4.JMockit;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-@RunWith(JMockit.class)
+//@RunWith(JMockit.class)
 public class WechatWebSupportTest extends WebContainerMockit {
 
     private static final Log log = Logs.get();
 
     @Override
-    @Before
+    @BeforeTest
     public void init() {
         log.info("====== WechatWebSupportTest ======");
         super.init();

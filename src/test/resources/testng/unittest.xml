@@ -19,14 +19,21 @@
 
     <suite-files>
         <!-- API测试 -->
-        <suite-file path="allapitest.xml"/>
+        <suite-file path="apitest.xml"/>
+        <!-- UTIL测试 -->
+        <suite-file path="utiltest.xml"/>
+
     </suite-files>
 
     <!-- 核心代码测试 -->
-    <!--<test name="coreTest" enabled="true">
+    <test name="coreTest" enabled="false">
         <packages>
             <package name="io.github.elkan1788.mpsdk4j.core"/>
         </packages>
-    </test>-->
+    </test>
+
+   <!-- <listeners>
+        <listener class-name="mockit.integration.testng.initializer" />
+    </listeners>-->
 
 </suite>

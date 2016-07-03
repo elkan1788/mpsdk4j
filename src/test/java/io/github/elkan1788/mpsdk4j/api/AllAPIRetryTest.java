@@ -3,6 +3,7 @@ package io.github.elkan1788.mpsdk4j.api;
 import io.github.elkan1788.mpsdk4j.RunTestSupport;
 import io.github.elkan1788.mpsdk4j.common.MediaType;
 import io.github.elkan1788.mpsdk4j.vo.api.AccessToken;
+import org.nutz.json.Json;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.testng.annotations.BeforeClass;
@@ -26,6 +27,13 @@ public class AllAPIRetryTest extends RunTestSupport {
     @BeforeClass
     public void init() {
         log.info("====== AllAPIRetryTest ======");
+        Object[] test2 = new Object[]{ 1, "2", 3};
+        Object[] test3 = new Object[4];
+        test3[0] = "0";
+        System.arraycopy(test2, 0, test3, 1, test2.length);
+        System.out.println(Json.toJson(test2));
+        System.out.println(Json.toJson(test3));
+
     }
 
     @BeforeMethod
