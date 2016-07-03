@@ -6,10 +6,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.Before;
 
 import mockit.Expectations;
 import mockit.Mocked;
+import org.testng.annotations.BeforeTest;
 
 /**
  * WEB容器模拟
@@ -25,7 +25,7 @@ public class WebContainerMockit {
     @Mocked
     protected HttpServletResponse resp;
 
-    @Before
+    @BeforeTest
     public void init() {
         new Expectations() {
             {
