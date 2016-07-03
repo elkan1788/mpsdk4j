@@ -40,33 +40,13 @@
                 </role>
             </roles>
         </developer>
-        <developer>
-            <id>2</id>
-            <name>黑色幽默</name>
-            <email>1315055798@qq.com</email>
-            <organization>CHINA</organization>
-            <roles>
-                <role>
-                    Committer
-                </role>
-            </roles>
-        </developer>
-        <developer>
-            <id>3</id>
-            <name>高轩雾褪</name>
-            <email>977903096@qq.com</email>
-            <organization>CHINA</organization>
-            <roles>
-                <role>
-                    Committer
-                </role>
-            </roles>
-        </developer>
     </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jmockit.version>1.20</jmockit.version>
+        <jmockit.version>1.22</jmockit.version>
+        <nutz.version>1.r.56</nutz.version>
+        <slf4j.version>1.7.21</slf4j.version>
     </properties>
 
     <dependencies>
@@ -75,14 +55,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>6.9.10</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>6.8</version>
             <scope>test</scope>
         </dependency>
 
@@ -110,19 +83,19 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
-            <version>1.7.7</version>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.7</version>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -130,7 +103,7 @@
         <dependency>
             <groupId>org.nutz</groupId>
             <artifactId>nutz</artifactId>
-            <version>1.b.52</version>
+            <version>${nutz.version}</version>
         </dependency>
 
         <!-- ServletApi -->
@@ -197,7 +170,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -210,8 +183,17 @@
                 <version>2.19</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>${project.build.testOutputDirectory}/testng/alltest.xml</suiteXmlFile>
+                        <suiteXmlFile>${project.build.testOutputDirectory}/testng/unittest.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                  <!-- <argLine>
+                        -javaagent:"${settings.localRepository}"/org/jmockit/jmockit-coverage/${jmockit.version}/jmockit-coverage-${jmockit.version}.jar
+                    </argLine>-->
+                    <!--<systemPropertyVariables>
+                        <coverage-output>serial</coverage-output>
+                    </systemPropertyVariables>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>${settings.localRepository}/org/jmockit/jmockit-coverage/${jmockit.version}/jmockit-coverage-${jmockit.version}.jar</additionalClasspathElement>
+                    </additionalClasspathElements>-->
                 </configuration>
             </plugin>
             <plugin>
