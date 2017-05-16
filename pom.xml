@@ -11,7 +11,7 @@
 	<name>mpsdk4j</name>
 	<description>
 		A simple SDK for wechat api develop in Java program.
-  </description>
+        </description>
   
 	<url>http://elkan1788.github.io/mpskd4j</url>
 	<issueManagement>
