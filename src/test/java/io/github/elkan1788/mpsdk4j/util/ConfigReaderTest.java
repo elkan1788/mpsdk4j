@@ -32,7 +32,7 @@ public class ConfigReaderTest {
 
     @BeforeClass
     public void init() {
-        cr = new ConfigReader("/ErrorCode.properties");
+        cr = ConfigReader.read("/ErrorCode.properties");
         cr.put("int", String.valueOf(INTEGER));
         cr.put("bool", String.valueOf(BOOL));
         cr.put("long", String.valueOf(LONG));
@@ -50,11 +50,6 @@ public class ConfigReaderTest {
         Collection<String> values = cr.values();
         assertEquals(keys.size(), values.size());
     }
-
-   /* @Test
-    public void testGet() {
-        assertNotNull(cr.get("0"));
-    }*/
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testNullFile() {

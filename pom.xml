@@ -44,7 +44,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jmockit.version>1.22</jmockit.version>
+        <jmockit.version>1.23</jmockit.version>
         <nutz.version>1.r.56</nutz.version>
         <slf4j.version>1.7.21</slf4j.version>
     </properties>
@@ -70,7 +70,7 @@
             <groupId>org.jmockit</groupId>
             <artifactId>jmockit-coverage</artifactId>
             <version>${jmockit.version}</version>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
 
         <!-- Log4j && Slf4j -->
@@ -179,12 +179,50 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>coverage.check</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <phase>test</phase>
+                        <configuration>
+                            <rules>
+                                <requireFilesDontExist>
+                                    <files>
+                                        <file>coverage.check.failed</file>
+                                    </files>
+                                </requireFilesDontExist>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19</version>
                 <configuration>
+                    <!-- -Djmockit-coverage-outputDir=target/coverage-report -->
+                    <!--<argLine>
+                        -javaagent:"${settings.localRepository}"/org/jmockit/jmockit-coverage/${jmockit.version}/jmockit-coverage-${jmockit.version}.jar==coverage
+                    </argLine>-->
                     <suiteXmlFiles>
-                        <suiteXmlFile>${project.build.testOutputDirectory}/testng/unittest.xml</suiteXmlFile>
+                        <suiteXmlFile>${project.build.testOutputDirectory}/testng/utiltest.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <!-- At least one of the following needs to be set: -->
+                        <coverage-output>html</coverage-output>     <!-- or: html-nocp, serial, serial-append -->
+                        <coverage-metrics>all</coverage-metrics>    <!-- or: line, path, data -->
+                        <coverage-classes>*</coverage-classes> <!-- or a "*" expression for class names -->
+                        <coverage-srcDirs>src</coverage-srcDirs>          <!-- default: all "src" directories -->
+                        <!--<coverage-check>80</coverage-check>  -->                 <!-- default: no checks -->
+
+                        <coverage-outputDir>target/coverage-report</coverage-outputDir>       <!-- default: target/coverage-report -->
+
+                    </systemPropertyVariables>
                   <!-- <argLine>
                         -javaagent:"${settings.localRepository}"/org/jmockit/jmockit-coverage/${jmockit.version}/jmockit-coverage-${jmockit.version}.jar
                     </argLine>-->
@@ -210,7 +248,36 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>
+                https://oss.sonatype.org/content/repositories/snapshots
+            </url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>
+                https://oss.sonatype.org/service/local/staging/deploy/maven2/
+            </url>
+        </repository>
+    </distributionManagement>
 
 </project>

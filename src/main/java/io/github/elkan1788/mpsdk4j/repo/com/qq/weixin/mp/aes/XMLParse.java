@@ -25,7 +25,7 @@ class XMLParse {
      * @param is
      *            待提取的xml输入流
      * @return 提取出的加密消息字符串
-     * @throws com.qq.weixin.mp.aes.AesException
+     * @throws {@link io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.AesException}
      */
     public static Object[] extract(InputStream is) throws AesException {
         try {

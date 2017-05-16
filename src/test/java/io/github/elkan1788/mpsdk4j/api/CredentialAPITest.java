@@ -43,7 +43,7 @@ public class CredentialAPITest extends RunTestSupport {
         log.info("====== CredentialAPI#getShortUrl ======");
 
         String shortUrl = "http://w.url.cn/s/AvCo6Ih";
-        MockUpHttpPost("{\"errcode\":0,\"errmsg\":\"ok\",\"short_url\":\""+shortUrl+"\"}");
+        MockUpHttpPost("{\"errcode\":0,\"errmsg\":\"ok\",\"shortURL\":\""+shortUrl+"\"}");
 
         String tmp = wechatAPI.getShortUrl(url);
         assertNotNull(tmp);

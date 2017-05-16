@@ -55,7 +55,7 @@ public class MessageHandler extends DefaultHandler2 {
                 && !Strings.equals("SendPicsInfo", qName)
                 && !Strings.equals("PicList", qName)
                 && !Strings.equals("item", qName)) {
-                log.debugf("Current node vaule: [%s-%s]", qName, attrVal);
+                log.debugf("Current node value: [%s-%s]", qName, attrVal);
             }
         }
 

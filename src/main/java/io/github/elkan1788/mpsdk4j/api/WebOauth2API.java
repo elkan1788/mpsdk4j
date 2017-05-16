@@ -14,26 +14,26 @@ public interface WebOauth2API {
     /**
      * 换取网页授权access_token地址
      */
-    String oauth2 = "/sns/oauth2/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
+    String oauth2URL = "/sns/oauth2URL/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
     /**
      * 刷新access_token地址
      */
-    String refreshTokenUrl = "/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
+    String refreshTokenURL = "/sns/oauth2URL/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
     /**
      * 拉取用户信息地址
      */
-    String oauth2User = "/sns/userinfo?access_token=%s&openid=%s&lang=%s";
+    String oauth2UserURL = "/sns/userinfo?access_token=%s&openid=%s&lang=%s";
     /**
      * 检验授权凭证地址
      */
-    String checkToken = "/sns/auth?access_token=%s&openid=%s";
+    String checkTokenURL = "/sns/auth?access_token=%s&openid=%s";
 
     /**
      * 获取网页授权信息
      *
      * @param authCode  授权码
      *
-     * @return  授权信息
+     * @return  授权信息 {@link io.github.elkan1788.mpsdk4j.vo.api.WebOauth2Result}
      */
     WebOauth2Result getWebOauth2Result(String authCode);
 
@@ -41,8 +41,9 @@ public interface WebOauth2API {
      * 获取网页授权用户信息(详细)
      *
      * @param openId    用户ID
+     * @param lang    语言
      *
-     * @return 用户信息
+     * @return 用户信息 {@link io.github.elkan1788.mpsdk4j.vo.api.Follower}
      */
     Follower getWebOauth2User(String openId, String lang);
 

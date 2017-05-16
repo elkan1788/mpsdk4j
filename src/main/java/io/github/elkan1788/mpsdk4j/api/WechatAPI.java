@@ -12,7 +12,7 @@ public interface WechatAPI extends CredentialAPI, MenuAPI, MediaAPI, GroupsAPI, 
     /**
      * 微信公众平台API入口
      */
-    String wechatAPI = "https://api.weixin.qq.com";
+    String wechatAPIURL = "https://api.weixin.qq.com";
 
-    String cgiBin = wechatAPI + "/cgi-bin";
+    String cgiBinURL = wechatAPIURL + "/cgi-bin";
 }

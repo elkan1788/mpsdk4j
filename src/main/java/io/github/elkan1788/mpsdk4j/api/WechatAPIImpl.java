@@ -1,7 +1,7 @@
 package io.github.elkan1788.mpsdk4j.api;
 
 import io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder;
-import io.github.elkan1788.mpsdk4j.exception.WechatApiException;
+import io.github.elkan1788.mpsdk4j.exception.WechatAPIException;
 import io.github.elkan1788.mpsdk4j.session.AccessTokenMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.JSTicketMemoryCache;
 import io.github.elkan1788.mpsdk4j.session.MemoryCache;
@@ -10,6 +10,8 @@ import io.github.elkan1788.mpsdk4j.util.HttpTool;
 import io.github.elkan1788.mpsdk4j.vo.APIResult;
 import io.github.elkan1788.mpsdk4j.vo.MPAccount;
 import io.github.elkan1788.mpsdk4j.vo.api.*;
+import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
+import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import org.nutz.castor.Castors;
 import org.nutz.json.Json;
 import org.nutz.json.JsonFormat;
@@ -89,19 +91,17 @@ public class WechatAPIImpl implements WechatAPI {
 
     private String mergeAPIUrl(String url, Object... values) {
         if (!Lang.isEmpty(values)) {
-            return wechatAPI + String.format(url, values);
+            return wechatAPIURL + String.format(url, values);
         }
-        return wechatAPI + url;
+        return wechatAPIURL + url;
     }
 
     private String mergeCgiBinUrl(String url, Object... values) {
         if (!Lang.isEmpty(values)) {
-            return cgiBin + String.format(url, values);
+            return cgiBinURL + String.format(url, values);
         }
-        return cgiBin + url;
+        return cgiBinURL + url;
     }
-
-
 
     /**
      * 微信API响应输出
@@ -155,14 +155,14 @@ public class WechatAPIImpl implements WechatAPI {
             }
         }
 
-        throw Lang.wrapThrow(new WechatApiException(ar.getJson()));
+        throw Lang.wrapThrow(new WechatAPIException(ar.getJson()));
     }
 
     /**
      * 强制刷新微信服务凭证
      */
     private synchronized void refreshAccessToken() {
-        String url = mergeCgiBinUrl(get_at, mpAct.getAppId(), mpAct.getAppSecret());
+        String url = mergeCgiBinUrl(getAccessTokenURL, mpAct.getAppId(), mpAct.getAppSecret());
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -174,11 +174,11 @@ public class WechatAPIImpl implements WechatAPI {
      * 强制刷新微信JS票据
      */
     private synchronized void refreshJSTicket() {
-        String url = mergeCgiBinUrl(js_ticket + getAccessToken());
+        String url = mergeCgiBinUrl(jsTicketURL + getAccessToken());
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
-                "获取公众号[%s]的JSSDK Ticket失败.");
+                "获取公众号[%s]的JS SDK Ticket失败.");
         _jstmc.set(mpAct.getMpId(), Json.fromJson(JSTicket.class, ar.getJson()));
     }
 
@@ -193,8 +193,18 @@ public class WechatAPIImpl implements WechatAPI {
     }
 
     @Override
+    public long getAccessTokenExpireTime() {
+        AccessToken at = _atmc.get(mpAct.getMpId());
+        if (at == null || !at.isAvailable()) {
+            refreshAccessToken();
+            at = _atmc.get(mpAct.getMpId());
+        }
+        return at.getExpiresIn();
+    }
+
+    @Override
     public List<String> getServerIps() {
-        String url = mergeCgiBinUrl(cb_ips + getAccessToken());
+        String url = mergeCgiBinUrl(callBackIPSURL + getAccessToken());
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -204,14 +214,14 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public String getShortUrl(String longUrl) {
-        String url = mergeCgiBinUrl(short_url + getAccessToken());
+        String url = mergeCgiBinUrl(shortURL + getAccessToken());
         String data = "{\"action\":\"long2short\",\"long_url\":\"" + longUrl + "\"}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
                 data,
                 "获取公众号[%s]生成[%s]短链接失败.",
                 longUrl);
-        return String.valueOf(ar.get("short_url"));
+        return String.valueOf(ar.get("shortURL"));
     }
 
     @Override
@@ -225,8 +235,18 @@ public class WechatAPIImpl implements WechatAPI {
     }
 
     @Override
+    public long getJSTicketExpireTime() {
+        JSTicket jst = _jstmc.get(mpAct.getMpId());
+        if (jst == null || !jst.isAvailable()) {
+            refreshJSTicket();
+            jst = _jstmc.get(mpAct.getMpId());
+        }
+        return jst.getExpiresIn();
+    }
+
+    @Override
     public List<Menu> getMenu() {
-        String url = mergeCgiBinUrl(query_menu + getAccessToken());
+        String url = mergeCgiBinUrl(getMenuURL + getAccessToken());
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -242,7 +262,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean createMenu(Menu... menu) {
-        String url = mergeCgiBinUrl(create_menu + getAccessToken());
+        String url = mergeCgiBinUrl(createMenuURL + getAccessToken());
         Map<String, Object> body = new HashMap<String, Object>();
         body.put("button", menu);
         String data = Json.toJson(body, JsonFormat.compact());
@@ -255,7 +275,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean delMenu() {
-        String url = mergeCgiBinUrl(del_menu + getAccessToken());
+        String url = mergeCgiBinUrl(delMenuURL + getAccessToken());
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -265,7 +285,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public Media upMedia(String type, File media) {
-        String url = mergeCgiBinUrl(upload_media, getAccessToken(), type);
+        String url = mergeCgiBinUrl(uploadMediaURL, getAccessToken(), type);
         APIResult ar = wechatServerResponse(url,
                 HTTP_UPLOAD,
                 media,
@@ -276,7 +296,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public File dlMedia(String mediaId) {
-        String url = mergeCgiBinUrl(get_media, getAccessToken(), mediaId);
+        String url = mergeCgiBinUrl(getMediaURL, getAccessToken(), mediaId);
         APIResult ar = wechatServerResponse(url,
                 HTTP_DOWNLOAD,
                 NONE_BODY,
@@ -287,7 +307,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public int createGroup(String name) {
-        String url = mergeCgiBinUrl(create_groups + getAccessToken());
+        String url = mergeCgiBinUrl(createGroupsURL + getAccessToken());
         String data = "{\"group\":{\"name\":\"" + name + "\"}}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -300,7 +320,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public List<Groups> getGroups() {
-        String url = mergeCgiBinUrl(get_groups + getAccessToken());
+        String url = mergeCgiBinUrl(getGroupsURL + getAccessToken());
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -310,7 +330,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public int getGroup(String openId) {
-        String url = mergeCgiBinUrl(get_member_group + getAccessToken());
+        String url = mergeCgiBinUrl(getMemberGroupURL + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\"}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -322,7 +342,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean renGroups(int id, String name) {
-        String url = mergeCgiBinUrl(update_group + getAccessToken());
+        String url = mergeCgiBinUrl(updateGroupURL + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + ",\"name\":\"" + name + "\"}}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -335,7 +355,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean move2Group(String openId, int groupId) {
-        String url = mergeCgiBinUrl(update_member_group + getAccessToken());
+        String url = mergeCgiBinUrl(updateMemberGroupURL + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\",\"to_groupid\":" + groupId + "}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -348,7 +368,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean batchMove2Group(Collection<String> openIds, int groupId) {
-        String url = mergeCgiBinUrl(update_members_group + getAccessToken());
+        String url = mergeCgiBinUrl(updateMembersGroupURL + getAccessToken());
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("openid_list", Json.toJson(openIds));
         data.put("to_groupid", groupId);
@@ -363,7 +383,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean delGroup(int id) {
-        String url = mergeCgiBinUrl(delete_groups + getAccessToken());
+        String url = mergeCgiBinUrl(deleteGroupsURL + getAccessToken());
         String data = "{\"group\":{\"id\":" + id + "}}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -375,7 +395,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public QRTicket createQR(Object sceneId, int expireSeconds) {
-        String url = mergeCgiBinUrl(create_qrcode + getAccessToken());
+        String url = mergeCgiBinUrl(createQRCodeURL + getAccessToken());
         NutMap data = new NutMap();
         NutMap scene;
         // 临时二维码
@@ -405,7 +425,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public File getQR(String ticket) {
-        String url = mergeCgiBinUrl(show_qrcode + ticket);
+        String url = mergeCgiBinUrl(showQRCodeURL + ticket);
         APIResult ar = wechatServerResponse(url,
                 HTTP_DOWNLOAD,
                 NONE_BODY,
@@ -416,7 +436,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean updateRemark(String openId, String remark) {
-        String url = mergeCgiBinUrl(user_remark + getAccessToken());
+        String url = mergeCgiBinUrl(userRemarkURL + getAccessToken());
         String data = "{\"openid\":\"" + openId + "\",\"remark\":\"" + remark + "\"}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -429,7 +449,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public FollowList getFollowerList(String nextOpenId) {
-        String url = mergeCgiBinUrl(user_list, getAccessToken(), Strings.sNull(nextOpenId, ""));
+        String url = mergeCgiBinUrl(userListURL, getAccessToken(), Strings.sNull(nextOpenId, ""));
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -444,7 +464,7 @@ public class WechatAPIImpl implements WechatAPI {
     @Override
     public Follower getFollower(String openId, String lang) {
         lang = Strings.sBlank(lang, "zh_CN");
-        String url = mergeCgiBinUrl(user_info, getAccessToken(), openId, lang);
+        String url = mergeCgiBinUrl(userInfoURL, getAccessToken(), openId, lang);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -456,7 +476,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public List<Follower> getFollowers(Collection<Follower2> users) {
-        String url = mergeCgiBinUrl(batch_user_info + getAccessToken());
+        String url = mergeCgiBinUrl(batchUserInfoURL + getAccessToken());
         String data = Json.toJson(Lang.map("user_list", users), JsonFormat.compact());
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -468,7 +488,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean setIndustry(int id1, int id2) {
-        String url = mergeCgiBinUrl(set_industry + getAccessToken());
+        String url = mergeCgiBinUrl(setIndustryURL + getAccessToken());
         String data = "{\"industry_id1\":\"" + id1 + "\",\"industry_id2\":\"" + id2 + "\"}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -481,7 +501,7 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public String getTemplateId(String tmlShortId) {
-        String url = mergeCgiBinUrl(add_template + getAccessToken());
+        String url = mergeCgiBinUrl(addTemplateURL + getAccessToken());
         String data = "{\"template_id_short\":\"" + tmlShortId + "\"}";
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
@@ -497,20 +517,44 @@ public class WechatAPIImpl implements WechatAPI {
                                 String topColor,
                                 String targetUrl,
                                 Template... tmls) {
-        String url = mergeCgiBinUrl(send_template + getAccessToken());
+        String url = mergeCgiBinUrl(sendTemplateURL + getAccessToken());
         String data = JsonMsgBuilder.create().template(openId, tmlId, topColor, targetUrl, tmls).build();
         APIResult ar = wechatServerResponse(url,
                 HTTP_POST,
                 data,
-                "给公众号[%s]发送模板[%s]消息失败.",
+                "公众号[%s]给用户[%s]发送模板[%s]消息失败.",
                 openId,
                 tmlId);
         return Long.valueOf(ar.get("msgid").toString());
     }
 
     @Override
+    public boolean sendTextMsg(TextMsg textMsg) {
+        String url = mergeCgiBinUrl(sendCustomURL +  getAccessToken());
+        String data = JsonMsgBuilder.create().text(textMsg).build();
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "公众号[%s]给用户[%s]发送文本客服消息失败.",
+                textMsg.getFromUserName());
+        return ar.isSuccess();
+    }
+
+    @Override
+    public boolean sendNewsMsg(NewsMsg newsMsg) {
+        String url = mergeCgiBinUrl(sendCustomURL +  getAccessToken());
+        String data = JsonMsgBuilder.create().news(newsMsg).build();
+        APIResult ar = wechatServerResponse(url,
+                HTTP_POST,
+                data,
+                "公众号[%s]给用户[%s]发送图文客服消息失败.",
+                newsMsg.getFromUserName());
+        return ar.isSuccess();
+    }
+
+    @Override
     public WebOauth2Result getWebOauth2Result(String authCode) {
-        String url = mergeAPIUrl(oauth2, mpAct.getAppId(), mpAct.getAppSecret(), authCode);
+        String url = mergeAPIUrl(oauth2URL, mpAct.getAppId(), mpAct.getAppSecret(), authCode);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 "换取公众号[%s]授权码[%s]凭证信息失败.",
@@ -521,7 +565,7 @@ public class WechatAPIImpl implements WechatAPI {
     }
 
     protected WebOauth2Result refreshWebOauth2Result(String refreshToken) {
-        String url = mergeAPIUrl(refreshTokenUrl, mpAct.getAppId(), refreshToken);
+        String url = mergeAPIUrl(refreshTokenURL, mpAct.getAppId(), refreshToken);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -537,12 +581,12 @@ public class WechatAPIImpl implements WechatAPI {
         lang = Strings.sBlank(lang, "zh_CN");
         WebOauth2Result result = _oath2.get(openId);
         if (result == null){
-           throw Lang.wrapThrow(new WechatApiException("用户未授权"));
+           throw Lang.wrapThrow(new WechatAPIException("用户未授权"));
         } else if (!result.isAvailable()){
             result = refreshWebOauth2Result(result.getRefreshToken());
         }
 
-        String url = mergeAPIUrl(oauth2User, result.getAccessToken(), lang);
+        String url = mergeAPIUrl(oauth2UserURL, result.getAccessToken(), lang);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
@@ -554,12 +598,11 @@ public class WechatAPIImpl implements WechatAPI {
 
     @Override
     public boolean checkWebOauth2Token(String accessToken, String openId) {
-        String url = mergeAPIUrl(checkToken, accessToken, openId);
+        String url = mergeAPIUrl(checkTokenURL, accessToken, openId);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
                 "验证公众号[%s]用户[%s]授权凭证[%s]信息失败.",
-                mpAct.getMpId(),
                 openId,
                 accessToken);
         return ar.isSuccess();

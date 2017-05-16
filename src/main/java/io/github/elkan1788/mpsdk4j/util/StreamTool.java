@@ -44,7 +44,6 @@ public class StreamTool {
      * @param is
      *            输入流
      * @return 字符串
-     * @throws IOException
      */
     public static String toString(InputStream is) {
         StringBuffer str = new StringBuffer();

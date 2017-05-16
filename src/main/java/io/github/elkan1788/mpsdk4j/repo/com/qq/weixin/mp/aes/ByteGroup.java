@@ -11,7 +11,9 @@ import java.util.List;
  */
 public class ByteGroup {
 
-	// 定义一个字节容器
+	/**
+	 * 定义一个字节容器
+	 */
 	private List<Byte> byteContainer = new ArrayList<Byte>();
 
 	/**
@@ -32,7 +34,7 @@ public class ByteGroup {
 	 *
 	 * @param bytes
 	 *            字节数组
-	 * @return com.qq.weixin.mp.aes.ByteGroup
+	 * @return {@link io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.ByteGroup}
 	 */
 	public ByteGroup addBytes(byte[] bytes) {
 		for (byte b : bytes) {

@@ -65,7 +65,7 @@ public class WXBizMsgCryptTest {
                                               StreamTool.toStream(fromMsg));
             assertNotNull(decryptmsg);
             log.info(decryptmsg);
-            log.info(pc.getFromAppid());
+            log.info(pc.getFromAppId());
         }
         catch (AesException e) {
             throw Lang.wrapThrow(e);

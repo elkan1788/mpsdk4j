@@ -22,6 +22,14 @@ public class JSTicket {
     @JsonField(value = "expires_in")
     private long expiresIn;
 
+    public JSTicket() {
+    }
+
+    public JSTicket(String ticket, long expiresIn) {
+        this.ticket = ticket;
+        this.expiresIn = expiresIn;
+    }
+
     public String getTicket() {
         return ticket;
     }

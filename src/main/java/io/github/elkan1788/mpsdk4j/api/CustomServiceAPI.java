@@ -15,32 +15,32 @@ public interface CustomServiceAPI {
     /**
      * 客服消息的会话状态接口地址
       */
-    String kf_session_base = "/customservice/kfsession/%s?access_token=";
+    String kfSessionURL = "/customservice/kfsession/%s?access_token=";
 
     /**
      * 创建会话接口地址
      */
-    String kf_session_create = "/customservice/kfsession/create?access_token=";
+    String kfSessionCreateURL = "/customservice/kfsession/create?access_token=";
 
     /**
      * 关闭会话接口地址
      */
-    String kf_session_close = "/customservice/kfsession/close?access_token=";
+    String kfSessionClose = "/customservice/kfsession/close?access_token=";
 
     /**
      * 获取用户会话状态接口地址
      */
-    String kf_session_get = "/customservice/kfsession/getsession?access_token=%1$s&openid=";
+    String kfSessionGetURL = "/customservice/kfsession/getsession?access_token=%1$s&openid=";
 
     /**
      * 获取客服会话列表接口地址
      */
-    String kf_session_getlist = "/customservice/kfsession/getsessionlist?access_token=%1$s&kf_account=";
+    String kfSessionGetListURL = "/customservice/kfsession/getsessionlist?access_token=%1$s&kf_account=";
 
     /**
      * 获取未接入会话列表接口地址
      */
-    String kf_session_getwait = "/customservice/kfsession/getwaitcase?access_token=";
+    String kfSessionGetWaitURL = "/customservice/kfsession/getwaitcase?access_token=";
 
     /**
      * 创建客服会话

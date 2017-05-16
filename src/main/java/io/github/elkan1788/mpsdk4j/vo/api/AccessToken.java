@@ -23,6 +23,14 @@ public class AccessToken {
     @JsonField(value = "expires_in")
     private long expiresIn;
 
+    public AccessToken() {
+    }
+
+    public AccessToken(String accessToken, long expiresIn) {
+        this.accessToken = accessToken;
+        this.expiresIn = expiresIn;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }

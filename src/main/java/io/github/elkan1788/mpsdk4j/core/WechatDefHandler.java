@@ -106,7 +106,7 @@ public class WechatDefHandler implements WechatHandler {
     @Override
     public BasicMsg eSub(BasicEvent event) {
         TextMsg text_msg = new TextMsg(event);
-        text_msg.setContent("Welcom, wechat develop with use mpsdk4j!");
+        text_msg.setContent("Welcome, wechat develop with use mpsdk4j!");
         return text_msg;
     }
 

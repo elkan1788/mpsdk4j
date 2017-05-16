@@ -27,6 +27,8 @@ public class XmlMsgBuilder {
 
     /**
      * 创建
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public static XmlMsgBuilder create() {
         return new XmlMsgBuilder();
@@ -54,6 +56,8 @@ public class XmlMsgBuilder {
      * 
      * @param msg
      *            文本消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public XmlMsgBuilder text(TextMsg msg) {
         msgPrefix(msg);
@@ -66,6 +70,8 @@ public class XmlMsgBuilder {
      *
      * @param msg
      *            图像消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public XmlMsgBuilder image(ImageMsg msg) {
         msgPrefix(msg);
@@ -80,6 +86,8 @@ public class XmlMsgBuilder {
      *
      * @param msg
      *            音频消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public XmlMsgBuilder voice(VoiceMsg msg) {
         msgPrefix(msg);
@@ -94,6 +102,8 @@ public class XmlMsgBuilder {
      *
      * @param msg
      *            视频消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public XmlMsgBuilder video(VideoMsg msg) {
         msgPrefix(msg);
@@ -112,6 +122,8 @@ public class XmlMsgBuilder {
      * 
      * @param msg
      *            音乐消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
 
     public XmlMsgBuilder music(MusicMsg msg) {
@@ -137,6 +149,8 @@ public class XmlMsgBuilder {
      *
      * @param msg
      *            图文消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public XmlMsgBuilder news(NewsMsg msg) {
         msgPrefix(msg);
@@ -164,6 +178,8 @@ public class XmlMsgBuilder {
      * 转发客服消息
      *
      * @param msg   客服消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.XmlMsgBuilder}
      */
     public XmlMsgBuilder transferCustomerService(CustomerServiceMsg msg) {
         msgPrefix(msg);
@@ -181,6 +197,8 @@ public class XmlMsgBuilder {
      *            时间戳
      * @param nonce
      *            随机字符
+     *
+     * @return 加密XML字符串
      */
     public String encrypt(String xml, String msgSignature, String timeStamp, String nonce) {
         msgBuf.setLength(0);
