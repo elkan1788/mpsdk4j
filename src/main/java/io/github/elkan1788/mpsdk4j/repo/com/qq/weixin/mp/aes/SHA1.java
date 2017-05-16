@@ -18,7 +18,7 @@ public class SHA1 {
 	 * @param params
 	 *            [token, timestamp, nonce, encrypt]
 	 * @return 安全签名
-	 * @throws com.qq.weixin.mp.aes.AesException
+	 * @throws AesException {@link io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes.AesException}
 	 */
 	public static String calculate(String... params) throws AesException {
 		try {

@@ -77,6 +77,18 @@ public enum EventType {
     /**
      * 跳转图文消息URL
      */
-    view_limited
+    view_limited,
+    /**
+     * 创建客服会话
+     */
+    kf_create_session,
+    /**
+     * 关闭客服会话
+     */
+    kf_close_session,
+    /**
+     * 转接客服会话
+     */
+    kf_switch_session
 
 }

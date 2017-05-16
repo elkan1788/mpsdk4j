@@ -16,6 +16,9 @@ import io.github.elkan1788.mpsdk4j.core.WechatKernel;
 @SuppressWarnings("unchecked")
 public abstract class WechatWebSupport {
 
+    /**
+     * 微信消息处理核心
+     */
     protected static WechatKernel _wk = new WechatKernel();
 
     /**
@@ -30,14 +33,15 @@ public abstract class WechatWebSupport {
     /**
      * 与微信服务器互动
      * 
-     * <pre/>
+     * <p>
      * !!!实际生产中写个入口方法调用即可!!!
+     * </p>
      * 
      * @param req
      *            微信服务器请求
      * @param resp
      *            响应微信服务器
-     * @throws IOException
+     * @throws IOException 抛出IO异常
      */
     protected void interact(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         init();

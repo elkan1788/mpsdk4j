@@ -3,9 +3,10 @@ package io.github.elkan1788.mpsdk4j;
 /**
  * 项目版本号声明
  * 
- * <pre/>
+ * <p>
  * (参考:http://nutzam.com/core/committer/version_naming.html)
- * 
+ * </p>
+ *
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
@@ -29,7 +30,7 @@ public final class Mpsdk4j {
     }
 
     private static int minorVersion() {
-        return 1;
+        return 2;
     }
 
     private static String releaseLevel() {

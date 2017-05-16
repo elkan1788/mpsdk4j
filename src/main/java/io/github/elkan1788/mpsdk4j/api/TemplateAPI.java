@@ -11,12 +11,12 @@ public interface TemplateAPI {
     /**
      * 设置所属行业地址
      */
-    static String set_industry = "/template/api_set_industry?access_token=";
+    String setIndustryURL = "/template/api_set_industry?access_token=";
 
     /**
      * 获得模板ID
      */
-    static String add_template = "/template/api_add_template?access_token=";
+    String addTemplateURL = "/template/api_add_template?access_token=";
 
     /**
      * 设置所属行业

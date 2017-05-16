@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<!-- 测试执行入口 -->
+<suite name="AllTest" preserve-order="true" thread-count="20">
+
+    <!-- 基础消息 -->
+    <test name="mpsdk4jVerTest" enabled="true">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.Mpsdk4jTest"/>
+        </classes>
+    </test>
+
+    <!-- AES消息加密测试 -->
+    <test name="WxBizMsgCryptTest" enabled="true">
+        <packages>
+            <package name="io.github.elkan1788.mpsdk4j.repo.com.qq.weixin.mp.aes"/>
+        </packages>
+    </test>
+
+    <suite-files>
+        <!-- API测试 -->
+        <suite-file path="apitest.xml"/>
+        <!-- UTIL测试 -->
+        <suite-file path="utiltest.xml"/>
+
+    </suite-files>
+
+    <!-- 核心代码测试 -->
+    <test name="coreTest" enabled="false">
+        <packages>
+            <package name="io.github.elkan1788.mpsdk4j.core"/>
+        </packages>
+    </test>
+
+   <!-- <listeners>
+        <listener class-name="mockit.integration.testng.initializer" />
+    </listeners>-->
+
+</suite>

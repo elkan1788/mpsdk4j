@@ -7,8 +7,12 @@ package io.github.elkan1788.mpsdk4j.api;
  * @since 2.0
  */
 public interface WechatAPI extends CredentialAPI, MenuAPI, MediaAPI, GroupsAPI, QRCodeAPI, UserAPI,
-        TemplateAPI, MessageAPI {
+        TemplateAPI, MessageAPI, WebOauth2API {
 
-    // 微信公众平台API入口
-    static final String wechatapi = "https://api.weixin.qq.com/cgi-bin";
+    /**
+     * 微信公众平台API入口
+     */
+    String wechatAPIURL = "https://api.weixin.qq.com";
+
+    String cgiBinURL = wechatAPIURL + "/cgi-bin";
 }

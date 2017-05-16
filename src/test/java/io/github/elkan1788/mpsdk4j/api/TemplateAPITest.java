@@ -1,9 +1,12 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import org.junit.Before;
-import org.junit.Test;
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
 
 /**
  * TemplateAPI 测试
@@ -12,35 +15,29 @@ import org.nutz.log.Logs;
  * @since 2.0
  */
 // TODO 此为新接口待测试
-public class TemplateAPITest extends APITestSupport {
+public class TemplateAPITest extends RunTestSupport {
 
     private static final Log log = Logs.get();
 
-    @SuppressWarnings("unused")
-    private TemplateAPI ta;
-
-    @Override
-    @Before
+    @BeforeClass
     public void init() {
         log.info("====== TemplateAPITest ======");
-        super.init();
-        ta = WechatAPIImpl.create(mpAct);
     }
 
     @Test
     public void testSetIndustry() {
         log.info("====== TemplateAPITest#setIndustry ======");
-        // boolean flag = ta.setIndustry(1, 2);
-        // assertTrue(flag);
-        // log.info(flag);
+        postMethodSuccess();
+        boolean flag = wechatAPI.setIndustry(1, 2);
+        assertTrue(flag);
     }
 
     @Test
     public void testGetTemplateId() {
         log.info("====== TemplateAPITest#getTemplateId ======");
-        // String tmplid = ta.getTemplateId("5A90LqXLMHUVd0d1PFv-TezTxYWf2PBDV1APvAMeb1E");
-        // assertNotNull(tmplid);
-        // log.info(tmplid);
+        MockUpHttpPost("{\"errcode\":0,\"errmsg\":\"ok\",\"template_id\":\"Doclyl5uP7Aciu-qZ7mJNPtWkbkYnWBWVja26EGbNyk\"}");
+        String tmplid = wechatAPI.getTemplateId("5A90LqXLMHUVd0d1PFv-TezTxYWf2PBDV1APvAMeb1E");
+        assertNotNull(tmplid);
     }
 
 }

@@ -1,21 +1,23 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.nutz.json.Json;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
 import io.github.elkan1788.mpsdk4j.vo.api.FollowList;
 import io.github.elkan1788.mpsdk4j.vo.api.Follower;
 import io.github.elkan1788.mpsdk4j.vo.api.Follower2;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
 
 /**
  * UserAPI 测试
@@ -23,42 +25,53 @@ import org.nutz.log.Logs;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-@FixMethodOrder(MethodSorters.JVM)
-public class UserAPITest extends APITestSupport {
+public class UserAPITest extends RunTestSupport {
 
     private static final Log log = Logs.get();
 
-    private UserAPI ua;
+    private Follower follower = new Follower();
 
-    @Before
+    @BeforeClass
     public void init() {
         log.info("====== UserAPITest ====== ");
-        super.init();
-        ua = WechatAPIImpl.create(mpAct);
+
+        follower.setOpenid(openId);
+        follower.setSubscribe(1);
+        follower.setCountry("China");
+        follower.setProvince("ShangHai");
+        follower.setCity("ShangHai");
+        follower.setSex(1);
+        follower.setSubscribeTime(new Date().getTime());
+        follower.setGroupid(101);
+        follower.setNickname("MPSDK4J");
+        follower.setHeadimgurl(url);
+        follower.setRemark("MPSDK4J");
     }
 
     @Test
     public void testGetFollowerList() {
         log.info("====== UserAPI#getFollowerList ====== ");
-        FollowList fl = ua.getFollowerList(null);
+        MockUpHttpGet("{\"total\":23000,\"count\":10000,\"data\":{\"openid\":[\"OPENID1\",\"OPENID2\",\"OPENID10000\"]},\"next_openid\":\"OPENID10000\"}");
+        FollowList fl = wechatAPI.getFollowerList(openId);
         assertNotNull(fl);
-        log.info(fl);
+        assertEquals(fl.getCount(), 10000);
     }
 
     @Test
     public void testGetFollower() {
         log.info("====== UserAPI#getFollower ====== ");
-        Follower f = ua.getFollower(openId, null);
+        MockUpHttpGet(Json.toJson(follower));
+        Follower f = wechatAPI.getFollower(openId, null);
         assertNotNull(f);
-        log.info(f);
+        assertEquals(f.getSubscribe(), 1);
     }
 
     @Test
     public void testUpdateRemark() {
         log.info("====== UserAPI#updateRemark ====== ");
-        boolean flag = ua.updateRemark(openId, "Youself");
+        postMethodSuccess();
+        boolean flag = wechatAPI.updateRemark(openId, "Youself");
         assertTrue(flag);
-        log.info(flag);
     }
 
     @Test
@@ -66,11 +79,12 @@ public class UserAPITest extends APITestSupport {
         log.info("====== UserAPI#getFollowers ====== ");
         List<Follower2> getfs = new ArrayList<Follower2>();
         getfs.add(new Follower2(openId));
-        getfs.add(new Follower2(_cr.get("openId2")));
+        getfs.add(new Follower2(openId));
 
-        List<Follower> fs = ua.getFollowers(getfs);
+        MockUpHttpPost("{\"user_info_list\":[{\"subscribe\":1,\"openid\":\"otvxTs4dckWG7imySrJd6jSi0CWE\",\"nickname\":\"iWithery\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"Jieyang\",\"province\":\"Guangdong\",\"country\":\"China\",\"headimgurl\":\"http://wx.qlogo.cn/mmopen/xbIQx1GRqdvyqkMMhEaGOX802l1CyqMJNgUzKP8MeAeHFicRDSnZH7FY4XB7p8XHXIf6uJA2SCunTPicGKezDC4saKISzRj3nz/0\",\"subscribe_time\":1434093047,\"unionid\":\"oR5GjjgEhCMJFyzaVZdrxZ2zRRF4\",\"remark\":\"\",\"groupid\":0},{\"subscribe\":0,\"openid\":\"otvxTs_JZ6SEiP0imdhpi50fuSZg\",\"unionid\":\"oR5GjjjrbqBZbrnPwwmSxFukE41U\"}]}");
+        List<Follower> fs = wechatAPI.getFollowers(getfs);
         assertNotNull(fs);
-        assertEquals(2, fs.size());
-        log.info(fs);
+        assertEquals(fs.size(), 2);
     }
+
 }

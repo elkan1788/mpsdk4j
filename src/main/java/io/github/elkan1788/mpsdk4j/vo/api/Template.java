@@ -81,6 +81,8 @@ public class Template {
 
     /**
      * 组装模板数据
+     *
+     * @return 返回模板数据字符串
      */
     public String templateData() {
         StringBuffer data = new StringBuffer("\"" + name + "\":{");

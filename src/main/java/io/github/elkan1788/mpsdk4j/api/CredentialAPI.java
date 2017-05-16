@@ -13,21 +13,29 @@ public interface CredentialAPI {
     /**
      * 获取access_token地址
      */
-    static String get_at = "/token?grant_type=client_credential&appid=%s&secret=%s";
+    String getAccessTokenURL = "/token?grant_type=client_credential&appid=%s&secret=%s";
+
     /**
      * 获取微信服务器IP地址
      */
-    static String cb_ips = "/getcallbackip?access_token=";
+    String callBackIPSURL = "/getcallbackip?access_token=";
 
     /**
      * 长链接转短链接地址
      */
-    static String short_url = "/shorturl?access_token=";
+    String shortURL = "/shorturl?access_token=";
 
     /**
-     * JSSDK临时凭证地址
+     * JS SDK临时凭证地址
      */
-    static String js_ticket = "/ticket/getticket?type=jsapi&access_token=";
+    String jsTicketURL = "/ticket/getticket?type=jsapi&access_token=";
+
+    /**
+     * 获取微信服务凭证失效时间
+     *
+     * @return 凭证失效时间
+     */
+    long getAccessTokenExpireTime();
 
     /**
      * 获取微信服务凭证
@@ -53,9 +61,16 @@ public interface CredentialAPI {
     String getShortUrl(String longUrl);
 
     /**
-     * 获取JSSDK凭证
+     * 获取JS SDK凭证
      * 
      * @return 凭证
      */
     String getJSTicket();
+
+    /**
+     * 获取微信JS SDK服务凭证失效时间
+     *
+     * @return JS SDK凭证失效时间
+     */
+    long getJSTicketExpireTime();
 }

@@ -17,7 +17,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
 /**
- * 读取配置文件
+ * 读取配置文件的工具类, 默认的文件路径为: mp_config.properties,
+ * 支持读取多个配置文件
  * 
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
@@ -26,23 +27,44 @@ public class ConfigReader {
 
     private static final Log log = Logs.get();
 
-    private Map<String, String> confs = new LinkedHashMap<String, String>();
+    private static final Map<String, String> CONF_PARAMETERS = new LinkedHashMap<String, String>();
 
-    public ConfigReader(String path) {
-        this.load(path);
+    private static ConfigReader CR;
+
+    private static final String[] DEFAULT_CONF_FILES = { "/mp_config.properties" };
+
+    public static ConfigReader read() {
+        return read(null);
     }
 
-    protected synchronized void load(String path) {
+    public static ConfigReader read(String... confFilesPath) {
+        if (CR == null) {
+            synchronized (ConfigReader.class) {
+                confFilesPath = Lang.isEmptyArray(confFilesPath) ? DEFAULT_CONF_FILES : confFilesPath;
+                CR = new ConfigReader(confFilesPath);
+            }
+        }
+
+        return CR;
+    }
+
+    public ConfigReader(String... confFilesPath) {
+        this.load(confFilesPath);
+    }
+
+    protected void load(String... confFilesPath) {
         if (log.isDebugEnabled()) {
-            log.debugf("Loading config file[%s].", path);
+            log.debugf("Loading config files[%s].", confFilesPath);
         }
         InputStream is = null;
         BufferedReader br = null;
         Properties p = new Properties();
         try {
-            is = this.getClass().getResourceAsStream(path);
-            br = new BufferedReader(new InputStreamReader(is));
-            p.load(br);
+            for (String confFilePath : confFilesPath) {
+                is = this.getClass().getResourceAsStream(confFilePath);
+                br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                p.load(br);
+            }
         }
         catch (Exception e) {
             throw Lang.wrapThrow(e);
@@ -58,11 +80,11 @@ public class ConfigReader {
                        "unchecked", "rawtypes"
     })
     protected void putAll(Map p) {
-        confs.putAll(p);
+        CONF_PARAMETERS.putAll(p);
     }
 
     public synchronized void clear() {
-        confs.clear();
+        CONF_PARAMETERS.clear();
     }
 
     protected void valid(String key) {
@@ -72,20 +94,20 @@ public class ConfigReader {
     }
 
     public void put(String key, String value) {
-        confs.put(key, value);
+        CONF_PARAMETERS.put(key, value);
     }
 
     public List<String> keys() {
-        return new ArrayList<String>(confs.keySet());
+        return new ArrayList<String>(CONF_PARAMETERS.keySet());
     }
 
     public Collection<String> values() {
-        return confs.values();
+        return CONF_PARAMETERS.values();
     }
 
     public String get(String key) {
         valid(key);
-        return confs.get(key);
+        return CONF_PARAMETERS.get(key);
     }
 
     public int getInt(String key) {
@@ -101,5 +123,9 @@ public class ConfigReader {
     public boolean getBoolean(String key) {
         valid(key);
         return Boolean.valueOf(get(key));
+    }
+
+    public Map<String, String> getAll() {
+        return CONF_PARAMETERS;
     }
 }

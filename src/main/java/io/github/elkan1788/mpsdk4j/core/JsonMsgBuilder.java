@@ -27,6 +27,8 @@ public class JsonMsgBuilder {
 
     /**
      * 创建
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public static JsonMsgBuilder create() {
         return new JsonMsgBuilder();
@@ -40,7 +42,7 @@ public class JsonMsgBuilder {
      */
     void msgPrefix(BasicMsg msg) {
         msgBuf.append("\"touser\":\"")
-                .append(msg.getToUserName())
+                .append(msg.getFromUserName())
                 .append("\",");
         msgBuf.append("\"msgtype\":\"")
                 .append(msg.getMsgType())
@@ -52,6 +54,8 @@ public class JsonMsgBuilder {
      *
      * @param msg
      *            文消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder text(TextMsg msg) {
         msgPrefix(msg);
@@ -68,6 +72,8 @@ public class JsonMsgBuilder {
      *
      * @param msg
      *            图像消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder image(ImageMsg msg) {
         msgPrefix(msg);
@@ -84,6 +90,8 @@ public class JsonMsgBuilder {
      *
      * @param msg
      *            语音
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder voice(VoiceMsg msg) {
         msgPrefix(msg);
@@ -100,6 +108,8 @@ public class JsonMsgBuilder {
      *
      * @param msg
      *            视频消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder video(VideoMsg msg) {
         msgPrefix(msg);
@@ -124,6 +134,8 @@ public class JsonMsgBuilder {
      * 音乐客服消息
      *
      * @param msg   音乐消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder music(MusicMsg msg) {
         msgPrefix(msg);
@@ -151,6 +163,8 @@ public class JsonMsgBuilder {
      * 多图文客服消息
      *
      * @param msg   图文消息
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder news(NewsMsg msg) {
         msgPrefix(msg);
@@ -194,6 +208,8 @@ public class JsonMsgBuilder {
      *            链接地址
      * @param tmls
      *            模板数据
+     *
+     * @return {@link io.github.elkan1788.mpsdk4j.core.JsonMsgBuilder}
      */
     public JsonMsgBuilder template(String openId,
                                    String tmlId,

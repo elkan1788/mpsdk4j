@@ -1,71 +1,81 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import static org.junit.Assert.assertNotNull;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
+import io.github.elkan1788.mpsdk4j.vo.api.JSTicket;
 
 /**
  * CredentialApi 测试
- * 
+ *
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CredentialAPITest extends APITestSupport {
+public class CredentialAPITest extends RunTestSupport {
 
     private static final Log log = Logs.get();
 
-    private CredentialAPI ca;
-
-    @Override
-    @Before
+    @BeforeClass
     public void init() {
         log.info("====== CredentialAPITest ======");
-        super.init();
-        ca = WechatAPIImpl.create(mpAct);
-    }
-
-    @Test
-    public void testGetAccessToken() {
-        log.info("====== CredentialAPI#getAccessToken ======");
-        assertNotNull(ca.getAccessToken());
-        accessToken = ca.getAccessToken();
-        log.info(ca.getAccessToken());
     }
 
     @Test
     public void testGetServerIps() {
         log.info("====== CredentialAPI#getServerIps ======");
-        List<String> ips = ca.getServerIps();
+
+        MockUpHttpGet("{\"ip_list\":[\"127.0.0.1\",\"127.0.0.2\",\"127.0.0.3\"]}");
+        List<String> ips = wechatAPI.getServerIps();
         assertNotNull(ips);
-        int i = 0;
-        for (String ip : ips) {
-            i++;
-            log.infof("Wechat server[%d] ip: %s", i, ip);
-        }
+        assertEquals(ips.size(), 3);
     }
 
     @Test
     public void testGetShorUrl() {
         log.info("====== CredentialAPI#getShortUrl ======");
-        String longurl = "https://mp.weixin.qq.com/wiki/10/165c9b15eddcfbd8699ac12b0bd89ae6.html";
-        String shorurl = ca.getShortUrl(longurl);
-        assertNotNull(shorurl);
-        log.info(shorurl);
+
+        String shortUrl = "http://w.url.cn/s/AvCo6Ih";
+        MockUpHttpPost("{\"errcode\":0,\"errmsg\":\"ok\",\"shortURL\":\""+shortUrl+"\"}");
+
+        String tmp = wechatAPI.getShortUrl(url);
+        assertNotNull(tmp);
+        assertEquals(tmp, shortUrl);
     }
 
     @Test
     public void testGetJSTicket() {
         log.info("====== CredentialAPI#getJSTicket ======");
-        String jsticket = ca.getJSTicket();
-        assertNotNull(jsticket);
-        log.info(jsticket);
+
+        MockUpHttpGet("{\"errcode\":0,\"errmsg\":\"ok\",\"ticket\":\""+uuid+"\"," +
+                "\"expires_in\":7200}");
+
+        String tmp = wechatAPI.getJSTicket();
+        assertNotNull(tmp);
+        assertEquals(tmp, uuid);
     }
+
+    @Test
+    public void testJSTicketExpired() {
+        log.info("====== CredentialAPI#JSTicketExpired ======");
+
+        JSTicket jst = WechatAPIImpl.getJsTicketCache().get(mpId);
+        jst.setExpiresIn(-100);
+        WechatAPIImpl.getJsTicketCache().set(mpId, jst);
+
+        MockUpHttpGet("{\"errcode\":0,\"errmsg\":\"ok\",\"ticket\":\""+uuid+"\"," +
+                "\"expires_in\":7200}");
+
+        String tmp = wechatAPI.getJSTicket();
+        assertNotNull(tmp);
+        assertEquals(tmp, uuid);
+    }
+
 }

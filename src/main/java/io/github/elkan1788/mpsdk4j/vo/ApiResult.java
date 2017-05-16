@@ -15,7 +15,7 @@ import io.github.elkan1788.mpsdk4j.util.ConfigReader;
  * @since 2.0
  */
 @SuppressWarnings("unchecked")
-public class ApiResult {
+public class APIResult {
 
     private static final Log log = Logs.get();
 
@@ -31,7 +31,7 @@ public class ApiResult {
     private String errMsg;
     private String errCNMsg;
 
-    public ApiResult(String json) {
+    public APIResult(String json) {
         this.json = json;
         this.content = Json.fromJson(Map.class, json);
         this.errCode = (Integer) this.content.get("errcode");
@@ -44,8 +44,8 @@ public class ApiResult {
         }
     }
 
-    public static ApiResult create(String json) {
-        return new ApiResult(json);
+    public static APIResult create(String json) {
+        return new APIResult(json);
     }
 
     public Object get(String key) {
@@ -73,7 +73,10 @@ public class ApiResult {
     }
 
     public boolean isSuccess() {
-        return (this.errCode == null || this.errCode.intValue() == 0);
+        // TODO 46003表示不存在菜单数据,算属于合法,不应抛出异常
+        return (this.errCode == null
+                || this.errCode.intValue() == 0
+                || this.errCode.intValue() == 46003);
     }
 
 }

@@ -15,26 +15,27 @@ public interface QRCodeAPI {
     /**
      * 创建二维码ticket地址
      */
-    static String create_qrcode = "/qrcode/create?access_token=";
+    String createQRCodeURL = "/qrcode/create?access_token=";
 
     /**
      * 下载二维码地址
      */
-    static String show_qrcode = "/showqrcode?ticket=";
+    String showQRCodeURL = "/showqrcode?ticket=";
 
     /**
      * 创建二维码ticket
      * 
-     * <pre/>
+     * <p>
      * 参考[https://github.com/nutzam/nutzwx/blob/master/src/main/java/org/nutz/weixin/impl/
      * WxApi2Impl.
      * java]
+     * </p>
      * 
      * @param sceneId
      *            场景Id(大于0 表示 临时码,Number 表示永远二维码, String 表示永远字符串)
      * @param expireSeconds
      *            二维码有效时间，以秒为单位。 最大不超过604800(即7天)
-     * @return
+     * @return 二维码 {@link io.github.elkan1788.mpsdk4j.vo.api.QRTicket}
      */
     QRTicket createQR(Object sceneId, int expireSeconds);
 

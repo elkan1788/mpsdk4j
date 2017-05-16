@@ -23,6 +23,14 @@ public class AccessToken {
     @JsonField(value = "expires_in")
     private long expiresIn;
 
+    public AccessToken() {
+    }
+
+    public AccessToken(String accessToken, long expiresIn) {
+        this.accessToken = accessToken;
+        this.expiresIn = expiresIn;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }
@@ -36,11 +44,12 @@ public class AccessToken {
     }
 
     public void setExpiresIn(long expiresIn) {
-        this.expiresIn = (expiresIn - 30) * 1000;
+        // 考虑到服务器时间同步,故将刷新时间提前60秒.
+        this.expiresIn = System.currentTimeMillis() + (expiresIn - 60) * 1000;
     }
 
     public boolean isAvailable() {
-        if (!Lang.isEmpty(accessToken) || this.expiresIn >= System.currentTimeMillis()) {
+        if (!Lang.isEmpty(accessToken) && this.expiresIn >= System.currentTimeMillis()) {
             return true;
         }
         return false;

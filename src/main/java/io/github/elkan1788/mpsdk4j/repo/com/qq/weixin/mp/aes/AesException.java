@@ -15,7 +15,7 @@ public class AesException extends Exception {
 	public final static int ParseXmlError = -40002;
 	public final static int ComputeSignatureError = -40003;
 	public final static int IllegalAesKey = -40004;
-	public final static int ValidateAppidError = -40005;
+	public final static int ValidateAppIdError = -40005;
 	public final static int EncryptAESError = -40006;
 	public final static int DecryptAESError = -40007;
 	public final static int IllegalBuffer = -40008;
@@ -40,8 +40,8 @@ public class AesException extends Exception {
 			return "sha加密生成签名失败";
 		case IllegalAesKey:
 			return "SymmetricKey非法";
-		case ValidateAppidError:
-			return "appid校验失败";
+		case ValidateAppIdError:
+			return "appId校验失败";
 		case EncryptAESError:
 			return "aes加密失败";
 		case DecryptAESError:
@@ -54,6 +54,8 @@ public class AesException extends Exception {
 			return "base64解密错误";
 		case GenReturnXmlError:
 			return "xml生成失败";
+		case OK:
+				return "成功";
 		default:
 			return "未知异常";
 		}

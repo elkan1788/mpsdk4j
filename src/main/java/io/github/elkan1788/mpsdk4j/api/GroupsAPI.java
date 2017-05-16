@@ -16,44 +16,45 @@ public interface GroupsAPI {
     /**
      * 创建分组地址
      */
-    static String create_groups = "/groups/create?access_token=";
+    String createGroupsURL = "/groups/create?access_token=";
 
     /**
      * 查询所有分组地址
      */
-    static String get_groups = "/groups/get?access_token=";
+    String getGroupsURL = "/groups/get?access_token=";
 
     /**
      * 查询用户所在分组地址
      */
-    static String get_member_group = "/groups/getid?access_token=";
+    String getMemberGroupURL = "/groups/getid?access_token=";
 
     /**
      * 修改分组名称地址
      */
-    static String update_group = "/groups/update?access_token=";
+    String updateGroupURL = "/groups/update?access_token=";
 
     /**
      * 移动用户分组地址
      */
-    static String update_member_group = "/groups/members/update?access_token=";
+    String updateMemberGroupURL = "/groups/members/update?access_token=";
 
     /**
      * 批量移动用户分组地址
      */
-    static String update_members_group = "/groups/members/batchupdate?access_token=";
+    String updateMembersGroupURL = "/groups/members/batchupdate?access_token=";
 
     /**
      * 删除分组地址
      */
-    static String delete_groups = "/groups/delete?access_token=";
+    String deleteGroupsURL = "/groups/delete?access_token=";
 
     /**
      * 创建用户分组
      * 
-     * <pre/>
+     * <p>
      * 一个公众账号,最多支持创建100个分组
-     * 
+     * </p>
+     *
      * @param name
      *            分组名字(30个字符以内)
      * @return 分组Id

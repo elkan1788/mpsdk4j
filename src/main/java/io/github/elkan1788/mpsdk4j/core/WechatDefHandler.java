@@ -2,15 +2,9 @@ package io.github.elkan1788.mpsdk4j.core;
 
 import java.util.Arrays;
 
+import io.github.elkan1788.mpsdk4j.vo.event.*;
 import org.nutz.lang.Strings;
 
-import io.github.elkan1788.mpsdk4j.vo.event.BasicEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.LocationEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.MenuEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.ScanCodeEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.ScanEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.SendLocationInfoEvent;
-import io.github.elkan1788.mpsdk4j.vo.event.SendPhotosEvent;
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
 import io.github.elkan1788.mpsdk4j.vo.message.BasicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
@@ -32,155 +26,163 @@ import io.github.elkan1788.mpsdk4j.vo.push.SentTmlJobEvent;
 public class WechatDefHandler implements WechatHandler {
 
     @Override
-    public BasicMsg defMsg(BasicMsg bm) {
-        TextMsg tm = new TextMsg(bm);
-        tm.setContent(bm.getMsgType());
-        return tm;
+    public BasicMsg defMsg(BasicMsg msg) {
+        TextMsg text_msg = new TextMsg(msg);
+        text_msg.setContent(msg.getMsgType());
+        return text_msg;
     }
 
     @Override
-    public BasicMsg defEvent(BasicEvent be) {
-        TextMsg tm = new TextMsg(be);
-        tm.setContent(Strings.join("\n", be.getEvent(), be.getEventKey()));
-        return tm;
+    public BasicMsg defEvent(BasicEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent(Strings.join("\n", event.getEvent(), event.getEventKey()));
+        return text_msg;
     }
 
     @Override
-    public BasicMsg text(TextMsg tm) {
-        return tm;
+    public BasicMsg text(TextMsg msg) {
+        return msg;
     }
 
     @Override
-    public BasicMsg image(ImageMsg im) {
-        return im;
+    public BasicMsg image(ImageMsg msg) {
+        return msg;
     }
 
     @Override
-    public BasicMsg voice(VoiceMsg vm) {
-        TextMsg tm = new TextMsg(vm);
-        tm.setContent(Strings.join("\n", vm.getMediaId(), vm.getFormat(), vm.getRecognition()));
-        return tm;
+    public BasicMsg voice(VoiceMsg msg) {
+        TextMsg text_msg = new TextMsg(msg);
+        text_msg.setContent(Strings.join("\n", msg.getMediaId(), msg.getFormat(), msg.getRecognition()));
+        return text_msg;
     }
 
     @Override
-    public BasicMsg video(VideoMsg vim) {
-        TextMsg tm = new TextMsg(vim);
-        tm.setContent(Strings.join("\n", vim.getMsgType(), vim.getMediaId(), vim.getThumbMediaId()));
-        return tm;
+    public BasicMsg video(VideoMsg msg) {
+        TextMsg text_msg = new TextMsg(msg);
+        text_msg.setContent(Strings.join("\n", msg.getMsgType(), msg.getMediaId(), msg.getThumbMediaId()));
+        return text_msg;
     }
 
     @Override
-    public BasicMsg shortVideo(VideoMsg vim) {
-        TextMsg tm = new TextMsg(vim);
-        tm.setContent(Strings.join("\n", vim.getMsgType(), vim.getMediaId(), vim.getThumbMediaId()));
-        return tm;
+    public BasicMsg shortVideo(VideoMsg msg) {
+        TextMsg text_msg = new TextMsg(msg);
+        text_msg.setContent(Strings.join("\n", msg.getMsgType(), msg.getMediaId(), msg.getThumbMediaId()));
+        return text_msg;
     }
 
     @Override
-    public BasicMsg location(LocationMsg lm) {
-        TextMsg tm = new TextMsg(lm);
-        tm.setContent(Strings.join("\n",
-                                   lm.getX(),
-                                   lm.getY(),
-                                   String.valueOf(lm.getScale()),
-                                   lm.getLabel()));
-        return tm;
+    public BasicMsg location(LocationMsg msg) {
+        TextMsg text_msg = new TextMsg(msg);
+        text_msg.setContent(Strings.join("\n",
+                                   msg.getX(),
+                                   msg.getY(),
+                                   String.valueOf(msg.getScale()),
+                                   msg.getLabel()));
+        return text_msg;
     }
 
     @Override
-    public BasicMsg link(LinkMsg lm) {
-        NewsMsg news = new NewsMsg(lm);
+    public BasicMsg link(LinkMsg msg) {
+        NewsMsg news_msg = new NewsMsg(msg);
         Article art = new Article();
-        art.setTitle(lm.getTitle());
-        art.setDescription(lm.getDescription());
+        art.setTitle(msg.getTitle());
+        art.setDescription(msg.getDescription());
         art.setPicUrl("http://j2ee.u.qiniudn.com/mpsdk4j-logo.png-aliassmall");
-        art.setUrl(lm.getUrl());
-        news.setArticles(Arrays.asList(art));
-        return news;
+        art.setUrl(msg.getUrl());
+        news_msg.setArticles(Arrays.asList(art));
+        return news_msg;
     }
 
     @Override
-    public BasicMsg eClick(MenuEvent me) {
-        TextMsg tm = new TextMsg(me);
-        tm.setContent(me.getEventKey());
-        return tm;
+    public BasicMsg eClick(MenuEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent(event.getEventKey());
+        return text_msg;
     }
 
     @Override
-    public void eView(MenuEvent me) {}
+    public void eView(MenuEvent event) {}
 
     @Override
-    public BasicMsg eSub(BasicEvent be) {
-        TextMsg tm = new TextMsg(be);
-        tm.setContent("Welcom, wechat develop with use mpsdk4j!");
-        return tm;
+    public BasicMsg eSub(BasicEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent("Welcome, wechat develop with use mpsdk4j!");
+        return text_msg;
     }
 
     @Override
-    public void eUnSub(BasicEvent be) {}
+    public void eUnSub(BasicEvent event) {}
 
     @Override
-    public BasicMsg eScan(ScanEvent se) {
-        TextMsg tm = new TextMsg(se);
-        tm.setContent(se.getEventKey() + se.getTicket());
-        return tm;
+    public BasicMsg eScan(ScanEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent(event.getEventKey() + event.getTicket());
+        return text_msg;
     }
 
     @Override
-    public void eLocation(LocationEvent le) {}
+    public void eLocation(LocationEvent event) {}
 
     @Override
-    public BasicMsg eScanCodePush(ScanCodeEvent sce) {
-        TextMsg tm = new TextMsg(sce);
-        tm.setContent(Strings.join("\n", sce.getEventKey(), sce.getScanType(), sce.getScanResult()));
-        return tm;
+    public BasicMsg eScanCodePush(ScanCodeEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent(Strings.join("\n", event.getEventKey(), event.getScanType(), event.getScanResult()));
+        return text_msg;
     }
 
     @Override
-    public BasicMsg eScanCodeWait(ScanCodeEvent sce) {
-        return this.eScanCodePush(sce);
+    public BasicMsg eScanCodeWait(ScanCodeEvent event) {
+        return this.eScanCodePush(event);
     }
 
     @Override
-    public BasicMsg ePicSysPhoto(SendPhotosEvent spe) {
-        TextMsg tm = new TextMsg(spe);
-        tm.setContent(Strings.join("\n",
-                                   spe.getEventKey(),
-                                   String.valueOf(spe.getSendPicsInfo().getCount()),
-                                   String.valueOf(spe.getSendPicsInfo().getPicList()),
-                                   String.valueOf(spe.getSendPicsInfo()
+    public BasicMsg ePicSysPhoto(SendPhotosEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent(Strings.join("\n",
+                                   event.getEventKey(),
+                                   String.valueOf(event.getSendPicsInfo().getCount()),
+                                   String.valueOf(event.getSendPicsInfo().getPicList()),
+                                   String.valueOf(event.getSendPicsInfo()
                                                      .getPicList()
                                                      .get(0)
                                                      .getPicMd5Sum())));
-        return tm;
+        return text_msg;
     }
 
     @Override
-    public BasicMsg ePicPhotoOrAlbum(SendPhotosEvent spe) {
-        return this.ePicSysPhoto(spe);
+    public BasicMsg ePicPhotoOrAlbum(SendPhotosEvent event) {
+        return this.ePicSysPhoto(event);
     }
 
     @Override
-    public BasicMsg ePicWeixin(SendPhotosEvent spe) {
-        return this.ePicSysPhoto(spe);
+    public BasicMsg ePicWeixin(SendPhotosEvent event) {
+        return this.ePicSysPhoto(event);
     }
 
     @Override
-    public BasicMsg eLocationSelect(SendLocationInfoEvent slie) {
-        TextMsg tm = new TextMsg(slie);
-        tm.setContent(Strings.join("\n",
-                                   slie.getLocationX(),
-                                   slie.getLocationY(),
-                                   slie.getLabel(),
-                                   String.valueOf(slie.getScale()),
-                                   slie.getPoiname()));
-        return tm;
+    public BasicMsg eLocationSelect(SendLocationInfoEvent event) {
+        TextMsg text_msg = new TextMsg(event);
+        text_msg.setContent(Strings.join("\n",
+                                   event.getLocationX(),
+                                   event.getLocationY(),
+                                   event.getLabel(),
+                                   String.valueOf(event.getScale()),
+                                   event.getPoiname()));
+        return text_msg;
     }
 
     @Override
-    public void eSentTmplJobFinish(SentTmlJobEvent stje) {}
+    public void eSentTmplJobFinish(SentTmlJobEvent event) {}
 
     @Override
-    public void eSentAllJobFinish(SentAllJobEvent saje) {}
+    public void eSentAllJobFinish(SentAllJobEvent event) {}
 
+    @Override
+    public void eCreateKfSession(CustomServiceEvent event) {}
+
+    @Override
+    public void eCloseKfSession(CustomServiceEvent event) {}
+
+    @Override
+    public void eSwitchKfSession(CustomServiceEvent event) {}
 }

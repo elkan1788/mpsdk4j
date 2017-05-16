@@ -55,7 +55,7 @@ public class MessageHandler extends DefaultHandler2 {
                 && !Strings.equals("SendPicsInfo", qName)
                 && !Strings.equals("PicList", qName)
                 && !Strings.equals("item", qName)) {
-                log.debugf("Current node vaule: [%s-%s]", qName, attrVal);
+                log.debugf("Current node value: [%s-%s]", qName, attrVal);
             }
         }
 
@@ -184,6 +184,18 @@ public class MessageHandler extends DefaultHandler2 {
         }
         if ("ErrorCount".equals(qName)) {
             _vals.put("errorCount", attrVal);
+            return;
+        }
+        if("KfAccount".equals(qName)){
+            _vals.put("kfAccount", attrVal);
+            return;
+        }
+        if("FromKfAccount".equals(qName)) {
+            _vals.put("fromKfAccount", attrVal);
+            return;
+        }
+        if("ToKfAccount".equals(qName)) {
+            _vals.put("toKfAccount", attrVal);
             return;
         }
     }

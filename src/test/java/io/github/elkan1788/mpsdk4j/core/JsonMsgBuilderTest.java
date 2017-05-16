@@ -1,12 +1,9 @@
 package io.github.elkan1788.mpsdk4j.core;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import io.github.elkan1788.mpsdk4j.api.APITestSupport;
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
 import io.github.elkan1788.mpsdk4j.vo.api.Template;
 import io.github.elkan1788.mpsdk4j.vo.message.Article;
 import io.github.elkan1788.mpsdk4j.vo.message.ImageMsg;
-import io.github.elkan1788.mpsdk4j.vo.message.MusicMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.NewsMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
@@ -14,11 +11,14 @@ import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
 
 import java.util.Arrays;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.nutz.json.Json;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
 
 /**
  * JsonBuilder 测试
@@ -26,14 +26,13 @@ import org.nutz.log.Logs;
  * @author 凡梦星尘(elkan1788@gmail.com)
  * @since 2.0
  */
-public class JsonMsgBuilderTest extends APITestSupport {
+public class JsonMsgBuilderTest extends RunTestSupport {
 
     private static final Log log = Logs.get();
 
-    @Before
+    @BeforeClass
     public void init() {
         log.info("====== JsonMsgBuilderTest ======");
-        super.init();
     }
 
     @Test
@@ -94,14 +93,7 @@ public class JsonMsgBuilderTest extends APITestSupport {
     @Test
     public void testMusic() {
         log.info("====== JsonMsgBuilder#music ======");
-        MusicMsg mm = new MusicMsg();
-        mm.setToUserName(openId);
-        mm.setThumbMediaId(mediaId);
-        mm.setTitle("致爱 Your Song");
-        mm.setDescription("Music message.");
-        mm.setMusicUrl("http://y.qq.com/#type=song&mid=002IVyIU4093Xr&play=0");
-        mm.setHQMusicUrl("http://y.qq.com/#type=song&mid=002IVyIU4093Xr&play=0");
-        String musicJson = JsonMsgBuilder.create().music(mm).build();
+        String musicJson = JsonMsgBuilder.create().music(musicMsg).build();
         assertNotNull(musicJson);
         assertNotEquals(-1, musicJson.indexOf("music"));
         assertNotNull(Json.fromJson(musicJson));
@@ -131,8 +123,8 @@ public class JsonMsgBuilderTest extends APITestSupport {
         log.info("====== JsonMsgBuilder#template ======");
         Template tmp = new Template();
         tmp.setColor("#ff0000");
-        tmp.setName("title");
-        tmp.setValue("Wechat template message.");
+        tmp.setName("百度一下你就知道");
+        tmp.setValue("百度是中国的搜索引擎");
 
         String tmpJson = JsonMsgBuilder.create()
                                        .template(openId,

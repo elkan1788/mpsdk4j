@@ -1,12 +1,9 @@
 package io.github.elkan1788.mpsdk4j.core;
 
-import static org.junit.Assert.assertNotNull;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.nutz.lang.Lang;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
@@ -20,6 +17,9 @@ import io.github.elkan1788.mpsdk4j.vo.message.LocationMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.TextMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VideoMsg;
 import io.github.elkan1788.mpsdk4j.vo.message.VoiceMsg;
+import org.testng.annotations.Test;
+
+import static org.testng.AssertJUnit.assertNotNull;
 
 /**
  * 测试XML读取
@@ -35,7 +35,7 @@ public class MessageHandlerTest {
     private SAXParser xmlParser;
     private MessageHandler msgHandler = new MessageHandler();
 
-    @Before
+//    @Before
     public void init() {
         log.info("====== MessageHandlerTest ======");
         try {

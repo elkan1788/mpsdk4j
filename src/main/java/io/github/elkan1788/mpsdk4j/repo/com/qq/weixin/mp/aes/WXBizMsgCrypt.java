@@ -190,7 +190,7 @@ public class WXBizMsgCrypt {
 
         // appid不相同的情况
         if (!fromAppId.equals(appId)) {
-            throw new AesException(AesException.ValidateAppidError);
+            throw new AesException(AesException.ValidateAppIdError);
         }
         return xmlContent;
 
@@ -278,7 +278,7 @@ public class WXBizMsgCrypt {
      *
      * @return APPID
      */
-    public String getFromAppid() {
+    public String getFromAppId() {
         return this.fromAppId;
     }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllAPITest">
+
+    <test name="AllAPIRetryTest" enabled="false">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.AllAPIRetryTest"/>
+        </classes>
+    </test>
+
+    <test name="CredentialAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.CredentialAPITest"/>
+        </classes>
+    </test>
+
+    <test name="GroupAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.GroupsAPITest"/>
+        </classes>
+    </test>
+
+    <test name="MediaAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.MediaAPITest"/>
+        </classes>
+    </test>
+
+    <test name="MenuAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.MenuAPITest"/>
+        </classes>
+    </test>
+
+    <test name="MessageAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.MessageAPITest"/>
+        </classes>
+    </test>
+
+    <test name="QRCodeAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.QRCodeAPITest"/>
+        </classes>
+    </test>
+
+    <test name="TemplateAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.TemplateAPITest"/>
+        </classes>
+    </test>
+
+    <test name="UserAPITest">
+        <classes>
+            <class name="io.github.elkan1788.mpsdk4j.api.UserAPITest"/>
+        </classes>
+    </test>
+</suite>

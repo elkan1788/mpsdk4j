@@ -112,7 +112,7 @@ public class HttpTool {
 
     public static Object download(String url) {
         if (log.isDebugEnabled()) {
-            log.debugf("Upload url: %s, default timeout: %d", url, CONNECT_TIME_OUT);
+            log.debugf("Download url: %s, default timeout: %d", url, CONNECT_TIME_OUT);
         }
 
         try {

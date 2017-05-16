@@ -1,16 +1,18 @@
 package io.github.elkan1788.mpsdk4j.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.nutz.ioc.impl.PropertiesProxy;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
 
 /**
  * ConfigReader Testing
@@ -20,21 +22,23 @@ import org.junit.Test;
  */
 public class ConfigReaderTest {
 
+    private static final Log logger = Logs.get();
+
     private static final int INTEGER = 1;
     private static final boolean BOOL = true;
     private static final long LONG = 100000000000000l;
 
     private ConfigReader cr;
 
-    @Before
+    @BeforeClass
     public void init() {
-        cr = new ConfigReader("/ErrorCode.properties");
+        cr = ConfigReader.read("/ErrorCode.properties");
         cr.put("int", String.valueOf(INTEGER));
         cr.put("bool", String.valueOf(BOOL));
         cr.put("long", String.valueOf(LONG));
     }
 
-    @After
+    @AfterClass
     public void testClear() {
         cr.clear();
         assertNull(cr.get("0"));
@@ -47,17 +51,12 @@ public class ConfigReaderTest {
         assertEquals(keys.size(), values.size());
     }
 
-    @Test
-    public void testGet() {
-        assertNotNull(cr.get("0"));
-    }
-
-    @Test(expected = NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testNullFile() {
         new ConfigReader("/test.properties");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testNullKey() {
         cr.get(null);
     }
@@ -77,4 +76,12 @@ public class ConfigReaderTest {
         assertTrue(cr.getBoolean("bool"));
     }
 
+    @Test
+    public void testValues() throws Exception {
+        Map<String, String> tmp = cr.getAll();
+        for (String key :  tmp.keySet()) {
+            assertNotNull(key);
+            logger.infof("%s: %s", key, tmp.get(key));
+        }
+    }
 }

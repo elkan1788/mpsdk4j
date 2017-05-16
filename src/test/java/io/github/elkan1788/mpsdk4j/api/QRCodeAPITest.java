@@ -1,15 +1,16 @@
 package io.github.elkan1788.mpsdk4j.api;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import io.github.elkan1788.mpsdk4j.RunTestSupport;
 import io.github.elkan1788.mpsdk4j.vo.api.QRTicket;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.nutz.log.Log;
-import org.nutz.log.Logs;
+import static org.testng.Assert.*;
+
 
 /**
  * QRCodeAPI 测试
@@ -18,40 +19,46 @@ import org.nutz.log.Logs;
  * @since 2.0
  */
 // TODO 此API貌似有问题,以后再好好检测
-public class QRCodeAPITest extends APITestSupport {
+public class QRCodeAPITest extends RunTestSupport {
 
     private static final Log log = Logs.get();
 
-    private QRCodeAPI qa;
-    private int expireSeconds = 604800;
-    private String ticket;
 
-    @Override
-    @Before
+    @BeforeClass
     public void init() {
         log.info("====== QRCodeAPITest ======");
-        super.init();
-        this.ticket = _cr.get("ticket");
-        qa = WechatAPIImpl.create(mpAct);
+        MockUpHttpPost("{\"ticket\":\"gQH47joAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL2taZ2Z3TVRtNzJXV1Brb3ZhYmJJAAIEZ23sUwMEmm3sUw==\",\"expire_seconds\":60,\"url\":\"http:\\/\\/weixin.qq.com\\/q\\/kZgfwMTm72WWPkovabbI\"}");
     }
 
     @Test
-    public void testCreateQR() {
-        log.info("====== QRCodeAPI#createQR ======");
-        QRTicket qrt = qa.createQR(10, expireSeconds);
+    public void testCreateSceneQR() {
+        log.info("====== QRCodeAPI#createSceneQR ======");
+        QRTicket qrt = wechatAPI.createQR(10, 604800);
         assertNotNull(qrt);
-        assertEquals(qrt.getExpireSeconds(), expireSeconds);
-        log.infof("QR ticket: %s", qrt.getTicket());
-        log.infof("QR expire time: %s", qrt.getExpireSeconds());
-        log.infof("QR url: %s", qrt.getUrl());
+        assertNotNull(qrt.getTicket());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
+    public void testCreateLimitSceneQR() {
+        log.info("====== QRCodeAPI#createLimitSceneQR ======");
+        QRTicket qrt = wechatAPI.createQR(new Integer(10), 0);
+        assertNotNull(qrt);
+        assertNotNull(qrt.getTicket());
+    }
+
+    @Test
+    public void testCreateLimitStrSceneQR() {
+        log.info("====== QRCodeAPI#createLimitStrSceneQR ======");
+        QRTicket qrt = wechatAPI.createQR(url, 0);
+        assertNotNull(qrt);
+        assertNotNull(qrt.getTicket());
+    }
+
+    @Test
     public void testGetQR() {
         log.info("====== QRCodeAPI#getQR ======");
-        File qrImg = qa.getQR(ticket);
+        MockUpHttpDownload(imgMedia);
+        File qrImg = wechatAPI.getQR("gQH47joAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL2taZ2Z3TVRtNzJXV1Brb3ZhYmJJAAIEZ23sUwMEmm3sUw==");
         assertNotNull(qrImg);
-        log.infof("temp path: %s", qrImg.getAbsolutePath());
     }
-
 }

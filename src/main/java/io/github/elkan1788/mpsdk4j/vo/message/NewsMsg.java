@@ -44,7 +44,7 @@ public class NewsMsg extends BasicMsg {
         return count;
     }
 
-    public void setCount(int count) {
+    protected void setCount(int count) {
         this.count = count;
     }
 
@@ -54,7 +54,7 @@ public class NewsMsg extends BasicMsg {
             setCount(10);
         }
         else {
-            this.setCount(Lang.length(articles));
+            this.setCount(articles.size());
         }
         return articles;
     }
