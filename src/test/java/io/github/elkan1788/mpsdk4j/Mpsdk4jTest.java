@@ -22,7 +22,7 @@ public class Mpsdk4jTest extends RunTestSupport {
     public void testVersion() {
         new Mpsdk4j(); // Just cover testing
         log.debug(Mpsdk4j.version());
-        String cur_ver = "2.b.2";
+        String cur_ver = "2.b.3";
         Assert.assertEquals(cur_ver, Mpsdk4j.version());
     }
 

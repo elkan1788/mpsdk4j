@@ -14,11 +14,11 @@ public interface WebOauth2API {
     /**
      * 换取网页授权access_token地址
      */
-    String oauth2URL = "/sns/oauth2URL/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
+    String oauth2URL = "/sns/oauth2/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
     /**
      * 刷新access_token地址
      */
-    String refreshTokenURL = "/sns/oauth2URL/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
+    String refreshTokenURL = "/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
     /**
      * 拉取用户信息地址
      */
