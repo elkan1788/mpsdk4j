@@ -586,7 +586,7 @@ public class WechatAPIImpl implements WechatAPI {
             result = refreshWebOauth2Result(result.getRefreshToken());
         }
 
-        String url = mergeAPIUrl(oauth2UserURL, result.getAccessToken(), lang);
+        String url = mergeAPIUrl(oauth2UserURL, result.getAccessToken(), openId, lang);
         APIResult ar = wechatServerResponse(url,
                 HTTP_GET,
                 NONE_BODY,
