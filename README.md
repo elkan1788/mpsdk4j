@@ -5,7 +5,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.elkan1788/mpsdk4j/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.elkan1788/mpsdk4j)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-!["MPSDK4J"](http://j2ee.lisenhui.cn/mpsdk4j-logo.png-alias "MPSDK4J")
+!["MPSDK4J"](http://j2ee.lisenhui.cn/mpsdk4j-logo.png-noalias "MPSDK4J")
 
 ## 目录
 *  [1.引言](#引言)
