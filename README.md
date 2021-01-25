@@ -5,7 +5,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.elkan1788/mpsdk4j/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.elkan1788/mpsdk4j)
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-!["MPSDK4J"](http://j2ee.u.qiniudn.com/mpsdk4j-logo.png-aliassmall "MPSDK4J")
+!["MPSDK4J"](http://j2ee.lisenhui.cn/mpsdk4j-logo.png-alias "MPSDK4J")
 
 ## 目录
 *  [1.引言](#引言)
@@ -56,15 +56,15 @@ _MPSDK4J_,非常直观的阐述了此项目的意义所在.没错,它就是JAVA�
 
 <a name="结构设计"></a>
 ### 2.1.整体结构设计
-!["MPSDK4J-V2"](http://j2ee.u.qiniudn.com/mpsdk4j-2.png-alias "MPSDK4J-V2")
+!["MPSDK4J-V2"](http://j2ee.lisenhui.cn/mpsdk4j-2.png-alias "MPSDK4J-V2")
 
 <a name="时序图"></a>
 ### 2.2.交互时序图
-!["MPSDK4J-seq"](http://j2ee.u.qiniudn.com/mpsdk4j-v2-seq.png-alias "MPSDK4J-seq")
+!["MPSDK4J-seq"](http://j2ee.lisenhui.cn/mpsdk4j-v2-seq.png-alias "MPSDK4J-seq")
 
 <a name="测试覆盖"></a>
 ### 2.3.测试覆盖
-!["MPSDK4J-test"](http://j2ee.u.qiniudn.com/mpsdk4j-v2-test-coverage.png-alias "MPSDK4J-test")
+!["MPSDK4J-test"](http://j2ee.lisenhui.cn/mpsdk4j-v2-test-coverage.png-alias "MPSDK4J-test")
 
 <a name="项目"></a>
 ## 3.项目
@@ -233,7 +233,7 @@ BUG提交：<https://git.oschina.net/lisenhui/mpsdk4j/issues>
 *  Email: elkan1788@gmail.com
 *  QQ群：486192816
 
-!["MPSDK4J-qq"](http://j2ee.u.qiniudn.com/MPSDK4J-qq.png-noalias "MPSDK4J-qq")
+!["MPSDK4J-qq"](http://j2ee.lisenhui.cn/MPSDK4J-qq.png-noalias "MPSDK4J-qq")
 
 <a name="其它"></a>
 ## 7.其它: JCE 使用说明
